@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phương trình bậc hai</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Consolidated CSS from all files */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--body-bg); /* Use CSS variable for background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px; /* Reduced from 20px by 25% */
+            box-sizing: border-box;
+            color: var(--text-color); /* Use CSS variable for text color */
+            position: relative; /* For positioning aurora layers */
+            overflow-x: hidden; /* Prevent horizontal scroll during animations */
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        /* CSS Variables for Theme */
+        :root {
+            /* Dark Theme (Default) */
+            --body-bg: #0d1a2a;
+            --text-color: #ecf0f1;
+            --container-bg: rgba(44, 62, 80, 0.05);
+            --container-border: rgba(61, 90, 115, 0.1);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.4);
+            --heading-color: #ecf0f1;
+            --subheading-color: #3498db;
+            --paragraph-color: #bdc3c7;
+            --label-text-color: #bdc3c7;
+            --input-bg: rgba(52, 73, 94, 0.15);
+            --input-border: rgba(74, 98, 122, 0.2);
+            --input-placeholder-color: #bdc3c7;
+            --input-focus-border: #3498db;
+            --input-focus-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+            --input-focus-bg: rgba(61, 90, 115, 0.25);
+            --button-bg: rgba(52, 152, 219, 0.15);
+            --button-color: white;
+            --button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --button-border: rgba(52, 152, 219, 0.25);
+            --button-hover-bg: rgba(52, 152, 219, 0.25);
+            --button-hover-shadow: 0 11.25px 26.25px rgba(52, 152, 219, 0.3);
+            --button-active-bg: rgba(36, 113, 163, 0.2);
+            --button-active-shadow: 0 1.5px 7.5px rgba(52, 152, 219, 0.15);
+            --result-box-bg: rgba(52, 73, 94, 0.15);
+            --result-box-border: rgba(74, 98, 122, 0.2);
+            --result-box-shadow: inset 0 1.5px 3.75px rgba(0, 0, 0, 0.1);
+            --result-text-color: #ecf0f1;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --info-color: #3498db;
+            --back-button-bg: rgba(90, 125, 154, 0.15);
+            --back-button-hover-bg: rgba(106, 141, 176, 0.25);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.1);
+            --back-button-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.15);
+            --back-button-active-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #ecf0f1;
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: white;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 7.5px 18.75px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-active-shadow: 0 2.25px 7.5px rgba(52, 152, 219, 0.1);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(255, 255, 255, 0.15);
+            --music-tooltip-bg: rgba(44, 62, 80, 0.95);
+            --music-tooltip-color: #ecf0f1;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.3);
+            --music-tooltip-border: rgba(61, 90, 115, 0.5);
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #ecf0f1;
+            --mathjax-bg: rgba(74, 98, 122, 0.2);
+            --mathjax-shadow: inset 0 0.75px 3px rgba(0, 0, 0, 0.15);
+            --mathjax-text-color: #ecf0f1;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            --body-bg: #f0f2f5; /* Light background */
+            --text-color: #34495e; /* Darker text */
+            --container-bg: rgba(255, 255, 255, 0.1); /* Reduced alpha for more transparency */
+            --container-border: rgba(180, 180, 180, 0.7);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.1);
+            --heading-color: #34495e;
+            --subheading-color: #2980b9;
+            --paragraph-color: #7f8c8d;
+            --label-text-color: #7f8c8d;
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(180, 180, 180, 0.7);
+            --input-placeholder-color: #7f8c8d;
+            --input-focus-border: #2980b9;
+            --input-focus-shadow: 0 0 0 3px rgba(41, 128, 185, 0.2);
+            --input-focus-bg: rgba(255, 255, 255, 0.2);
+            --button-bg: rgba(52, 152, 219, 0.1);
+            --button-color: #34495e;
+            --button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.1);
+            --button-border: rgba(52, 152, 219, 0.15);
+            --button-hover-bg: rgba(52, 152, 219, 0.15);
+            --button-hover-shadow: 0 11.25px 26.25px rgba(52, 152, 219, 0.2);
+            --button-active-bg: rgba(36, 113, 163, 0.1);
+            --button-active-shadow: 0 1.5px 7.5px rgba(52, 152, 219, 0.1);
+            --result-box-bg: rgba(255, 255, 255, 0.1);
+            --result-box-border: rgba(180, 180, 180, 0.7);
+            --result-box-shadow: inset 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --result-text-color: #34495e;
+            --error-color: #c0392b;
+            --success-color: #27ae60;
+            --info-color: #2980b9;
+            --back-button-bg: rgba(180, 180, 180, 0.2);
+            --back-button-hover-bg: rgba(180, 180, 180, 0.3);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.05);
+            --back-button-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.1);
+            --back-button-active-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #34495e;
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: #34495e;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-active-shadow: 0 2.25px 7.5px rgba(52, 152, 219, 0.1);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(0, 0, 0, 0.1);
+            --music-tooltip-bg: rgba(255, 255, 255, 0.9);
+            --music-tooltip-color: #34495e;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.15);
+            --music-tooltip-border: #ccc;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #34495e;
+            --mathjax-bg: rgba(180, 180, 180, 0.2);
+            --mathjax-shadow: inset 0 0.75px 3px rgba(0, 0, 0, 0.05);
+            --mathjax-text-color: #34495e;
+        }
+
+        /* Aurora Borealis Effect - Copied from music.html */
+        .aurora-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through */
+            z-index: -1; /* Place behind content */
+            background: transparent;
+            overflow: hidden; /* Keep hidden for aurora layers to prevent inner scroll */
+        }
+
+       .aurora-layer {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(52, 152, 219, 0.3), /* Blue from active playlist item */
+                rgba(46, 204, 113, 0.3)  /* Green from active playlist item */
+            );
+            border-radius: 50%;
+            filter: blur(80px); /* Soft blur for aurora effect */
+            opacity: 0;
+            animation: auroraMovement 5s infinite alternate ease-in-out;
+        }
+
+        .aurora-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: 10%;
+            left: 15%;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.4), rgba(46, 204, 113, 0.4));
+            animation-delay: 0s;
+            animation-duration: 8s; /* Adjusted duration for more subtle flow */
+        }
+
+        .aurora-layer:nth-child(2) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 70%;
+            background: linear-gradient(to top, rgba(0, 200, 200, 0.4), rgba(0, 150, 150, 0.4)); /* Teal tones */
+            animation-delay: 8s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            top: 80%;
+            left: 30%;
+            background: linear-gradient(to right, rgba(70, 130, 180, 0.3), rgba(60, 179, 113, 0.3)); /* SteelBlue to MediumSeaGreen */
+            animation-delay: 16s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            top: 20%;
+            left: 80%;
+            background: linear-gradient(to left, rgba(135, 206, 250, 0.3), rgba(127, 255, 212, 0.3)); /* LightSkyBlue to Aquamarine */
+            animation-delay: 24s; /* Adjusted delay */
+            animation-duration: 9s; /* Adjusted duration */
+        }
+
+        @keyframes auroraMovement {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translate(25px, -35px) scale(1.06); /* More pronounced movement */
+                opacity: 0.75; /* Slightly higher opacity */
+            }
+            50% {
+                transform: translate(-15px, 45px) scale(0.94); /* More pronounced movement */
+                opacity: 0.65;
+            }
+            75% {
+                transform: translate(35px, -25px) scale(1.04);
+                opacity: 0.85; /* Slightly higher opacity */
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* Light theme specific adjustment for aurora opacity */
+        body.light-theme .aurora-layer {
+            opacity: 0.2; /* Reduce opacity for light theme */
+        }
+
+        /* Page Transition Animations - Copied from index.html */
+        @keyframes slideInFromBottom {
+            from {
+                transform: translateY(100vh); /* Bắt đầu từ dưới khung nhìn */
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutToTop {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh); /* Trượt lên khỏi khung nhìn */
+                opacity: 0;
+            }
+        }
+
+        /* Initial state for page content wrapper to prevent flicker */
+        #pageContentWrapper {
+            opacity: 0; /* Start hidden */
+        }
+
+        .page-transition-in {
+            animation: slideInFromBottom 0.7s ease-out forwards;
+        }
+
+        .page-transition-out {
+            animation: slideOutToTop 0.7s ease-in forwards;
+        }
+
+        /* New: Global entrance animation for the container */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px); /* Reduced from 20px by 25% */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-container { /* New main container to hold all tool boxes */
+            background-color: var(--container-bg); /* Use CSS variable */
+            border-radius: 12px; /* Reduced from 16px by 25% */
+            box-shadow: var(--container-shadow); /* Use CSS variable */
+            padding: 22.5px; /* Reduced from 30px by 25% */
+            max-width: 525px; /* Reduced from 700px by 25% */
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--container-border); /* Use CSS variable */
+            backdrop-filter: blur(7.5px); /* Reduced from 10px by 25% */
+            -webkit-backdrop-filter: blur(7.5px); /* For Safari */
+            position: relative; /* For back button positioning */
+            z-index: 1; /* Ensure container is above aurora effect */
+        }
+        .tool-box { /* Style for each individual tool section */
+            background-color: var(--input-bg); /* Use CSS variable */
+            border-radius: 9px; /* Reduced from 12px by 25% */
+            box-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.3); /* Reduced from 0 6px 15px by 25% */
+            padding: 18.75px; /* Reduced from 25px by 25% */
+            margin-bottom: 22.5px; /* Reduced from 30px by 25% */
+            border: 1px solid var(--input-border); /* Use CSS variable */
+            opacity: 0; /* Start hidden for staggered animation */
+            transform: translateY(15px); /* Reduced from 20px by 25% */
+            animation: fadeInSlideUp 0.6s ease-out forwards; /* Staggered animation */
+        }
+        .tool-box:last-child {
+            margin-bottom: 0; /* No margin for the last tool box */
+        }
+        /* General input field styling */
+        input[type="number"], input[type="text"] {
+            background-color: var(--input-bg); /* Use CSS variable */
+            border: 1px solid var(--input-border); /* Use CSS variable */
+            transition: all 0.3s ease; /* Smooth transitions */
+            color: var(--input-color); /* Use CSS variable */
+            border-radius: 7.5px; /* Reduced from 10px by 25% */
+            padding: 10.5px; /* Reduced from 14px by 25% */
+            font-size: 0.7875rem; /* Reduced from 1.05rem by 25% */
+            width: 100%; /* Ensure full width */
+            appearance: none; /* Remove default browser styling for select */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        input[type="number"]::placeholder, input[type="text"]::placeholder {
+            color: var(--input-placeholder-color); /* Use CSS variable */
+            opacity: 0.7; /* Slightly transparent */
+        }
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: var(--input-focus-border); /* Use CSS variable */
+            outline: none;
+            box-shadow: var(--input-focus-shadow); /* Use CSS variable */
+            background-color: var(--input-focus-bg); /* Use CSS variable */
+            transform: translateY(-1.5px); /* Reduced from -2px by 25% */
+        }
+        .label-text {
+            color: var(--label-text-color); /* Use CSS variable */
+            font-weight: 600;
+            display: block; /* Ensure label is block for proper spacing */
+            margin-bottom: 6px; /* Reduced from 8px by 25% */
+            text-align: left; /* Align label text to left */
+        }
+        /* Button styling - unified and large */
+        .calculate-button { /* Specific class for calculation buttons */
+            background: var(--button-bg); /* Use CSS variable */
+            color: var(--button-color); /* Use CSS variable */
+            cursor: pointer;
+            font-weight: 700; /* Bolder text */
+            box-shadow: var(--button-shadow); /* Use CSS variable */
+            letter-spacing: 0.05em; /* Slight letter spacing */
+            text-transform: uppercase; /* Uppercase for button text */
+            border-radius: 7.5px; /* Reduced from 10px by 25% */
+            padding: 13.5px 18px; /* Reduced from 18px 24px by 25% */
+            font-size: 0.975rem; /* Reduced from 1.3rem by 25% */
+            margin-top: 18.75px; /* Reduced from 25px by 25% */
+            border: 1px solid var(--button-border); /* Use CSS variable */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transitions */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Subtle text shadow */
+            width: 100%; /* Ensure buttons take full width of their parent */
+        }
+        .calculate-button:hover {
+            background: var(--button-hover-bg); /* Use CSS variable */
+            transform: translateY(-3.75px) scale(1.06); /* Reduced from -5px, 1.08 by 25% */
+            box-shadow: var(--button-hover-shadow); /* Use CSS variable */
+        }
+        .calculate-button:active {
+            transform: translateY(0) scale(0.94); /* Reduced from 0.92 by 25% */
+            box-shadow: var(--button-active-shadow); /* Use CSS variable */
+            background: var(--button-active-bg); /* Use CSS variable */
+        }
+        /* Result display area - unified */
+        .result-box {
+            background-color: var(--result-box-bg); /* Use CSS variable */
+            padding: 18.75px; /* Reduced from 25px by 25% */
+            border-radius: 9px; /* Reduced from 12px by 25% */
+            margin-top: 18.75px; /* Reduced from 25px by 25% */
+            min-height: 6.75rem; /* Reduced from 9rem by 25% */
+            color: var(--result-text-color); /* Use CSS variable */
+            border: 1px solid var(--result-box-border); /* Use CSS variable */
+            box-shadow: var(--result-box-shadow); /* Use CSS variable */
+            text-align: center; /* Center content within result box */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            word-break: break-word; /* Allow long results to wrap */
+            opacity: 0; /* Start hidden for result animation */
+            transform: translateY(7.5px); /* Reduced from 10px by 25% */
+        }
+        .result-box.show {
+            animation: popIn 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; /* Using popIn from dao_ham.html */
+        }
+        .result-box h2 { /* Heading inside result box */
+            color: var(--result-text-color); /* Use CSS variable */
+            text-align: center;
+            margin-bottom: 11.25px; /* Reduced from 15px by 25% */
+            font-size: 0.9375rem; /* Reduced from 1.25rem by 25% */
+        }
+        .result-line {
+            display: block; /* Ensure each line breaks */
+            margin-bottom: 6px; /* Reduced from 8px by 25% */
+            font-size: 0.825rem; /* Reduced from 1.1rem by 25% */
+        }
+        .result-line:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Colors for specific feedback */
+        .text-red-600 {
+            color: var(--error-color); /* Use CSS variable */
+            font-weight: 600;
+        }
+        .text-green-600 {
+            color: var(--success-color); /* Use CSS variable */
+            font-weight: 600;
+        }
+        .text-blue-600 {
+            color: var(--info-color); /* Use CSS variable */
+            font-weight: 600;
+        }
+        h1 { /* Main page title */
+            color: var(--heading-color); /* Use CSS variable */
+            font-size: 1.65rem; /* Reduced from 2.2rem by 25% */
+            font-weight: 700;
+            margin-bottom: 1.5rem; /* Reduced from 2rem by 25% */
+            text-shadow: 0 1.5px 4.5px rgba(0,0,0,0.4); /* Reduced from 0 2px 6px by 25% */
+        }
+        body.light-theme h1 {
+            text-shadow: none; /* Remove text shadow in light theme */
+        }
+        p {
+            color: var(--paragraph-color); /* Use CSS variable */
+            font-size: 0.7875rem; /* Reduced from 1.05rem by 25% */
+            line-height: 1.5;
+            margin-bottom: 1.125rem; /* Reduced from 1.5rem by 25% */
+        }
+        /* Custom styling for number input spin buttons (to remove them) */
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Chrome, Safari, Edge */
+            margin: 0;
+        }
+        .grid-3-cols-gap { /* For 3-column input grids */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.9375rem; /* Reduced from 1.25rem by 25% */
+        }
+        .grid-2-cols-gap { /* For 2-column input grids */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.9375rem; /* Reduced from 1.25rem by 25% */
+        }
+        /* MathJax styling */
+        .MathJax_Display {
+            overflow-x: auto; /* Allow horizontal scrolling for long equations */
+            padding: 9px 11.25px; /* Reduced from 12px 15px by 25% */
+            background-color: var(--mathjax-bg); /* Use CSS variable */
+            border-radius: 0.5625rem; /* Reduced from 0.75rem by 25% */
+            margin-top: 0.9375rem; /* Reduced from 1.25rem by 25% */
+            color: var(--mathjax-text-color) !important; /* Ensure MathJax text is light */
+            box-shadow: var(--mathjax-shadow); /* Use CSS variable */
+        }
+        .MathJax_CHTML {
+            color: var(--mathjax-text-color) !important;
+        }
+        .MathJax_CHTML span {
+            color: var(--mathjax-text-color) !important;
+        }
+
+        /* Keyframe Animations */
+        @keyframes popIn { /* Copied from dao_ham.html */
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(15px); /* Reduced from 0.8, 20px by 25% */
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.0375) translateY(-3.75px); /* Overshoot slightly, reduced by 25% */
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .error-message {
+            color: var(--error-color); /* Use CSS variable */
+            margin-top: 7.5px; /* Reduced from 10px by 25% */
+            font-weight: 600;
+            font-size: 0.75rem; /* Reduced from 1rem by 25% */
+        }
+
+        /* Back Button Styling - Copied from music.html for consistency */
+        .back-button {
+            position: absolute; /* Changed from fixed to absolute to be relative to container */
+            top: 15px; /* Reduced from 20px by 25% */
+            left: 15px; /* Reduced from 20px by 25% */
+            background-color: var(--back-button-bg); /* Use CSS variable */
+            width: 33.75px; /* Reduced from 45px by 25% */
+            height: 33.75px; /* Reduced from 45px by 25% */
+            border-radius: 50%; /* Make it circular */
+            display: flex; /* Use flex to center SVG */
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--back-button-shadow); /* Use CSS variable */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Added transitions */
+            text-decoration: none; /* Remove underline for link */
+            z-index: 10; /* Ensure it's above other content */
+            border: 1px solid var(--back-button-bg); /* Use CSS variable */
+        }
+        .back-button:hover {
+            background-color: var(--back-button-hover-bg); /* Use CSS variable */
+            transform: translateX(-3.75px) scale(1.0375); /* Reduced from -5px, 1.05 by 25% */
+            box-shadow: var(--back-button-hover-shadow); /* Use CSS variable */
+        }
+        .back-button:active {
+            transform: translateY(0) scale(0.9625); /* Reduced from 0.95 by 25% */
+            box-shadow: var(--back-button-active-shadow); /* Use CSS variable */
+        }
+        /* Style for the SVG icon inside the button */
+        .back-button svg {
+            width: 0.9em; /* Reduced from 1.2em by 25% */
+            height: 0.9em; /* Reduced from 1.2em by 25% */
+            stroke: var(--back-button-icon-color); /* Use CSS variable */
+            stroke-width: 1.875; /* Reduced from 2.5 by 25% */
+            stroke-linecap: round; /* Rounded ends for lines */
+            stroke-linejoin: round; /* Rounded corners for lines */
+            fill: none; /* Ensure no fill for the arrow */
+            transition: stroke 0.3s ease; /* Smooth transition for arrow color */
+        }
+        .back-button:hover svg {
+            stroke: var(--back-button-icon-color); /* Keep white on hover */
+        }
+
+        /* Music Player Floating Button - Copied from index.html */
+        .music-player-floating-button-wrapper {
+            position: fixed; /* Fixed position relative to the viewport */
+            bottom: 22.5px; /* Reduced from 30px by 25% */
+            left: 22.5px; /* Reduced from 30px by 25% */
+            z-index: 1000; /* Ensure it's above all other content */
+            display: flex;
+            align-items: flex-end; /* Align tooltip to the bottom of the button */
+            justify-content: flex-start; /* Align tooltip to the left of the button */
+        }
+
+        .music-player-floating-button {
+            background: var(--music-button-bg); /* Use CSS variable */
+            color: var(--music-button-color); /* Use CSS variable */
+            width: 45px; /* Reduced from 60px by 25% */
+            height: 45px; /* Reduced from 60px by 25% */
+            border-radius: 50%; /* Circular button */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            box-shadow: var(--music-button-shadow); /* Use CSS variable */
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; /* For tooltip positioning */
+            z-index: 1; /* Ensure button is above tooltip when active */
+            border: 1px solid var(--music-button-border); /* Use CSS variable */
+        }
+
+        .music-player-floating-button:hover {
+            background: var(--music-button-hover-bg); /* Use CSS variable */
+            transform: translateY(-2.25px) scale(1.0375); /* Reduced lift and scale by 25% */
+            box-shadow: var(--music-button-hover-shadow); /* Use CSS variable */
+        }
+
+        .music-player-floating-button:active {
+            transform: translateY(0) scale(0.9625); /* Reduced press effect by 25% */
+            box-shadow: var(--music-button-active-shadow); /* Use CSS variable */
+            background: var(--music-button-active-bg); /* Use CSS variable */
+        }
+
+        /* Pulse effect for the music button when playing */
+        @keyframes pulseMusicButton {
+            0% {
+                box-shadow: var(--music-button-pulse-shadow-1); /* Use CSS variable */
+            }
+            50% {
+                box-shadow: var(--music-button-pulse-shadow-2); /* Use CSS variable */
+            }
+            100% {
+                box-shadow: var(--music-button-pulse-shadow-1); /* Use CSS variable */
+            }
+        }
+
+        .music-player-floating-button.playing {
+            animation: pulseMusicButton 1.5s infinite ease-in-out;
+        }
+
+        /* Light theme specific adjustment for music button pulse */
+        body.light-theme .music-player-floating-button.playing {
+            animation: none; /* Disable pulse animation for light theme */
+            box-shadow: var(--music-button-shadow); /* Keep regular shadow */
+        }
+
+        .music-player-floating-button i {
+            color: var(--music-icon-color); /* Use CSS variable */
+        }
+
+        /* Custom Tooltip Styles - Copied from index.html */
+        .music-tooltip {
+            position: absolute;
+            left: 52.5px; /* Reduced from 70px by 25% */
+            bottom: 50%; /* Vertically center with the button */
+            transform: translateY(50%); /* Adjust for vertical centering */
+            background-color: var(--music-tooltip-bg); /* Use CSS variable */
+            color: var(--music-tooltip-color); /* Use CSS variable */
+            padding: 7.5px 11.25px; /* Reduced from 10px 15px by 25% */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            box-shadow: var(--music-tooltip-shadow); /* Use CSS variable */
+            white-space: nowrap; /* Prevent text wrapping */
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-size: 0.7125rem; /* Reduced from 0.95rem by 25% */
+            pointer-events: none; /* Allow clicks to pass through */
+            border: 1px solid var(--music-tooltip-border); /* Use CSS variable */
+            backdrop-filter: blur(2.25px); /* Reduced from 3px by 25% */
+            -webkit-backdrop-filter: blur(2.25px); /* For Safari */
+            display: flex; /* Use flexbox for layout inside tooltip */
+            align-items: center; /* Vertically align items */
+            gap: 7.5px; /* Reduced from 10px by 25% */
+        }
+
+        .music-tooltip img {
+            width: 37.5px; /* Reduced from 50px by 25% */
+            height: 37.5px; /* Reduced from 50px by 25% */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .music-tooltip-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .music-tooltip-content .song-title {
+            font-weight: bold;
+            font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            color: var(--music-tooltip-color); /* Use CSS variable */
+        }
+
+        .music-tooltip-content .song-details {
+            font-size: 0.6375rem; /* Reduced from 0.85rem by 25% */
+            color: var(--paragraph-color); /* Use CSS variable */
+        }
+
+        .music-player-floating-button-wrapper:hover .music-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Theme Switch Styles */
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--container-bg);
+            border-radius: 9px;
+            padding: 8px 15px;
+            box-shadow: var(--container-shadow);
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--slider-before-bg);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--slider-checked-bg);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--slider-checked-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .main-container {
+                padding: 15px; /* Reduced from 20px by 25% */
+            }
+            h1 {
+                font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+                margin-bottom: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            p {
+                font-size: 0.7125rem; /* Reduced from 0.95rem by 25% */
+            }
+            input[type="number"], input[type="text"], .calculate-button {
+                padding: 9px; /* Reduced from 12px by 25% */
+                font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            }
+            .result-box {
+                padding: 15px; /* Reduced from 20px by 25% */
+                font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            }
+            .result-box h2 {
+                font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            .result-line {
+                font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            }
+            .grid-3-cols-gap, .grid-2-cols-gap {
+                grid-template-columns: repeat(1, 1fr); /* Stack columns on small screens */
+                gap: 0.75rem; /* Reduced from 1rem by 25% */
+            }
+            .music-player-floating-button-wrapper,
+            .theme-switch-wrapper {
+                bottom: 15px;
+                left: 15px;
+                right: 15px;
+                justify-content: space-between;
+                width: calc(100% - 30px);
+                gap: 0;
+            }
+            .theme-switch-wrapper {
+                right: 15px;
+                left: auto;
+                width: auto;
+                padding: 8px 10px;
+            }
+            .music-player-floating-button-wrapper {
+                left: 15px;
+                right: auto;
+                width: auto;
+                padding: 0;
+            }
+            .music-tooltip {
+                left: 60px;
+            }
+        }
+    </style>
+    <!-- Math.js CDN for parsing and evaluating expressions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.0/math.min.js"></script>
+    <!-- MathJax CDN for rendering mathematical equations -->
+    <script type="text/javascript" id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <script>
+        // Configure MathJax to process TeX in HTML
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            chtml: {
+                // Ensure MathJax output respects the dark theme colors
+                scale: 1,
+                displayAlign: 'center',
+                displayIndent: '0em',
+                matchFontHeight: true,
+                linebreaks: {
+                    automatic: true,
+                    width: "container"
+                },
+                styles: {
+                    '.mjx-chtml': {
+                        color: 'var(--mathjax-text-color) !important', /* Override MathJax default text color */
+                    },
+                    '.mjx-chtml span': {
+                        color: 'var(--mathjax-text-color) !important', /* Override MathJax default span text color */
+                    }
+                }
+            }
+        };
+
+        // --- Quadratic Equation Solver Logic ---
+        async function calculateQuadraticEquation() {
+            const a = parseFloat(document.getElementById('solverA').value);
+            const b = parseFloat(document.getElementById('solverB').value);
+            const c = parseFloat(document.getElementById('solverC').value);
+            const resultDiv = document.getElementById('solverResult');
+
+            // Clear previous results and reset colors
+            resultDiv.innerHTML = '';
+            resultDiv.classList.remove('text-red-600', 'text-green-600', 'text-blue-600', 'show'); // Remove 'show' class to re-trigger animation
+
+            // Check if inputs are valid numbers
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                resultDiv.innerHTML = '<span class="text-red-600">Vui lòng nhập các hệ số hợp lệ (là số).</span>';
+                resultDiv.classList.add('show'); // Show error with animation
+                return;
+            }
+
+            // Case 1: Not a quadratic equation (a = 0)
+            if (a === 0) {
+                if (b === 0) {
+                    if (c === 0) {
+                        resultDiv.innerHTML = '<span class="text-green-600">Phương trình có vô số nghiệm.</span>';
+                    } else {
+                        resultDiv.innerHTML = '<span class="text-red-600">Phương trình vô nghiệm.</span>';
+                    }
+                } else {
+                    // Linear equation: bx + c = 0 => x = -c/b
+                    const x = -c / b;
+                    resultDiv.innerHTML = `<span class="text-blue-600">Đây là phương trình bậc nhất: $${b}x + ${c} = 0$<br>Nghiệm: $x = ${x.toFixed(4)}$</span>`;
+                }
+                // Re-render MathJax for linear equation
+                await MathJax.typesetPromise([resultDiv]);
+                resultDiv.classList.add('show'); // Show result with animation
+                return;
+            }
+
+            // Calculate the discriminant (delta)
+            const delta = b * b - 4 * a * c;
+
+            // Case 2: No real roots (delta < 0)
+            if (delta < 0) {
+                const realPart = (-b / (2 * a));
+                const imaginaryPart = (Math.sqrt(Math.abs(delta)) / (2 * a));
+                resultDiv.innerHTML = `<span class="text-red-600">Delta = ${delta.toFixed(4)} < 0<br>Phương trình vô nghiệm thực.</span><br>Nghiệm phức:<br>$x_1 = ${realPart.toFixed(4)} + ${imaginaryPart.toFixed(4)}i$<br>$x_2 = ${realPart.toFixed(4)} - ${imaginaryPart.toFixed(4)}i$`;
+            }
+            // Case 3: One real root (delta = 0)
+            else if (Math.abs(delta) < 1e-9) { // Use epsilon for delta === 0 check
+                const x = -b / (2 * a);
+                resultDiv.innerHTML = `<span class="text-green-600">Delta = ${delta.toFixed(4)} = 0<br>Phương trình có nghiệm kép: $x_1 = x_2 = ${x.toFixed(4)}$</span>`;
+            }
+            // Case 4: Two distinct real roots (delta > 0)
+            else {
+                const x1 = (-b + Math.sqrt(delta)) / (2 * a);
+                const x2 = (-b - Math.sqrt(delta)) / (2 * a);
+                resultDiv.innerHTML = `<span class="text-blue-600">Delta = ${delta.toFixed(4)} > 0<br>Phương trình có hai nghiệm phân biệt:<br>$x_1 = ${x1.toFixed(4)}$<br>$x_2 = ${x2.toFixed(4)}$</span>`;
+            }
+            // Re-render MathJax after updating content
+            await MathJax.typesetPromise([resultDiv]);
+            resultDiv.classList.add('show'); // Show result with animation
+        }
+
+        // --- Quadratic Factorizer Logic ---
+        async function factorizeQuadratic() {
+            const a = parseFloat(document.getElementById('factorizerA').value);
+            const b = parseFloat(document.getElementById('factorizerB').value);
+            const c = parseFloat(document.getElementById('factorizerC').value);
+            const resultDiv = document.getElementById('factorizerResult');
+            const errorDiv = document.getElementById('factorizerError');
+
+            // Clear previous results and errors
+            resultDiv.textContent = '';
+            errorDiv.textContent = '';
+            resultDiv.classList.remove('text-red-600', 'text-green-600', 'text-blue-600', 'show'); // Remove 'show' class
+
+            // Validate inputs
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                errorDiv.textContent = 'Lỗi: Vui lòng nhập tất cả các hệ số là số hợp lệ.';
+                resultDiv.classList.add('show'); // Show error with animation
+                return;
+            }
+
+            let output = '';
+
+            if (a === 0) {
+                if (b === 0) {
+                    if (c === 0) {
+                        output = "Đây là phương trình $0 = 0$ (vô số nghiệm).";
+                    } else {
+                        output = "Đây không phải phương trình bậc hai (hằng số khác 0).";
+                    }
+                } else {
+                    // Linear equation: bx + c = 0
+                    const x = -c / b;
+                    output = `Đây là đa thức bậc nhất: $${b}x + ${c} = ${b}(x - ${-x.toFixed(4)})$`;
+                }
+            } else {
+                // Calculate the discriminant (delta)
+                const delta = (b * b) - 4 * a * c;
+
+                if (delta >= 0) {
+                    // Real roots
+                    const x1 = (-b - Math.sqrt(delta)) / (2 * a);
+                    const x2 = (-b + Math.sqrt(delta)) / (2 * a);
+
+                    let factor1_str = `(x - ${x1.toFixed(4)})`;
+                    let factor2_str = `(x - ${x2.toFixed(4)})`;
+
+                    // Simple integer check for cleaner output
+                    if (Math.abs(x1 - Math.round(x1)) < 1e-9) { // Check if very close to an integer
+                        factor1_str = `(x - ${Math.round(x1)})`;
+                    }
+                    if (Math.abs(x2 - Math.round(x2)) < 1e-9) { // Check if very close to an integer
+                        factor2_str = `(x - ${Math.round(x2)})`;
+                    }
+
+                    // Handle x - 0 case
+                    if (Math.abs(x1) < 1e-9) factor1_str = "x";
+                    if (Math.abs(x2) < 1e-9) factor2_str = "x";
+
+
+                    if (Math.abs(delta) < 1e-9) { // Using epsilon for delta === 0 check
+                        // Double root
+                        output = `Đa thức có dạng nhân tử: $${a}${factor1_str}^2$`;
+                    } else {
+                        // Two distinct roots
+                        output = `Đa thức có dạng nhân tử: $${a}${factor1_str}${factor2_str}$`;
+                    }
+                } else {
+                    // Complex roots
+                    const realPart = (-b / (2 * a));
+                    const imagPart = (Math.sqrt(Math.abs(delta)) / (2 * a));
+
+                    // Format complex numbers
+                    const x1_complex = `${realPart.toFixed(4)} + ${imagPart.toFixed(4)}i`;
+                    const x2_complex = `${realPart.toFixed(4)} - ${imagPart.toFixed(4)}i`;
+
+                    output = `Đa thức có nghiệm phức và dạng nhân tử trên trường số phức: $${a}(x - (${x1_complex}))(x - (${x2_complex}))$`;
+                }
+            }
+            resultDiv.innerHTML = `<span class="text-blue-600">${output}</span>`;
+            // Re-render MathJax after updating content
+            await MathJax.typesetPromise([resultDiv]);
+            resultDiv.classList.add('show'); // Show result with animation
+        }
+
+        // --- Min/Max Finder Logic ---
+        async function findMinMaxExpression() {
+            const expressionStr = document.getElementById('minMaxExpressionInput').value;
+            const variable = document.getElementById('minMaxVariableInput').value;
+            const startRange = parseFloat(document.getElementById('minMaxStartRangeInput').value);
+            const endRange = parseFloat(document.getElementById('minMaxEndRangeInput').value);
+            const resultDiv = document.getElementById('minMaxResultDiv');
+
+            // Clear previous results and reset colors
+            resultDiv.innerHTML = '';
+            resultDiv.classList.remove('text-red-600', 'text-green-600', 'text-blue-600', 'show'); // Remove 'show' class
+
+            // Validate inputs
+            if (!expressionStr || !variable || isNaN(startRange) || isNaN(endRange)) {
+                resultDiv.innerHTML = '<span class="text-red-600">Vui lòng nhập đầy đủ biểu thức, biến và khoảng giá trị hợp lệ.</span>';
+                resultDiv.classList.add('show'); // Show error with animation
+                return;
+            }
+
+            if (startRange >= endRange) {
+                resultDiv.innerHTML = '<span class="text-red-600">Khoảng bắt đầu phải nhỏ hơn khoảng kết thúc.</span>';
+                resultDiv.classList.add('show'); // Show error with animation
+                return;
+            }
+
+            try {
+                const parser = math.parser();
+                const node = math.parse(expressionStr);
+                const compiled = node.compile();
+
+                let minVal = Infinity;
+                let maxVal = -Infinity;
+                let xMin = null;
+                let xMax = null;
+
+                // Define a step size for iteration. Smaller step = more accurate but slower.
+                const step = (endRange - startRange) / 10000; // 10,000 steps
+
+                for (let x = startRange; x <= endRange; x += step) {
+                    const scope = { [variable]: x };
+                    const y = compiled.evaluate(scope);
+
+                    if (y < minVal) {
+                        minVal = y;
+                        xMin = x;
+                    }
+                    if (y > maxVal) {
+                        maxVal = y;
+                        xMax = x;
+                    }
+                }
+
+                // Ensure the exact end point is also checked
+                const scopeEnd = { [variable]: endRange };
+                const yEnd = compiled.evaluate(scopeEnd);
+                if (yEnd < minVal) {
+                    minVal = yEnd;
+                    xMin = endRange;
+                }
+                if (yEnd > maxVal) {
+                    maxVal = yEnd;
+                    xMax = endRange;
+                }
+
+                let outputHtml = `<span class="result-line text-blue-600">Biểu thức: $f(${variable}) = ${expressionStr}$</span>`;
+                outputHtml += `<span class="result-line text-green-600">Giá trị nhỏ nhất: ${minVal.toFixed(4)} (tại $${variable} \\approx ${xMin.toFixed(4)}$)</span>`;
+                outputHtml += `<span class="result-line text-green-600">Giá trị lớn nhất: ${maxVal.toFixed(4)} (tại $${variable} \\approx ${xMax.toFixed(4)}$)</span>`;
+
+                resultDiv.innerHTML = outputHtml;
+
+                // Re-render MathJax after updating content
+                await MathJax.typesetPromise([resultDiv]);
+                resultDiv.classList.add('show'); // Show result with animation
+
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">Lỗi: ${error.message}. Vui lòng kiểm tra lại cú pháp biểu thức hoặc biến.</span>`;
+                console.error("Error calculating min/max:", error);
+                resultDiv.classList.add('show'); // Show error with animation
+            }
+        }
+
+        // --- Music Player Logic for Background Playback ---
+        let audioPlayer;
+        let toggleMusicButton;
+        let musicPlayPauseIcon;
+        let musicTooltip;
+        let albumCoverImg;
+        let songTitleSpan;
+        let songDetailsSpan;
+        let themeSwitchCheckbox; // Declare themeSwitchCheckbox
+
+        const SONGS = [
+       {
+            id: 'song1',
+            title: "Die for you",
+            artist: "joji",
+            album: "SMITHEREENS",
+            url: "music/03. Die For You.mp3",
+            albumArtUrl: "albumcover/smithereens.jpeg"
+        },
+        {
+            id: 'song2',
+            title: "You suck Charlie",
+            artist: "joji",
+            album: "Chloe Burbank",
+            url: "music/you suck charlie.m4a",
+            albumArtUrl: "albumcover/chloe burbank.jpg"
+        },
+        {
+            id: 'song3',
+            title: "Come Thru",
+            artist: "Joji",
+            album: "BALLADS 1",
+            url: "music/09 Come Thru.mp3",
+            albumArtUrl: "albumcover/ballads1.png"
+        },
+        {
+            id: 'song4',
+            title: "Modus",
+            artist: "Joji",
+            album: "Nectar",
+            url: "music/02 MODUS.mp3",
+            albumArtUrl: "albumcover/Nectar.jpg"
+        },
+        {
+            id: 'song5',
+            title: "505",
+            artist: "Arctic Monkeys",
+            album: "Favourite Worst Nightmare",
+            url: "music/505 - Arctic Monkeys.mp3",
+            albumArtUrl: "albumcover/FavouriteWorstNightmare.jpg"
+        },
+        {
+            id: 'song6',
+            title: "Stressed Out",
+            artist: "Ben Schuller",
+            album: "piano cover",
+            url: "music/Ben Schuller-Stressed Out.mp3",
+            albumArtUrl: "albumcover/strout.jpg"
+        },
+        {
+            id: 'song7',
+            title: "Chamber Of Reflection",
+            artist: "Mac DeMarco",
+            album: "Salad Days",
+            url: "music/Chamber Of Reflection.mp3",
+            albumArtUrl: "albumcover/cbofrl.jpg"
+        },
+        {
+            id: 'song8',
+            title: "For the First Time",
+            artist: "Mac DeMarco",
+            album: "This Old Dog",
+            url: "music/For the First Time - Mac DeMarco.mp3",
+            albumArtUrl: "albumcover/tolddog.png"
+        }
+        ];
+
+        let currentSongIndex = -1; // No song selected initially
+
+        function saveMusicState() {
+            const currentSongId = audioPlayer.dataset.currentSongId;
+            if (currentSongId) {
+                const state = {
+                    songId: currentSongId,
+                    currentTime: audioPlayer.currentTime,
+                    isPlaying: !audioPlayer.paused,
+                    volume: audioPlayer.volume
+                };
+                localStorage.setItem('musicPlayerState', JSON.stringify(state));
+            } else {
+                localStorage.removeItem('musicPlayerState');
+            }
+        }
+
+        function loadMusicState() {
+            const savedState = localStorage.getItem('musicPlayerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const song = SONGS.find(s => s.id === state.songId);
+                if (song) {
+                    currentSongIndex = SONGS.indexOf(song); // Update currentSongIndex
+                    audioPlayer.src = song.url;
+                    audioPlayer.dataset.currentSongId = song.id;
+                    audioPlayer.volume = state.volume;
+
+                    if (state.isPlaying) {
+                        audioPlayer.currentTime = state.currentTime;
+                        audioPlayer.play().then(() => {
+                            updateTooltip(song);
+                            updatePlayPauseIcon(true); // Update icon to pause
+                            toggleMusicButton.classList.add('playing'); // Add playing class for visual feedback
+                        }).catch(error => {
+                            console.log("Autoplay prevented:", error);
+                            updateTooltip({
+                                title: "Nhấn nút nhạc để phát!",
+                                artist: "Trình duyệt đã chặn tự động phát.",
+                                album: "",
+                                albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                            });
+                            updatePlayPauseIcon(false); // Update icon to play
+                            toggleMusicButton.classList.remove('playing');
+                        });
+                    } else {
+                        updateTooltip(song); // Show current song info even if paused
+                        audioPlayer.currentTime = state.currentTime; // Set current time even if paused
+                        updatePlayPauseIcon(false); // Update icon to play
+                        toggleMusicButton.classList.remove('playing');
+                    }
+                } else {
+                    // If song not found, reset to default state
+                    resetMusicState();
+                }
+            } else {
+                // Default state if no music was previously playing
+                resetMusicState();
+            }
+        }
+
+        function resetMusicState() {
+            currentSongIndex = -1;
+            audioPlayer.src = "";
+            audioPlayer.dataset.currentSongId = '';
+            audioPlayer.currentTime = 0;
+            audioPlayer.volume = 1; // Default volume
+            localStorage.removeItem('musicPlayerState');
+            updateTooltip({
+                title: "Chưa có nhạc",
+                artist: "Hãy chọn bài hát từ trang nhạc",
+                album: "",
+                albumArtUrl: "https://placehold.co/50x50/95a5a6/ffffff?text=Music"
+            });
+            updatePlayPauseIcon(false); // Ensure icon is play
+            toggleMusicButton.classList.remove('playing');
+        }
+
+        function updateTooltip(song) {
+            albumCoverImg.src = song.albumArtUrl;
+            albumCoverImg.alt = `Ảnh bìa album của ${song.title}`;
+            songTitleSpan.textContent = song.title;
+            songDetailsSpan.textContent = `${song.artist} ${song.album ? '(Album: "' + song.album + '")' : ''}`;
+        }
+
+        function updatePlayPauseIcon(isPlaying) {
+            if (isPlaying) {
+                musicPlayPauseIcon.classList.remove('fa-play');
+                musicPlayPauseIcon.classList.add('fa-pause');
+            } else {
+                musicPlayPauseIcon.classList.remove('fa-pause');
+                musicPlayPauseIcon.classList.add('fa-play');
+            }
+        }
+
+        // --- Theme Switch Logic ---
+        function applyTheme(theme) {
+            document.body.classList.remove('light-theme'); // Remove existing theme class
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+            localStorage.setItem('theme', theme); // Save theme preference
+        }
+
+        // --- Initialization on page load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageContentWrapper = document.getElementById('pageContentWrapper');
+            const pageLinks = document.querySelectorAll('.page-link');
+            themeSwitchCheckbox = document.getElementById('theme-switch-checkbox'); // Assign themeSwitchCheckbox here
+
+            // Animate page in on load
+            pageContentWrapper.classList.add('page-transition-in');
+
+            // Attach music player DOM elements and event listeners
+            audioPlayer = document.getElementById('audioPlayer');
+            toggleMusicButton = document.getElementById('toggleMusicButton');
+            musicPlayPauseIcon = document.getElementById('musicPlayPauseIcon');
+            musicTooltip = document.getElementById('musicTooltip');
+            albumCoverImg = document.getElementById('albumCover');
+            songTitleSpan = document.getElementById('songTitle');
+            songDetailsSpan = document.getElementById('songDetails');
+
+            // The click event listener for the music button now controls play/pause directly
+            toggleMusicButton.addEventListener('click', () => {
+                if (currentSongIndex === -1) {
+                    // If no song is loaded, load the first one and play
+                    currentSongIndex = 0;
+                    audioPlayer.src = SONGS[currentSongIndex].url;
+                    audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                    updateTooltip(SONGS[currentSongIndex]);
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on first play:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else if (audioPlayer.paused) {
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on resume:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else {
+                    audioPlayer.pause();
+                    updatePlayPauseIcon(false); // Update icon to play
+                    toggleMusicButton.classList.remove('playing');
+                }
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                updatePlayPauseIcon(true);
+                toggleMusicButton.classList.add('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                updatePlayPauseIcon(false);
+                toggleMusicButton.classList.remove('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                currentSongIndex = (currentSongIndex + 1) % SONGS.length;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                updateTooltip(SONGS[currentSongIndex]);
+                audioPlayer.play(); // Auto-play next song
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('timeupdate', saveMusicState);
+            audioPlayer.addEventListener('volumechange', saveMusicState);
+
+            loadMusicState(); // Load music state when the page loads
+
+            // Handle page link clicks for smooth transitions
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default navigation
+                    const targetPage = link.dataset.href; // Get target page from data-href
+
+                    // Add slide-out animation
+                    pageContentWrapper.classList.remove('page-transition-in');
+                    pageContentWrapper.classList.add('page-transition-out');
+
+                    // Wait for the animation to complete before navigating
+                    pageContentWrapper.addEventListener('animationend', () => {
+                        window.location.href = targetPage; // Navigate to the new page
+                    }, { once: true }); // Ensure the event listener is removed after it fires
+                });
+            });
+
+            // Apply staggered animation to tool boxes
+            const toolBoxes = document.querySelectorAll('.tool-box');
+            toolBoxes.forEach((box, index) => {
+                box.style.animationDelay = `${0.075 + index * 0.075}s`; // Reduced from 0.1 + index * 0.1 by 25%
+                // No need to set opacity/transform here, CSS animation handles it with 'forwards'
+            });
+
+            // Attach event listeners for the tool functionalities
+            document.getElementById('solverCalculateBtn').addEventListener('click', calculateQuadraticEquation);
+            document.getElementById('factorizerCalculateBtn').addEventListener('click', factorizeQuadratic);
+            document.getElementById('minMaxCalculateBtn').addEventListener('click', findMinMaxExpression);
+
+            // Clear input fields and result boxes on initial load
+            document.getElementById('solverA').value = '';
+            document.getElementById('solverB').value = '';
+            document.getElementById('solverC').value = '';
+            document.getElementById('solverResult').innerHTML = 'Kết quả sẽ hiển thị ở đây.';
+            document.getElementById('solverResult').classList.remove('show');
+
+            document.getElementById('factorizerA').value = '';
+            document.getElementById('factorizerB').value = '';
+            document.getElementById('factorizerC').value = '';
+            document.getElementById('factorizerResult').innerHTML = 'Kết quả sẽ hiển thị ở đây.';
+            document.getElementById('factorizerResult').classList.remove('show');
+            document.getElementById('factorizerError').textContent = '';
+
+            document.getElementById('minMaxExpressionInput').value = '';
+            document.getElementById('minMaxVariableInput').value = '';
+            document.getElementById('minMaxStartRangeInput').value = '';
+            document.getElementById('minMaxEndRangeInput').value = '';
+            document.getElementById('minMaxResultDiv').innerHTML = '<h2 class="text-xl font-semibold mb-2">Kết Quả:</h2>Kết quả sẽ hiển thị ở đây.';
+            document.getElementById('minMaxResultDiv').classList.remove('show');
+
+            // Load theme preference on page load
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+            themeSwitchCheckbox.checked = (savedTheme === 'light'); // Set checkbox state
+
+            // Event listener for theme switch
+            themeSwitchCheckbox.addEventListener('change', () => {
+                if (themeSwitchCheckbox.checked) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+        });
+    </script>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="aurora-background">
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+    </div>
+
+    <!-- Page Content Wrapper for Transitions -->
+    <div id="pageContentWrapper" class="relative w-full h-full flex justify-center items-center">
+        <div class="main-container">
+            <!-- Back Button -->
+            <a href="#" class="back-button page-link" data-href="index.html" title="Quay lại Trang Chủ">
+                <!-- Replaced Font Awesome icon with inline SVG for exact match -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 4L4 12L12 20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
+            <h1 class="text-3xl font-bold text-center mb-6">Phương trình bậc hai</h1>
+
+            <!-- Quadratic Equation Solver Section -->
+            <div class="tool-box mb-8">
+                <h2 class="text-2xl font-bold text-center mb-6">Giải Phương Trình Bậc Hai</h2>
+                <p class="mb-8">Nhập các hệ số $a, b, c$ của phương trình $ax^2 + bx + c = 0$ để tìm nghiệm.</p>
+
+                <div class="grid-3-cols-gap mb-4">
+                    <div>
+                        <label for="solverA" class="label-text">Hệ số a:</label>
+                        <input type="number" id="solverA" placeholder="Nhập a (ví dụ: 1)" class="input-field">
+                    </div>
+                    <div>
+                        <label for="solverB" class="label-text">Hệ số b:</label>
+                        <input type="number" id="solverB" placeholder="Nhập b (ví dụ: -3)" class="input-field">
+                    </div>
+                    <div>
+                        <label for="solverC" class="label-text">Hệ số c:</label>
+                        <input type="number" id="solverC" placeholder="Nhập c (ví dụ: 2)" class="input-field">
+                    </div>
+                </div>
+
+                <button id="solverCalculateBtn" class="calculate-button">
+                    Tính Nghiệm
+                </button>
+
+                <div id="solverResult" class="result-box">
+                    Kết quả sẽ hiển thị ở đây.
+                </div>
+            </div>
+
+            <!-- Quadratic Factorizer Section -->
+            <div class="tool-box mb-8">
+                <h2 class="text-2xl font-bold text-center mb-6">Phân tích đa thức bậc hai</h2>
+                <p class="mb-8">Nhập các hệ số $a, b, c$ của đa thức $ax^2 + bx + c$ để phân tích thành nhân tử.</p>
+
+                <div class="grid-3-cols-gap mb-4">
+                    <div>
+                        <label for="factorizerA" class="label-text">Hệ số a:</label>
+                        <input type="number" id="factorizerA" placeholder="a" class="input-field">
+                    </div>
+                    <div>
+                        <label for="factorizerB" class="label-text">Hệ số b:</label>
+                        <input type="number" id="factorizerB" placeholder="b" class="input-field">
+                    </div>
+                    <div>
+                        <label for="factorizerC" class="label-text">Hệ số c:</label>
+                        <input type="number" id="factorizerC" placeholder="c" class="input-field">
+                    </div>
+                </div>
+
+                <button id="factorizerCalculateBtn" class="calculate-button">
+                    Phân tích
+                </button>
+
+                <div id="factorizerResult" class="result-box">
+                    Kết quả sẽ hiển thị ở đây.
+                </div>
+                <div id="factorizerError" class="error-message"></div>
+            </div>
+
+            <!-- Min/Max Finder Section -->
+            <div class="tool-box">
+                <h2 class="text-2xl font-bold text-center mb-6">Tìm GTNN & GTLN Của Biểu Thức</h2>
+                <p class="mb-8">Nhập biểu thức, biến và khoảng để tìm giá trị nhỏ nhất và lớn nhất.</p>
+
+                <div class="mb-4">
+                    <label for="minMaxExpressionInput" class="label-text">Biểu thức (ví dụ: x^2 - 4*x + 5):</label>
+                    <input type="text" id="minMaxExpressionInput" placeholder="Nhập biểu thức" class="input-field">
+                </div>
+
+                <div class="mb-4">
+                    <label for="minMaxVariableInput" class="label-text">Biến (ví dụ: x):</label>
+                    <input type="text" id="minMaxVariableInput" placeholder="Nhập biến" class="input-field">
+                </div>
+
+                <div class="grid-2-cols-gap mb-6">
+                    <div>
+                        <label for="minMaxStartRangeInput" class="label-text">Khoảng bắt đầu:</label>
+                        <input type="number" id="minMaxStartRangeInput" placeholder="Ví dụ: 0" class="input-field">
+                    </div>
+                    <div>
+                        <label for="minMaxEndRangeInput" class="label-text">Khoảng kết thúc:</label>
+                        <input type="number" id="minMaxEndRangeInput" placeholder="Ví dụ: 5" class="input-field">
+                    </div>
+                </div>
+
+                <button id="minMaxCalculateBtn" class="calculate-button">
+                    Tính Toán
+                </button>
+
+                <div id="minMaxResultDiv" class="result-box">
+                    <h2 class="text-xl font-semibold mb-2">Kết Quả:</h2>
+                    Kết quả sẽ hiển thị ở đây.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Button Wrapper for Tooltip - Copied from index.html -->
+    <div class="music-player-floating-button-wrapper">
+        <button class="music-player-floating-button" id="toggleMusicButton">
+            <!-- Font Awesome Play/Pause icon -->
+            <i class="fas fa-play" id="musicPlayPauseIcon"></i>
+        </button>
+        <div class="music-tooltip" id="musicTooltip">
+            <!-- Album cover image -->
+            <img id="albumCover" src="" alt="Album Cover">
+            <div class="music-tooltip-content">
+                <span class="song-title" id="songTitle"></span>
+                <span class="song-details" id="songDetails"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switch-wrapper">
+        <label for="theme-switch-checkbox" class="text-sm font-semibold">Chế độ sáng</label>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-switch-checkbox">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" src="" preload="auto"></audio>
+</body>
+</html>

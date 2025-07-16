@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA San Andreas: More Police Mod</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom font and background consistent with homepage */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--body-bg); /* Use CSS variable for background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for scrolling content */
+            min-height: 100vh; /* Use min-height to allow content to push it */
+            padding: 15px;
+            box-sizing: border-box;
+            color: var(--text-color); /* Use CSS variable for text color */
+            position: relative;
+            overflow-y: auto; /* Enable vertical scrolling */
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        /* CSS Variables for Theme */
+        :root {
+            /* Dark Theme (Default) */
+            --body-bg: #0d1a2a;
+            --text-color: #ecf0f1;
+            --container-bg: rgba(44, 62, 80, 0.05);
+            --container-border: rgba(61, 90, 115, 0.1);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.4);
+            --heading-color: #ecf0f1;
+            --heading-shadow: 0 1.5px 6px rgba(0,0,0,0.5);
+            --subheading-color: #3498db;
+            --paragraph-color: #bdc3c7;
+            --list-item-color: #bdc3c7;
+            --strong-color: #ecf0f1;
+            --important-note-bg: rgba(231, 76, 60, 0.15);
+            --important-note-border: #e74c3c;
+            --important-note-text: #ecf0f1;
+            --link-color: #F7F7F7;
+            --link-hover-color: #F7F7F7;
+            --highlight-glow-color: #F7F7F7;
+            --image-shadow: 0 3.75px 11.25px rgba(0, 0, 0, 0.3);
+            --image-hover-shadow: 0 7.5px 18.75px rgba(0, 0, 0, 0.5);
+            --back-button-bg: rgba(90, 125, 154, 0.15);
+            --back-button-hover-bg: rgba(106, 141, 176, 0.25);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.1);
+            --back-button-hover-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            --back-button-active-shadow: 0 2.25px 6px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #ecf0f1;
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: white;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 7.5px 18.75px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-active-shadow: 0 2.25px 7.5px rgba(52, 152, 219, 0.1);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(255, 255, 255, 0.15);
+            --music-tooltip-bg: rgba(44, 62, 80, 0.95);
+            --music-tooltip-color: #ecf0f1;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.3);
+            --music-tooltip-border: rgba(61, 90, 115, 0.5);
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #ecf0f1;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            --body-bg: #f0f2f5; /* Light background */
+            --text-color: #34495e; /* Darker text */
+            --container-bg: rgba(255, 255, 255, 0.1); /* Reduced alpha for more transparency */
+            --container-border: rgba(180, 180, 180, 0.7);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.1);
+            --heading-color: #34495e;
+            --heading-shadow: none;
+            --subheading-color: #2980b9;
+            --paragraph-color: #7f8c8d;
+            --list-item-color: #7f8c8d;
+            --strong-color: #34495e;
+            --important-note-bg: rgba(231, 76, 60, 0.1);
+            --important-note-border: #c0392b;
+            --important-note-text: #34495e;
+            --link-color: #2980b9;
+            --link-hover-color: #3498db;
+            --highlight-glow-color: #2980b9;
+            --image-shadow: 0 3.75px 11.25px rgba(0, 0, 0, 0.1);
+            --image-hover-shadow: 0 7.5px 18.75px rgba(0, 0, 0, 0.2);
+            --back-button-bg: rgba(180, 180, 180, 0.2);
+            --back-button-hover-bg: rgba(180, 180, 180, 0.3);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.05);
+            --back-button-hover-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            --back-button-active-shadow: 0 2.25px 6px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #34495e;
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: #34495e;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(0, 0, 0, 0.1);
+            --music-tooltip-bg: rgba(255, 255, 255, 0.9);
+            --music-tooltip-color: #34495e;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.15);
+            --music-tooltip-border: #ccc;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #34495e;
+        }
+
+        /* Aurora background from homepage */
+        .aurora-background {
+            position: fixed; /* Fixed to viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: transparent;
+            overflow: hidden;
+        }
+
+         .aurora-layer {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(52, 152, 219, 0.3), /* Blue from active playlist item */
+                rgba(46, 204, 113, 0.3)  /* Green from active playlist item */
+            );
+            border-radius: 50%;
+            filter: blur(80px); /* Soft blur for aurora effect */
+            opacity: 0;
+            animation: auroraMovement 5s infinite alternate ease-in-out;
+        }
+
+        .aurora-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: 10%;
+            left: 15%;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.4), rgba(46, 204, 113, 0.4));
+            animation-delay: 0s;
+            animation-duration: 8s; /* Adjusted duration for more subtle flow */
+        }
+
+        .aurora-layer:nth-child(2) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 70%;
+            background: linear-gradient(to top, rgba(0, 200, 200, 0.4), rgba(0, 150, 150, 0.4)); /* Teal tones */
+            animation-delay: 8s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            top: 80%;
+            left: 30%;
+            background: linear-gradient(to right, rgba(70, 130, 180, 0.3), rgba(60, 179, 113, 0.3)); /* SteelBlue to MediumSeaGreen */
+            animation-delay: 16s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            top: 20%;
+            left: 80%;
+            background: linear-gradient(to left, rgba(135, 206, 250, 0.3), rgba(127, 255, 212, 0.3)); /* LightSkyBlue to Aquamarine */
+            animation-delay: 24s; /* Adjusted delay */
+            animation-duration: 9s; /* Adjusted duration */
+        }
+
+        @keyframes auroraMovement {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            25% { transform: translate(25px, -35px) scale(1.06); opacity: 0.75; } /* More pronounced movement */
+            50% { transform: translate(-15px, 45px) scale(0.94); opacity: 0.65; } /* More pronounced movement */
+            75% { transform: translate(35px, -25px) scale(1.04); opacity: 0.85; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+        }
+
+        /* Light theme specific adjustment for aurora opacity */
+        body.light-theme .aurora-layer {
+            opacity: 0.2; /* Reduce opacity for light theme */
+        }
+
+        /* Page Transition Animations - Changed to Fade In/Out with subtle timing */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98); /* Start slightly below and smaller */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1); /* End at original position and size */
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.98); /* Exit by moving up and shrinking */
+            }
+        }
+
+        /* Initial state for page content wrapper to prevent flicker */
+        #pageContentWrapper {
+            opacity: 0; /* Start hidden */
+        }
+
+        .page-transition-in {
+            animation: fadeIn 0.5s ease-out forwards; /* Smoother ease-out */
+        }
+
+        .page-transition-out {
+            animation: fadeOut 0.5s ease-in forwards; /* Smoother ease-in */
+        }
+
+        /* Main content container */
+        .article-container {
+            background-color: var(--container-bg);
+            border-radius: 12px; /* Reduced from 16px by 25% */
+            box-shadow: var(--container-shadow);
+            padding: 22.5px; /* Reduced from 30px by 25% */
+            max-width: 600px; /* Reduced from 800px by 25% */
+            width: 100%;
+            text-align: left; /* Align text left for readability */
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(25px); /* Increased blur for frosted glass effect in light mode */
+            -webkit-backdrop-filter: blur(25px); /* For Safari */
+            position: relative;
+            z-index: 1;
+            margin-top: 37.5px; /* Reduced from 50px by 25% */
+            margin-bottom: 37.5px; /* Reduced from 50px by 25% */
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+		.important-note a {
+            color: var(--link-color);
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+        .important-note a:hover {
+            color: var(--link-hover-color);
+        }
+
+        /* Keyframes for the subtle glowing effect on specific text */
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 6px var(--highlight-glow-color), 0 0 11.25px rgba(247, 247, 247, 0.6); } /* Reduced by 25% */
+            50% { text-shadow: 0 0 9px var(--highlight-glow-color), 0 0 15px rgba(247, 247, 247, 0.9); } /* Reduced by 25% */
+            100% { text-shadow: 0 0 6px var(--highlight-glow-color), 0 0 11.25px rgba(247, 247, 247, 0.6); } /* Reduced by 25% */
+        }
+
+        body.light-theme @keyframes pulseGlow {
+            0% { text-shadow: 0 0 6px var(--highlight-glow-color), 0 0 11.25px rgba(41, 128, 185, 0.3); }
+            50% { text-shadow: 0 0 9px var(--highlight-glow-color), 0 0 15px rgba(41, 128, 185, 0.6); }
+            100% { text-shadow: 0 0 6px var(--highlight-glow-color), 0 0 11.25px rgba(41, 128, 185, 0.3); }
+        }
+
+        .highlight-glow {
+            color: var(--highlight-glow-color); /* Ensure the text itself is the glow color */
+            animation: pulseGlow 2.5s infinite alternate ease-in-out; /* Slightly longer duration for smoother pulse */
+            font-weight: bold; /* Make it slightly bolder */
+        }
+
+        /* Back button styling - Positioned outside the article container */
+        .back-button {
+            position: fixed; /* Fixed to the viewport */
+            top: 22.5px; /* Reduced from 30px by 25% */
+            left: 22.5px; /* Reduced from 30px by 25% */
+            background-color: var(--back-button-bg);
+            width: 33.75px; /* Reduced from 45px by 25% */
+            height: 33.75px; /* Reduced from 45px by 25% */
+            border-radius: 50%; /* Make it circular */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--back-button-shadow);
+            cursor: pointer;
+            /* Enhanced transition for back button */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000; /* Ensure it's always on top */
+            border: 1px solid var(--back-button-bg);
+        }
+        .back-button:hover {
+            background-color: var(--back-button-hover-bg);
+            transform: translateX(-6px) scale(1.08); /* Reduced from -8px, 1.1 by 25% */
+            box-shadow: var(--back-button-hover-shadow);
+        }
+        .back-button:active {
+            transform: translateY(0) scale(0.925); /* Reduced from 0.9 by 25% */
+            box-shadow: var(--back-button-active-shadow);
+        }
+        .back-button svg {
+            width: 0.9em; /* Reduced from 1.2em by 25% */
+            height: 0.9em; /* Reduced from 1.2em by 25% */
+            stroke: var(--back-button-icon-color);
+            stroke-width: 1.875; /* Reduced from 2.5 by 25% */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            transition: stroke 0.3s ease;
+        }
+
+        /* Article content styling */
+        .article-container h1 {
+            font-size: 1.875rem; /* Reduced from 2.5rem by 25% */
+            font-weight: bold;
+            color: var(--heading-color);
+            margin-bottom: 1.125rem; /* Reduced from 1.5rem by 25% */
+            text-align: center;
+            text-shadow: var(--heading-shadow);
+        }
+        .article-container h2 {
+            font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+            font-weight: 600;
+            color: var(--subheading-color); /* Blue accent for subheadings */
+            margin-top: 1.875rem; /* Reduced from 2.5rem by 25% */
+            margin-bottom: 0.75rem; /* Reduced from 1rem by 25% */
+            border-bottom: 1.5px solid rgba(52, 152, 219, 0.25); /* Reduced from 2px, transparency adjusted */
+            padding-bottom: 3.75px; /* Reduced from 5px by 25% */
+            display: inline-block; /* Underline only text width */
+        }
+        body.light-theme .article-container h2 {
+            border-bottom: 1.5px solid rgba(41, 128, 185, 0.25); /* Adjust border color for light theme */
+        }
+        .article-container p {
+            font-size: 0.7875rem; /* Reduced from 1.05rem by 25% */
+            line-height: 1.7;
+            color: var(--paragraph-color);
+            margin-bottom: 0.9rem; /* Reduced from 1.2rem by 25% */
+        }
+        .article-container ul {
+            list-style: disc;
+            margin-left: 18.75px; /* Reduced from 25px by 25% */
+            margin-bottom: 0.9rem; /* Reduced from 1.2rem by 25% */
+            color: var(--list-item-color);
+        }
+        .article-container ul li {
+            margin-bottom: 0.375rem; /* Reduced from 0.5rem by 25% */
+        }
+        .article-container strong {
+            color: var(--strong-color);
+        }
+        .article-container .important-note {
+            background-color: var(--important-note-bg);
+            border-left: 3px solid var(--important-note-border);
+            padding: 11.25px; /* Reduced from 15px by 25% */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            margin-top: 1.5rem; /* Reduced from 2rem by 25% */
+            margin-bottom: 1.5rem; /* Reduced from 2rem by 25% */
+            color: var(--important-note-text);
+            font-weight: 500;
+        }
+
+        /* Image gallery styling */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Reduced minmax from 200px by 25% */
+            gap: 11.25px; /* Reduced from 15px by 25% */
+            margin-top: 1.5rem; /* Reduced from 2rem by 25% */
+            margin-bottom: 1.5rem; /* Reduced from 2rem by 25% */
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: 150px; /* Reduced from 200px by 25% */
+            object-fit: cover; /* Crop images to fit */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            box-shadow: var(--image-shadow);
+            /* Enhanced transition for gallery images */
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer; /* Indicate clickable */
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.0375); /* Reduced from 1.05 by 25% */
+            box-shadow: var(--image-hover-shadow);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 15px; /* Reduced from 20px by 25% */
+                margin-top: 15px; /* Reduced from 20px by 25% */
+                margin-bottom: 15px; /* Reduced from 20px by 25% */
+            }
+            .article-container h1 {
+                font-size: 1.5rem; /* Reduced from 2rem by 25% */
+            }
+            .article-container h2 {
+                font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            .article-container p {
+                font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            }
+            .image-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(112.5px, 1fr)); /* Reduced minmax from 150px by 25% */
+            }
+            .image-gallery img {
+                height: 112.5px; /* Reduced from 150px by 25% */
+            }
+        }
+
+        /* Modal Styles */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Above everything else */
+            opacity: 0;
+            visibility: hidden;
+            /* Enhanced transition for modal appearance/disappearance */
+            transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .image-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background-color: transparent; /* No background for content itself */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Apply initial state and transition directly to modal-content */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 20px; /* Added padding to ensure space around the image */
+            box-sizing: border-box; /* Include padding in width/height calculation */
+        }
+
+        /* When modal is shown, apply final state to modal-content */
+        .image-modal.show .modal-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Ensure the whole image is visible */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); /* Reduced from 0 0 20px by 25% */
+            transition: transform 0.3s ease;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: -30px; /* Reduced from -40px by 25% */
+            right: -30px; /* Reduced from -40px by 25% */
+            background-color: rgba(231, 76, 60, 0.15); /* 85% transparent */
+            color: white;
+            width: 30px; /* Reduced from 40px by 25% */
+            height: 30px; /* Reduced from 40px by 25% */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            cursor: pointer;
+            box-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.3); /* Reduced from 0 2px 5px by 25% */
+            /* Enhanced transition for close button */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(231, 76, 60, 0.25); /* Added subtle border with transparency */
+        }
+        body.light-theme .close-modal-btn {
+            background-color: rgba(231, 76, 60, 0.2); /* Adjust background for light theme */
+            border: 1px solid rgba(192, 57, 43, 0.3); /* Adjust border for light theme */
+            color: #34495e; /* Darker text for light theme */
+        }
+
+        .close-modal-btn:hover {
+            background-color: rgba(192, 57, 43, 0.25); /* Slightly darker, 75% transparent */
+            transform: scale(1.15) rotate(90deg); /* Reduced from 1.2 by 25% */
+        }
+        .close-modal-btn:active {
+            transform: scale(0.9) rotate(90deg); /* More distinct active effect */
+            box-shadow: 0 0.75px 2.25px rgba(0, 0, 0, 0.2); /* Reduced from 0 1px 3px by 25% */
+        }
+
+        /* Responsive adjustments for modal close button */
+        @media (max-width: 768px) {
+            .close-modal-btn {
+                top: 7.5px; /* Reduced from 10px by 25% */
+                right: 7.5px; /* Reduced from 10px by 25% */
+                width: 22.5px; /* Reduced from 30px by 25% */
+                height: 22.5px; /* Reduced from 30px by 25% */
+                font-size: 0.9rem; /* Reduced from 1.2rem by 25% */
+            }
+        }
+
+        /* Music Player Floating Button - Copied from index.html */
+        .music-player-floating-button-wrapper {
+            position: fixed; /* Fixed position relative to the viewport */
+            bottom: 22.5px; /* Reduced from 30px by 25% */
+            left: 22.5px; /* Reduced from 30px by 25% */
+            z-index: 1000; /* Ensure it's above all other content */
+            display: flex;
+            align-items: flex-end; /* Align tooltip to the bottom of the button */
+            justify-content: flex-start; /* Align tooltip to the left of the button */
+        }
+
+        .music-player-floating-button {
+            background: var(--music-button-bg);
+            color: var(--music-button-color);
+            width: 45px; /* Reduced from 60px by 25% */
+            height: 45px; /* Reduced from 60px by 25% */
+            border-radius: 50%; /* Circular button */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            box-shadow: var(--music-button-shadow);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; /* For tooltip positioning */
+            z-index: 1; /* Ensure button is above tooltip when active */
+            border: 1px solid var(--music-button-border);
+        }
+
+        .music-player-floating-button:hover {
+            background: var(--music-button-hover-bg);
+            transform: translateY(-2.25px) scale(1.0375); /* Reduced lift and scale by 25% */
+            box-shadow: var(--music-button-hover-shadow);
+        }
+
+        .music-player-floating-button:active {
+            transform: translateY(0) scale(0.9625); /* Reduced press effect by 25% */
+            box-shadow: var(--music-button-active-shadow);
+            background: var(--music-button-active-bg);
+        }
+
+        /* Pulse effect for the music button when playing */
+        @keyframes pulseMusicButton {
+            0% {
+                box-shadow: var(--music-button-pulse-shadow-1);
+            }
+            50% {
+                box-shadow: var(--music-button-pulse-shadow-2);
+            }
+            100% {
+                box-shadow: var(--music-button-pulse-shadow-1);
+            }
+        }
+
+        .music-player-floating-button.playing {
+            animation: pulseMusicButton 1.5s infinite ease-in-out;
+        }
+
+        /* Light theme specific adjustment for music button pulse */
+        body.light-theme .music-player-floating-button.playing {
+            animation: none; /* Disable pulse animation for light theme */
+            box-shadow: var(--music-button-shadow); /* Keep regular shadow */
+        }
+
+        .music-player-floating-button i {
+            color: var(--music-icon-color);
+        }
+
+        /* Custom Tooltip Styles - Copied from index.html */
+        .music-tooltip {
+            position: absolute;
+            left: 52.5px; /* Reduced from 70px by 25% */
+            bottom: 50%; /* Vertically center with the button */
+            transform: translateY(50%); /* Adjust for vertical centering */
+            background-color: var(--music-tooltip-bg);
+            color: var(--music-tooltip-color);
+            padding: 7.5px 11.25px; /* Reduced from 10px 15px by 25% */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            box-shadow: var(--music-tooltip-shadow);
+            white-space: nowrap; /* Prevent text wrapping */
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-size: 0.7125rem; /* Reduced from 0.95rem by 25% */
+            pointer-events: none; /* Allow clicks to pass through */
+            border: 1px solid var(--music-tooltip-border);
+            backdrop-filter: blur(2.25px); /* Reduced from 3px by 25% */
+            -webkit-backdrop-filter: blur(2.25px); /* For Safari */
+            display: flex; /* Use flexbox for layout inside tooltip */
+            align-items: center; /* Vertically align items */
+            gap: 7.5px; /* Reduced from 10px by 25% */
+        }
+
+        .music-tooltip img {
+            width: 37.5px; /* Reduced from 50px by 25% */
+            height: 37.5px; /* Reduced from 50px by 25% */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .music-tooltip-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .music-tooltip-content .song-title {
+            font-weight: bold;
+            font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            color: var(--music-tooltip-color);
+        }
+
+        .music-tooltip-content .song-details {
+            font-size: 0.6375rem; /* Reduced from 0.85rem by 25% */
+            color: var(--paragraph-color);
+        }
+
+        .music-player-floating-button-wrapper:hover .music-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Theme Switch Styles */
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--container-bg);
+            border-radius: 9px;
+            padding: 8px 15px;
+            box-shadow: var(--container-shadow);
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--slider-before-bg);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--slider-checked-bg);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--slider-checked-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .music-player-floating-button-wrapper,
+            .theme-switch-wrapper {
+                bottom: 15px;
+                left: 15px;
+                right: 15px;
+                justify-content: space-between;
+                width: calc(100% - 30px);
+                gap: 0;
+            }
+            .theme-switch-wrapper {
+                right: 15px;
+                left: auto;
+                width: auto;
+                padding: 8px 10px;
+            }
+            .music-player-floating-button-wrapper {
+                left: 15px;
+                right: auto;
+                width: auto;
+                padding: 0;
+            }
+            .music-tooltip {
+                left: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Content Wrapper for Transitions -->
+    <div id="pageContentWrapper" class="relative w-full h-full flex justify-center items-start">
+        <!-- Back button positioned outside the article container -->
+        <a href="#" class="back-button page-link" data-href="index.html" title="Quay lại Trang Chủ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 4L4 12L12 20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+
+        <div class="aurora-background">
+            <div class="aurora-layer"></div>
+            <div class="aurora-layer"></div>
+            <div class="aurora-layer"></div>
+            <div class="aurora-layer"></div>
+        </div>
+
+        <div class="article-container">
+            <h1>GTA San Andreas: More Police Mod v1.1</h1>
+
+            <p>Grand Theft Auto: San Andreas vẫn là một trong những tựa game được yêu thích nhất mọi thời đại, và cộng đồng modding của nó vẫn hoạt động mạnh mẽ.</p>
+
+           <div class="image-gallery">
+                <img src="image/1717791649_a.jpg" alt="Cảnh sát truy đuổi trong GTA San Andreas">
+                <img src="image/1717791649_ab.jpg" alt="Xe cảnh sát trong GTA San Andreas">
+                <img src="image/1717791649_abcd.jpg" alt="Cảnh sát đang làm nhiệm vụ">
+            </div>
+
+            <h2>Mod này làm gì?</h2>
+            <p>"More Police Mod v1.1" tập trung vào việc tăng cường sự hiện diện và hành vi của cảnh sát trong game. Nếu bạn đã từng cảm thấy cảnh sát trong GTA San Andreas hơi "hiền" hoặc dễ dàng bị cắt đuôi, bản mod này sẽ thay đổi điều đó. Mặc dù thông tin chi tiết về các tính năng cụ thể của phiên bản 1.1 không được công bố rộng rãi, nhưng các bản mod cảnh sát tương tự thường bao gồm:</p>
+            <ul>
+                <li><strong>Tăng cường số lượng cảnh sát:</strong> Bạn sẽ thấy nhiều xe cảnh sát và sĩ quan hơn tuần tra trên đường, đặc biệt là khi bạn có mức độ truy nã cao.</li>
+                <li><strong>Hành vi cảnh sát thông minh hơn:</strong> Cảnh sát có thể trở nên hung hãn hơn, sử dụng chiến thuật truy đuổi hiệu quả hơn, và khó cắt đuôi hơn.</li>
+                <li><strong>Phản ứng nhanh hơn:</strong> Lực lượng cảnh sát sẽ phản ứng nhanh chóng hơn với các hành vi phạm tội của bạn.</li>
+                <li><strong>Các loại phương tiện cảnh sát đa dạng hơn:</strong> Có thể bao gồm sự xuất hiện của các loại xe cảnh sát đặc biệt hơn như Ranger hoặc Enforcer, tùy thuộc vào mức độ truy nã và khu vực.</li>
+            </ul>
+            <p>Mục tiêu chính của bản mod là làm cho hệ thống truy nã trở nên thử thách và hấp dẫn hơn, buộc người chơi phải suy nghĩ kỹ hơn về hành vi của mình và tìm kiếm những cách trốn thoát sáng tạo hơn.</p>
+
+            <div class="image-gallery">
+                <img src="image/1717791649_abcdef.jpg" alt="Cảnh sát bao vây trong GTA San Andreas">
+                <img src="image/1717791649_abcdefgsi.jpg" alt="Xe cảnh sát đang đuổi theo">
+            </div>
+
+            <h2>Tại sao bạn nên thử?</h2>
+            <p>Nếu bạn là một fan hâm mộ lâu năm của GTA San Andreas và muốn làm mới trải nghiệm chơi game, "More Police Mod v1.1" là một lựa chọn tuyệt vời. Nó mang lại:</p>
+            <ul>
+                <li><strong>Tăng tính thử thách:</strong> Đối với những người chơi muốn một thử thách cao hơn, bản mod này sẽ làm cho việc thoát khỏi cảnh sát trở nên khó khăn và thú vị hơn.</li>
+                <li><strong>Trải nghiệm nhập vai:</strong> Cảm giác bị truy đuổi bởi một lực lượng cảnh sát đông đảo và quyết liệt sẽ tăng cường tính nhập vai, khiến bạn cảm thấy như đang thực sự là một tên tội phạm bị săn lùng.</li>
+                <li><strong>Kịch tính hơn:</strong> Những cuộc rượt đuổi tốc độ cao sẽ trở nên căng thẳng và mãn nhãn hơn rất nhiều.</li>
+            </ul>
+
+           <div class="image-gallery">
+                <img src="image/1717791649_abcdefgsij.jpg" alt="Cảnh sát truy đuổi trong GTA San Andreas">
+                <img src="image/1717791649_abcdefgsijk.jpg" alt="Xe cảnh sát trong GTA San Andreas">
+                <img src="image/1717791649_a.jpg" alt="Cảnh sát đang làm nhiệm vụ">
+            </div>
+
+            <h2>Lưu ý khi cài đặt</h2>
+            <p>Việc cài đặt các bản mod cho GTA San Andreas thường yêu cầu một số công cụ hỗ trợ như ModLoader, Cleo(cụ thể hơn là ASI loader), tùy thuộc vào loại mod. Đối với các bản mod thay đổi hành vi hoặc thêm phương tiện, bạn có thể cần:</p>
+            <ol class="list-decimal list-inside ml-5">
+                <li><strong>Tải xuống mod:</strong> Bản mod thường ở định dạng RAR. "1722115496_More Police mod v1.1.rar"</li>
+                <li><strong>Sử dụng công cụ cài đặt mod:</strong> Các công cụ như Cleo 4.4, ModLoader có thể tự động phát hiện thư mục game của bạn, tùy theo bạn cài đặt và giúp bạn cài đặt mod một cách dễ dàng bằng cách chọn file RAR.</li>
+                <li><strong>Thay thế hoặc thêm file:</strong> Một số mod có thể yêu cầu bạn thay thế các file game hiện có (ví dụ: một số mod như cài skin, chỉnh file hệ thống game,...). Luôn sao lưu các file gốc trước khi cài đặt mod để tránh lỗi.</li>
+            </ol>
+            <div class="important-note">
+                <strong>Quan trọng:</strong> luôn cài AsiLoader và Cleo 4.4 đầy đủ, có thể tải mod <a href="https://www.gtainside.com/en/sanandreas/mods/200093-more-police-mod-v1-1/" target="_blank"><span class="highlight-glow">tại đây</span></a>.
+            </div>
+            <p>"More Police Mod v1.1" hứa hẹn sẽ thổi một luồng gió mới vào những cuộc phiêu lưu của bạn tại San Andreas, biến mỗi lần truy nã thành một cuộc chiến sinh tồn đầy cam go và hấp dẫn.</p>
+        </div>
+
+        <!-- Image Modal -->
+        <div id="imageModal" class="image-modal">
+            <div class="modal-content">
+                <img id="modalImage" src="" alt="Full size image">
+                <span class="close-modal-btn" id="closeModalBtn">&times;</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Button Wrapper for Tooltip - Copied from index.html -->
+    <div class="music-player-floating-button-wrapper">
+        <button class="music-player-floating-button" id="toggleMusicButton">
+            <!-- Font Awesome Play/Pause icon -->
+            <i class="fas fa-play" id="musicPlayPauseIcon"></i>
+        </button>
+        <div class="music-tooltip" id="musicTooltip">
+            <!-- Album cover image -->
+            <img id="albumCover" src="" alt="Album Cover">
+            <div class="music-tooltip-content">
+                <span class="song-title" id="songTitle"></span>
+                <span class="song-details" id="songDetails"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switch-wrapper">
+        <label for="theme-switch-checkbox" class="text-sm font-semibold">Chế độ sáng</label>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-switch-checkbox">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" src="" preload="auto"></audio>
+
+    <script>
+        // --- Music Player Logic for Background Playback ---
+        let audioPlayer;
+        let toggleMusicButton;
+        let musicPlayPauseIcon;
+        let musicTooltip;
+        let albumCoverImg;
+        let songTitleSpan;
+        let songDetailsSpan;
+
+        const SONGS = [
+       {
+            id: 'song1',
+            title: "Die for you",
+            artist: "joji",
+            album: "SMITHEREENS",
+            url: "music/03. Die For You.mp3",
+            albumArtUrl: "albumcover/smithereens.jpeg"
+        },
+        {
+            id: 'song2',
+            title: "You suck Charlie",
+            artist: "joji",
+            album: "Chloe Burbank",
+            url: "music/you suck charlie.m4a",
+            albumArtUrl: "albumcover/chloe burbank.jpg"
+        },
+        {
+            id: 'song3',
+            title: "Come Thru",
+            artist: "Joji",
+            album: "BALLADS 1",
+            url: "music/09 Come Thru.mp3",
+            albumArtUrl: "albumcover/ballads1.png"
+        },
+        {
+            id: 'song4',
+            title: "Modus",
+            artist: "Joji",
+            album: "Nectar",
+            url: "music/02 MODUS.mp3",
+            albumArtUrl: "albumcover/Nectar.jpg"
+        },
+        {
+            id: 'song5',
+            title: "505",
+            artist: "Arctic Monkeys",
+            album: "Favourite Worst Nightmare",
+            url: "music/505 - Arctic Monkeys.mp3",
+            albumArtUrl: "albumcover/FavouriteWorstNightmare.jpg"
+        },
+        {
+            id: 'song6',
+            title: "Stressed Out",
+            artist: "Ben Schuller",
+            album: "piano cover",
+            url: "music/Ben Schuller-Stressed Out.mp3",
+            albumArtUrl: "albumcover/strout.jpg"
+        },
+        {
+            id: 'song7',
+            title: "Chamber Of Reflection",
+            artist: "Mac DeMarco",
+            album: "Salad Days",
+            url: "music/Chamber Of Reflection.mp3",
+            albumArtUrl: "albumcover/cbofrl.jpg"
+        },
+        {
+            id: 'song8',
+            title: "For the First Time",
+            artist: "Mac DeMarco",
+            album: "This Old Dog",
+            url: "music/For the First Time - Mac DeMarco.mp3",
+            albumArtUrl: "albumcover/tolddog.png"
+        }
+        ];
+
+        let currentSongIndex = -1; // No song selected initially
+
+        function saveMusicState() {
+            const currentSongId = audioPlayer.dataset.currentSongId;
+            if (currentSongId) {
+                const state = {
+                    songId: currentSongId,
+                    currentTime: audioPlayer.currentTime,
+                    isPlaying: !audioPlayer.paused,
+                    volume: audioPlayer.volume
+                };
+                localStorage.setItem('musicPlayerState', JSON.stringify(state));
+            } else {
+                localStorage.removeItem('musicPlayerState');
+            }
+        }
+
+        function loadMusicState() {
+            const savedState = localStorage.getItem('musicPlayerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const song = SONGS.find(s => s.id === state.songId);
+                if (song) {
+                    currentSongIndex = SONGS.indexOf(song); // Update currentSongIndex
+                    audioPlayer.src = song.url;
+                    audioPlayer.dataset.currentSongId = song.id;
+                    audioPlayer.volume = state.volume;
+
+                    if (state.isPlaying) {
+                        audioPlayer.currentTime = state.currentTime;
+                        audioPlayer.play().then(() => {
+                            updateTooltip(song);
+                            updatePlayPauseIcon(true); // Update icon to pause
+                            toggleMusicButton.classList.add('playing'); // Add playing class for visual feedback
+                        }).catch(error => {
+                            console.log("Autoplay prevented:", error);
+                            updateTooltip({
+                                title: "Nhấn nút nhạc để phát!",
+                                artist: "Trình duyệt đã chặn tự động phát.",
+                                album: "",
+                                albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                            });
+                            updatePlayPauseIcon(false); // Update icon to play
+                            toggleMusicButton.classList.remove('playing');
+                        });
+                    } else {
+                        updateTooltip(song); // Show current song info even if paused
+                        audioPlayer.currentTime = state.currentTime; // Set current time even if paused
+                        updatePlayPauseIcon(false); // Update icon to play
+                        toggleMusicButton.classList.remove('playing');
+                    }
+                } else {
+                    // If song not found, reset to default state
+                    resetMusicState();
+                }
+            } else {
+                // Default state if no music was previously playing
+                resetMusicState();
+            }
+        }
+
+        function resetMusicState() {
+            currentSongIndex = -1;
+            audioPlayer.src = "";
+            audioPlayer.dataset.currentSongId = '';
+            audioPlayer.currentTime = 0;
+            audioPlayer.volume = 1; // Default volume
+            localStorage.removeItem('musicPlayerState');
+            updateTooltip({
+                title: "Chưa có nhạc",
+                artist: "Hãy chọn bài hát từ trang nhạc",
+                album: "",
+                albumArtUrl: "https://placehold.co/50x50/95a5a6/ffffff?text=Music"
+            });
+            updatePlayPauseIcon(false); // Ensure icon is play
+            toggleMusicButton.classList.remove('playing');
+        }
+
+        function updateTooltip(song) {
+            albumCoverImg.src = song.albumArtUrl;
+            albumCoverImg.alt = `Ảnh bìa album của ${song.title}`;
+            songTitleSpan.textContent = song.title;
+            songDetailsSpan.textContent = `${song.artist} ${song.album ? '(Album: "' + song.album + '")' : ''}`;
+        }
+
+        function updatePlayPauseIcon(isPlaying) {
+            if (isPlaying) {
+                musicPlayPauseIcon.classList.remove('fa-play');
+                musicPlayPauseIcon.classList.add('fa-pause');
+            } else {
+                musicPlayPauseIcon.classList.remove('fa-pause');
+                musicPlayPauseIcon.classList.add('fa-play');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageContentWrapper = document.getElementById('pageContentWrapper');
+            const pageLinks = document.querySelectorAll('.page-link');
+            const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox'); // Get the theme switch checkbox
+
+            // Animate page in on load
+            pageContentWrapper.classList.add('page-transition-in');
+
+            // Attach music player DOM elements and event listeners
+            audioPlayer = document.getElementById('audioPlayer');
+            toggleMusicButton = document.getElementById('toggleMusicButton');
+            musicPlayPauseIcon = document.getElementById('musicPlayPauseIcon');
+            musicTooltip = document.getElementById('musicTooltip');
+            albumCoverImg = document.getElementById('albumCover');
+            songTitleSpan = document.getElementById('songTitle');
+            songDetailsSpan = document.getElementById('songDetails');
+
+            // The click event listener for the music button now controls play/pause directly
+            toggleMusicButton.addEventListener('click', () => {
+                if (currentSongIndex === -1) {
+                    // If no song is loaded, load the first one and play
+                    currentSongIndex = 0;
+                    audioPlayer.src = SONGS[currentSongIndex].url;
+                    audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                    updateTooltip(SONGS[currentSongIndex]);
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on first play:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else if (audioPlayer.paused) {
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on resume:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else {
+                    audioPlayer.pause();
+                    updatePlayPauseIcon(false); // Update icon to play
+                    toggleMusicButton.classList.remove('playing');
+                }
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                updatePlayPauseIcon(true);
+                toggleMusicButton.classList.add('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                updatePlayPauseIcon(false);
+                toggleMusicButton.classList.remove('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                currentSongIndex = (currentSongIndex + 1) % SONGS.length;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                updateTooltip(SONGS[currentSongIndex]);
+                audioPlayer.play(); // Auto-play next song
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('timeupdate', saveMusicState);
+            audioPlayer.addEventListener('volumechange', saveMusicState);
+
+            loadMusicState(); // Load music state when the page loads
+
+            // Handle page link clicks for smooth transitions
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default navigation
+                    const targetPage = link.dataset.href; // Get target page from data-href
+
+                    // Add fade-out animation
+                    pageContentWrapper.classList.remove('page-transition-in');
+                    pageContentWrapper.classList.add('page-transition-out');
+
+                    // Wait for the animation to complete before navigating
+                    pageContentWrapper.addEventListener('animationend', () => {
+                        window.location.href = targetPage; // Navigate to the new page
+                    }, { once: true }); // Ensure the event listener is removed after it fires
+                });
+            });
+
+            // Image Modal Logic (already present, just ensuring it's within DOMContentLoaded)
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const galleryImages = document.querySelectorAll('.image-gallery img');
+
+            galleryImages.forEach(image => {
+                image.addEventListener('click', () => {
+                    modalImage.src = image.src;
+                    imageModal.classList.add('show');
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                imageModal.classList.remove('show');
+            });
+
+            // Close modal when clicking outside the image content
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    imageModal.classList.remove('show');
+                }
+            });
+
+            // --- Theme Switch Logic ---
+            function applyTheme(theme) {
+                document.body.classList.remove('light-theme'); // Remove existing theme class
+                if (theme === 'light') {
+                    document.body.classList.add('light-theme');
+                }
+                localStorage.setItem('theme', theme); // Save theme preference
+            }
+
+            // Load theme preference on page load
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+            themeSwitchCheckbox.checked = (savedTheme === 'light'); // Set checkbox state
+
+            // Event listener for theme switch
+            themeSwitchCheckbox.addEventListener('change', () => {
+                if (themeSwitchCheckbox.checked) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

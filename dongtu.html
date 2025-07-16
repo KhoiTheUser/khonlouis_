@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng Dụng Chia Động Từ (Có Nghĩa)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom font for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--body-bg); /* Use CSS variable for background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            box-sizing: border-box;
+            color: var(--text-color); /* Use CSS variable for text color */
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        /* CSS Variables for Theme */
+        :root {
+            /* Dark Theme (Default) */
+            --body-bg: #0d1a2a;
+            --text-color: #ecf0f1;
+            --container-bg: rgba(44, 62, 80, 0.05);
+            --container-border: rgba(61, 90, 115, 0.1);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.4);
+            --input-bg: rgba(44, 62, 80, 0.6);
+            --input-border: #4a627a;
+            --input-focus-border: #3498db;
+            --input-focus-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+            --input-focus-bg: rgba(61, 90, 115, 0.25);
+            --placeholder-color: #bdc3c7;
+            --button-bg: rgba(52, 152, 219, 0.15);
+            --button-hover-bg: rgba(52, 152, 219, 0.25);
+            --button-active-bg: rgba(36, 113, 163, 0.2);
+            --button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --button-hover-shadow: 0 11.25px 26.25px rgba(52, 152, 219, 0.3);
+            --button-active-shadow: 0 1.5px 7.5px rgba(52, 152, 219, 0.15);
+            --result-box-bg: rgba(52, 73, 94, 0.15);
+            --result-box-border: rgba(74, 98, 122, 0.2);
+            --result-box-shadow: inset 0 1.5px 3.75px rgba(0, 0, 0, 0.1);
+            --red-color: #e74c3c;
+            --green-color: #2ecc71;
+            --blue-color: #3498db;
+            --back-button-bg: rgba(90, 125, 154, 0.15);
+            --back-button-hover-bg: rgba(106, 141, 176, 0.25);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.1);
+            --back-button-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.15);
+            --back-button-active-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: white;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.2);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(255, 255, 255, 0.15);
+            --music-tooltip-bg: rgba(44, 62, 80, 0.95);
+            --music-tooltip-color: #ecf0f1;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.3);
+            --music-tooltip-border: rgba(61, 90, 115, 0.5);
+            --heading-color: #ecf0f1;
+            --heading-shadow: 0 1.5px 4.5px rgba(0,0,0,0.4);
+            --label-text-color: #bdc3c7;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #ecf0f1;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            --body-bg: #f0f2f5; /* Light background */
+            --text-color: #34495e; /* Darker text */
+            --container-bg: rgba(255, 255, 255, 0.1); /* Reduced alpha for more transparency */
+            --container-border: rgba(180, 180, 180, 0.7);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: rgba(200, 200, 200, 0.7);
+            --input-focus-border: #2980b9;
+            --input-focus-shadow: 0 0 0 3px rgba(41, 128, 185, 0.15);
+            --input-focus-bg: rgba(255, 255, 255, 0.95);
+            --placeholder-color: #7f8c8d;
+            --button-bg: rgba(52, 152, 219, 0.25);
+            --button-hover-bg: rgba(52, 152, 219, 0.35);
+            --button-active-bg: rgba(36, 113, 163, 0.3);
+            --button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.1);
+            --button-hover-shadow: 0 13.5px 30px rgba(52, 152, 219, 0.2);
+            --button-active-shadow: 0 3px 9px rgba(52, 152, 219, 0.05);
+            --result-box-bg: rgba(255, 255, 255, 0.9);
+            --result-box-border: rgba(200, 200, 200, 0.7);
+            --result-box-shadow: inset 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --red-color: #c0392b;
+            --green-color: #27ae60;
+            --blue-color: #2980b9;
+            --back-button-bg: rgba(180, 180, 180, 0.2);
+            --back-button-hover-bg: rgba(180, 180, 180, 0.3);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.05);
+            --back-button-hover-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            --back-button-active-shadow: 0 2.25px 6px rgba(0, 0, 0, 0.05);
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: #34495e;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-pulse-shadow-1: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-pulse-shadow-2: 0 0 18.75px rgba(52, 152, 219, 0.3), 0 0 30px rgba(0, 0, 0, 0.1);
+            --music-tooltip-bg: rgba(255, 255, 255, 0.9);
+            --music-tooltip-color: #34495e;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.15);
+            --music-tooltip-border: #ccc;
+            --heading-color: #34495e;
+            --heading-shadow: none;
+            --label-text-color: #7f8c8d;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+            --music-icon-color: #34495e;
+        }
+
+        /* Aurora Borealis Effect - Copied from music.html */
+        .aurora-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .aurora-layer {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(52, 152, 219, 0.3),
+                rgba(46, 204, 113, 0.3)
+            );
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0;
+            animation: auroraMovement 5s infinite alternate ease-in-out;
+        }
+
+        .aurora-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: 10%;
+            left: 15%;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.4), rgba(46, 204, 113, 0.4));
+            animation-delay: 0s;
+            animation-duration: 8s;
+        }
+
+        .aurora-layer:nth-child(2) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 70%;
+            background: linear-gradient(to top, rgba(0, 200, 200, 0.4), rgba(0, 150, 150, 0.4));
+            animation-delay: 8s;
+            animation-duration: 10s;
+        }
+
+        .aurora-layer:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            top: 80%;
+            left: 30%;
+            background: linear-gradient(to right, rgba(70, 130, 180, 0.3), rgba(60, 179, 113, 0.3));
+            animation-delay: 16s;
+            animation-duration: 10s;
+        }
+
+        .aurora-layer:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            top: 20%;
+            left: 80%;
+            background: linear-gradient(to left, rgba(135, 206, 250, 0.3), rgba(127, 255, 212, 0.3));
+            animation-delay: 24s;
+            animation-duration: 9s;
+        }
+
+        @keyframes auroraMovement {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translate(25px, -35px) scale(1.06);
+                opacity: 0.75;
+            }
+            50% {
+                transform: translate(-15px, 45px) scale(0.94);
+                opacity: 0.65;
+            }
+            75% {
+                transform: translate(35px, -25px) scale(1.04);
+                opacity: 0.85;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* Light theme specific adjustment for aurora opacity */
+        body.light-theme .aurora-layer {
+            opacity: 0.2; /* Reduce opacity for light theme */
+        }
+
+        /* Page Transition Animations - Copied from index.html */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.98);
+            }
+        }
+
+        /* Initial state for page content wrapper to prevent flicker */
+        #pageContentWrapper {
+            opacity: 0;
+        }
+
+        .page-transition-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .page-transition-out {
+            animation: fadeOut 0.5s ease-in forwards;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: var(--container-shadow);
+            padding: 22.5px;
+            max-width: 412.5px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(25px); /* Increased blur for frosted glass effect in light mode */
+            -webkit-backdrop-filter: blur(25px);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+            position: relative;
+        }
+        .input-field {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1.05rem;
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            transition: all 0.3s ease;
+        }
+        .input-field option {
+            color: #000000; /* Always black for readability in dropdown options */
+            background-color: #ffffff; /* Always white for readability in dropdown options */
+        }
+        .input-field::placeholder {
+            color: var(--placeholder-color);
+            opacity: 0.7;
+        }
+        .input-field:focus {
+            border-color: var(--input-focus-border);
+            outline: none;
+            box-shadow: var(--input-focus-shadow);
+            background-color: var(--input-focus-bg);
+            transform: translateY(-1.5px);
+        }
+        .label-text {
+            color: var(--label-text-color);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+        /* Button styling - unified and large */
+        .calculate-button {
+            background: var(--button-bg);
+            color: var(--music-button-color);
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--button-shadow);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 7.5px;
+            padding: 13.5px 18px;
+            font-size: 0.975rem;
+            margin-top: 18.75px;
+            border: 1px solid var(--music-button-border);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+        .calculate-button:hover {
+            background: var(--button-hover-bg);
+            transform: translateY(-3.75px) scale(1.06);
+            box-shadow: var(--button-hover-shadow);
+        }
+        .calculate-button:active {
+            transform: translateY(0) scale(0.94);
+            box-shadow: var(--button-active-shadow);
+            background: var(--button-active-bg);
+        }
+        /* Result display area - unified */
+        .result-box {
+            background-color: var(--result-box-bg);
+            padding: 18.75px;
+            border-radius: 9px;
+            margin-top: 18.75px;
+            min-height: 6.75rem;
+            color: var(--text-color);
+            border: 1px solid var(--result-box-border);
+            box-shadow: var(--result-box-shadow);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            word-break: break-word;
+            opacity: 0;
+            transform: translateY(7.5px);
+        }
+        .result-box.show {
+            animation: popIn 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+        .result-box h2 {
+            color: var(--heading-color);
+            text-align: center;
+            margin-bottom: 11.25px;
+            font-size: 0.9375rem;
+        }
+        .result-box p {
+            color: var(--text-color);
+            font-size: 0.825rem;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        .result-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Colors for specific feedback */
+        .text-red-600 {
+            color: var(--red-color);
+            font-weight: 600;
+        }
+        .text-green-600 {
+            color: var(--green-color);
+            font-weight: 600;
+        }
+        .text-blue-600 {
+            color: var(--blue-color);
+            font-weight: 600;
+        }
+        h1 {
+            color: var(--heading-color);
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: var(--heading-shadow);
+        }
+        h2 {
+            color: var(--heading-color);
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.125rem;
+        }
+        p {
+            color: var(--placeholder-color); /* Use placeholder color for general paragraphs */
+            font-size: 0.7875rem;
+            line-height: 1.5;
+            margin-bottom: 1.125rem;
+        }
+
+        /* Keyframe Animations */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(15px);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.0375) translateY(-3.75px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Back Button Styling - Copied from music.html for consistency */
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--back-button-bg);
+            width: 33.75px;
+            height: 33.75px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--back-button-shadow);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            z-index: 10;
+            border: 1px solid var(--back-button-bg);
+        }
+        .back-button:hover {
+            background-color: var(--back-button-hover-bg);
+            transform: translateX(-3.75px) scale(1.0375);
+            box-shadow: var(--back-button-hover-shadow);
+        }
+        .back-button:active {
+            transform: translateY(0) scale(0.9625);
+            box-shadow: var(--back-button-active-shadow);
+        }
+        /* Style for the SVG icon inside the button */
+        .back-button svg {
+            width: 0.9em;
+            height: 0.9em;
+            stroke: var(--text-color);
+            stroke-width: 1.875;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            transition: stroke 0.3s ease;
+        }
+        .back-button:hover svg {
+            stroke: var(--text-color);
+        }
+
+        /* Music Player Floating Button - Copied from index.html */
+        .music-player-floating-button-wrapper {
+            position: fixed;
+            bottom: 22.5px;
+            left: 22.5px;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+        }
+
+        .music-player-floating-button {
+            background: var(--music-button-bg);
+            color: var(--music-button-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.125rem;
+            box-shadow: var(--music-button-shadow);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            z-index: 1;
+            border: 1px solid var(--music-button-border);
+        }
+
+        .music-player-floating-button:hover {
+            background: var(--music-button-hover-bg);
+            transform: translateY(-2.25px) scale(1.0375);
+            box-shadow: var(--music-button-hover-shadow);
+        }
+
+        .music-player-floating-button:active {
+            transform: translateY(0) scale(0.9625);
+            box-shadow: var(--music-button-active-shadow);
+            background: var(--music-button-active-bg);
+        }
+
+        /* Pulse effect for the music button when playing */
+        @keyframes pulseMusicButton {
+            0% {
+                box-shadow: var(--music-button-pulse-shadow-1);
+            }
+            50% {
+                box-shadow: var(--music-button-pulse-shadow-2);
+            }
+            100% {
+                box-shadow: var(--music-button-pulse-shadow-1);
+            }
+        }
+
+        .music-player-floating-button.playing {
+            animation: pulseMusicButton 1.5s infinite ease-in-out;
+        }
+
+        /* Light theme specific adjustment for music button pulse */
+        body.light-theme .music-player-floating-button.playing {
+            animation: none; /* Disable pulse animation for light theme */
+            box-shadow: var(--music-button-shadow); /* Keep regular shadow */
+        }
+
+        .music-player-floating-button i {
+            color: var(--music-icon-color);
+        }
+
+        /* Custom Tooltip Styles - Copied from index.html */
+        .music-tooltip {
+            position: absolute;
+            left: 52.5px;
+            bottom: 50%;
+            transform: translateY(50%);
+            background-color: var(--music-tooltip-bg);
+            color: var(--music-tooltip-color);
+            padding: 7.5px 11.25px;
+            border-radius: 6px;
+            box-shadow: var(--music-tooltip-shadow);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-size: 0.7125rem;
+            pointer-events: none;
+            border: 1px solid var(--music-tooltip-border);
+            backdrop-filter: blur(2.25px);
+            -webkit-backdrop-filter: blur(2.25px);
+            display: flex;
+            align-items: center;
+            gap: 7.5px;
+        }
+
+        .music-tooltip img {
+            width: 37.5px;
+            height: 37.5px;
+            border-radius: 3px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .music-tooltip-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .music-tooltip-content .song-title {
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: var(--music-tooltip-color);
+        }
+
+        .music-tooltip-content .song-details {
+            font-size: 0.6375rem;
+            color: var(--placeholder-color);
+        }
+
+        .music-player-floating-button-wrapper:hover .music-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Theme Switch Styles */
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--container-bg);
+            border-radius: 9px;
+            padding: 8px 15px;
+            box-shadow: var(--container-shadow);
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--slider-before-bg);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--slider-checked-bg);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--slider-checked-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.35rem;
+                margin-bottom: 1.125rem;
+            }
+            h2 {
+                font-size: 1.125rem;
+            }
+            p {
+                font-size: 0.7875rem;
+            }
+            .input-field, .calculate-button {
+                padding: 9px;
+                font-size: 0.75rem;
+            }
+            .result-box {
+                padding: 15px;
+                font-size: 0.75rem;
+            }
+            .music-player-floating-button-wrapper,
+            .theme-switch-wrapper {
+                bottom: 15px;
+                left: 15px;
+                right: 15px;
+                justify-content: space-between;
+                width: calc(100% - 30px);
+                gap: 0;
+            }
+            .theme-switch-wrapper {
+                right: 15px;
+                left: auto;
+                width: auto;
+                padding: 8px 10px;
+            }
+            .music-player-floating-button-wrapper {
+                left: 15px;
+                right: auto;
+                width: auto;
+                padding: 0;
+            }
+            .music-tooltip {
+                left: 60px;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="aurora-background">
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+    </div>
+
+    <!-- Page Content Wrapper for Transitions -->
+    <div id="pageContentWrapper" class="relative w-full h-full flex justify-center items-center">
+        <div class="container">
+            <!-- Back Button -->
+            <a href="#" class="back-button page-link" data-href="index.html" title="Quay lại Trang Chủ">
+                <!-- Replaced Font Awesome icon with inline SVG for exact match -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 4L4 12L12 20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
+            <h1 class="text-3xl font-bold text-center mb-6">Ứng Dụng Chia Động Từ (Có Nghĩa)</h1>
+
+            <div class="mb-6">
+                <label for="verbSelect" class="label-text mb-2">Chọn một động từ:</label>
+                <select id="verbSelect" class="input-field">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Button to show conjugation -->
+            <button id="showConjugationBtn" class="calculate-button">
+                Hiển Thị Chia Động Từ
+            </button>
+
+            <!-- Result Display Area -->
+            <div id="result" class="result-box">
+                <h2 class="text-xl font-semibold text-center mb-3">Kết Quả:</h2>
+                <div id="conjugationDetails" class="text-base leading-relaxed text-center">
+                    Vui lòng chọn một động từ và nhấn nút để xem chia động từ.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Button Wrapper for Tooltip - Copied from index.html -->
+    <div class="music-player-floating-button-wrapper">
+        <button class="music-player-floating-button" id="toggleMusicButton">
+            <!-- Font Awesome Play/Pause icon -->
+            <i class="fas fa-play" id="musicPlayPauseIcon"></i>
+        </button>
+        <div class="music-tooltip" id="musicTooltip">
+            <!-- Album cover image -->
+            <img id="albumCover" src="" alt="Album Cover">
+            <div class="music-tooltip-content">
+                <span class="song-title" id="songTitle"></span>
+                <span class="song-details" id="songDetails"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switch-wrapper">
+        <label for="theme-switch-checkbox" class="text-sm font-semibold">Chế độ sáng</label>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-switch-checkbox">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" src="" preload="auto"></audio>
+
+    <script>
+        // --- Music Player Logic for Background Playback ---
+        // Declare variables globally
+        let audioPlayer;
+        let toggleMusicButton;
+        let musicPlayPauseIcon;
+        let musicTooltip;
+        let albumCoverImg;
+        let songTitleSpan;
+        let songDetailsSpan;
+
+        const SONGS = [
+            {
+            id: 'song1',
+            title: "Die for you",
+            artist: "joji",
+            album: "SMITHEREENS",
+            url: "music/03. Die For You.mp3",
+            albumArtUrl: "albumcover/smithereens.jpeg"
+        },
+        {
+            id: 'song2',
+            title: "You suck Charlie",
+            artist: "joji",
+            album: "Chloe Burbank",
+            url: "music/you suck charlie.m4a",
+            albumArtUrl: "albumcover/chloe burbank.jpg"
+        },
+        {
+            id: 'song3',
+            title: "Come Thru",
+            artist: "Joji",
+            album: "BALLADS 1",
+            url: "music/09 Come Thru.mp3",
+            albumArtUrl: "albumcover/ballads1.png"
+        },
+        {
+            id: 'song4',
+            title: "Modus",
+            artist: "Joji",
+            album: "Nectar",
+            url: "music/02 MODUS.mp3",
+            albumArtUrl: "albumcover/Nectar.jpg"
+        },
+        {
+            id: 'song5',
+            title: "505",
+            artist: "Arctic Monkeys",
+            album: "Favourite Worst Nightmare",
+            url: "music/505 - Arctic Monkeys.mp3",
+            albumArtUrl: "albumcover/FavouriteWorstNightmare.jpg"
+        },
+        {
+            id: 'song6',
+            title: "Stressed Out",
+            artist: "Ben Schuller",
+            album: "piano cover",
+            url: "music/Ben Schuller-Stressed Out.mp3",
+            albumArtUrl: "albumcover/strout.jpg"
+        },
+        {
+            id: 'song7',
+            title: "Chamber Of Reflection",
+            artist: "Mac DeMarco",
+            album: "Salad Days",
+            url: "music/Chamber Of Reflection.mp3",
+            albumArtUrl: "albumcover/cbofrl.jpg"
+        },
+        {
+            id: 'song8',
+            title: "For the First Time",
+            artist: "Mac DeMarco",
+            album: "This Old Dog",
+            url: "music/For the First Time - Mac DeMarco.mp3",
+            albumArtUrl: "albumcover/tolddog.png"
+        }
+        ];
+
+        let currentSongIndex = -1; // No song selected initially
+
+        function saveMusicState() {
+            const currentSongId = audioPlayer.dataset.currentSongId;
+            if (currentSongId) {
+                const state = {
+                    songId: currentSongId,
+                    currentTime: audioPlayer.currentTime,
+                    isPlaying: !audioPlayer.paused,
+                    volume: audioPlayer.volume
+                };
+                localStorage.setItem('musicPlayerState', JSON.stringify(state));
+            } else {
+                localStorage.removeItem('musicPlayerState');
+            }
+        }
+
+        function loadMusicState() {
+            const savedState = localStorage.getItem('musicPlayerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const song = SONGS.find(s => s.id === state.songId);
+                if (song) {
+                    currentSongIndex = SONGS.indexOf(song); // Update currentSongIndex
+                    audioPlayer.src = song.url;
+                    audioPlayer.dataset.currentSongId = song.id;
+                    audioPlayer.volume = state.volume;
+
+                    if (state.isPlaying) {
+                        audioPlayer.currentTime = state.currentTime;
+                        audioPlayer.play().then(() => {
+                            updateTooltip(song);
+                            updatePlayPauseIcon(true); // Update icon to pause
+                            toggleMusicButton.classList.add('playing'); // Add playing class for visual feedback
+                        }).catch(error => {
+                            console.log("Autoplay prevented:", error);
+                            updateTooltip({
+                                title: "Nhấn nút nhạc để phát!",
+                                artist: "Trình duyệt đã chặn tự động phát.",
+                                album: "",
+                                albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                            });
+                            updatePlayPauseIcon(false); // Update icon to play
+                            toggleMusicButton.classList.remove('playing');
+                        });
+                    } else {
+                        updateTooltip(song); // Show current song info even if paused
+                        audioPlayer.currentTime = state.currentTime; // Set current time even if paused
+                        updatePlayPauseIcon(false); // Update icon to play
+                        toggleMusicButton.classList.remove('playing');
+                    }
+                } else {
+                    // If song not found, reset to default state
+                    resetMusicState();
+                }
+            } else {
+                // Default state if no music was previously playing
+                resetMusicState();
+            }
+        }
+
+        function resetMusicState() {
+            currentSongIndex = -1;
+            audioPlayer.src = "";
+            audioPlayer.dataset.currentSongId = '';
+            audioPlayer.currentTime = 0;
+            audioPlayer.volume = 1; // Default volume
+            localStorage.removeItem('musicPlayerState');
+            updateTooltip({
+                title: "Chưa có nhạc",
+                artist: "Hãy chọn bài hát từ trang nhạc",
+                album: "",
+                albumArtUrl: "https://placehold.co/50x50/95a5a6/ffffff?text=Music"
+            });
+            updatePlayPauseIcon(false); // Ensure icon is play
+            toggleMusicButton.classList.remove('playing');
+        }
+
+        function updateTooltip(song) {
+            albumCoverImg.src = song.albumArtUrl;
+            albumCoverImg.alt = `Ảnh bìa album của ${song.title}`;
+            songTitleSpan.textContent = song.title;
+            songDetailsSpan.textContent = `${song.artist} ${song.album ? '(Album: "' + song.album + '")' : ''}`;
+        }
+
+        function updatePlayPauseIcon(isPlaying) {
+            if (isPlaying) {
+                musicPlayPauseIcon.classList.remove('fa-play');
+                musicPlayPauseIcon.classList.add('fa-pause');
+            } else {
+                musicPlayPauseIcon.classList.remove('fa-pause');
+                musicPlayPauseIcon.classList.add('fa-play');
+            }
+        }
+
+        // Comprehensive list of irregular verbs with their forms
+        // This list is used to determine if a verb from the user's file is irregular.
+        const irregularVerbsData = {
+            "be": { pastSimple: "was/were", pastParticiple: "been" },
+            "become": { pastSimple: "became", pastParticiple: "become" },
+            "begin": { pastSimple: "began", pastParticiple: "begun" },
+            "break": { pastSimple: "broke", pastParticiple: "broken" },
+            "bring": { pastSimple: "brought", pastParticiple: "brought" },
+            "build": { pastSimple: "built", pastParticiple: "built" },
+            "buy": { pastSimple: "bought", pastParticiple: "bought" },
+            "choose": { pastSimple: "chose", pastParticiple: "chosen" },
+            "come": { pastSimple: "came", pastParticiple: "come" },
+            "cut": { pastSimple: "cut", pastParticiple: "cut" },
+            "do": { pastSimple: "did", pastParticiple: "done" },
+            "draw": { pastSimple: "drew", pastParticiple: "drawn" },
+            "drink": { pastSimple: "drank", pastParticiple: "drunk" },
+            "drive": { pastSimple: "drove", pastParticiple: "driven" },
+            "eat": { pastSimple: "ate", pastParticiple: "eaten" },
+            "fall": { pastSimple: "fell", pastParticiple: "fallen" },
+            "feel": { pastSimple: "felt", pastParticiple: "felt" },
+            "find": { pastSimple: "found", pastParticiple: "found" },
+            "forget": { pastSimple: "forgot", pastParticiple: "forgotten" },
+            "get": { pastSimple: "got", pastParticiple: "gotten/got" },
+            "give": { pastSimple: "gave", pastParticiple: "given" },
+            "go": { pastSimple: "went", pastParticiple: "gone" },
+            "grow": { pastSimple: "grew", pastParticiple: "grown" },
+            "have": { pastSimple: "had", pastParticiple: "had" },
+            "hear": { pastSimple: "heard", pastParticiple: "heard" },
+            "hide": { pastSimple: "hid", pastParticiple: "hidden" },
+            "hit": { pastSimple: "hit", pastParticiple: "hit" },
+            "hold": { pastSimple: "held", pastParticiple: "held" },
+            "keep": { pastSimple: "kept", pastParticiple: "kept" },
+            "know": { pastSimple: "knew", pastParticiple: "known" },
+            "lead": { pastSimple: "led", pastParticiple: "led" },
+            "leave": { pastSimple: "left", pastParticiple: "left" },
+            "let": { pastSimple: "let", pastParticiple: "let" },
+            "lose": { pastSimple: "lost", pastParticiple: "lost" },
+            "make": { pastSimple: "made", pastParticiple: "made" },
+            "mean": { pastSimple: "meant", pastParticiple: "meant" },
+            "meet": { pastSimple: "met", pastParticiple: "met" },
+            "pay": { pastSimple: "paid", pastParticiple: "paid" },
+            "put": { pastSimple: "put", pastParticiple: "put" },
+            "read": { pastSimple: "read", pastParticiple: "read" },
+            "run": { pastSimple: "ran", pastParticiple: "run" },
+            "say": { pastSimple: "said", pastParticiple: "said" },
+            "see": { pastSimple: "saw", pastParticiple: "seen" },
+            "sell": { pastSimple: "sold", pastParticiple: "sold" },
+            "send": { pastSimple: "sent", pastParticiple: "sent" },
+            "set": { pastSimple: "set", pastParticiple: "set" },
+            "show": { pastSimple: "showed", pastParticiple: "shown/showed" },
+            "sing": { pastSimple: "sang", pastParticiple: "sung" },
+            "sit": { pastSimple: "sat", pastParticiple: "sat" },
+            "sleep": { pastSimple: "slept", pastParticiple: "slept" },
+            "speak": { pastSimple: "spoke", pastParticiple: "spoken" },
+            "spend": { pastSimple: "spent", pastParticiple: "spent" },
+            "stand": { pastSimple: "stood", pastParticiple: "stood" },
+            "swim": { pastSimple: "swam", pastParticiple: "swum" },
+            "take": { pastSimple: "took", pastParticiple: "taken" },
+            "teach": { pastSimple: "taught", pastParticiple: "taught" },
+            "tell": { pastSimple: "told", pastParticiple: "told" },
+            "think": { pastSimple: "thought", pastParticiple: "thought" },
+            "understand": { pastSimple: "understood", pastParticiple: "understood" },
+            "wear": { pastSimple: "wore", pastParticiple: "worn" },
+            "win": { pastSimple: "won", pastParticiple: "won" },
+            "write": { pastSimple: "wrote", pastParticiple: "written" },
+            "arise": { pastSimple: "arose", pastParticiple: "arisen" },
+            "awake": { pastSimple: "awoke", pastParticiple: "awoken" },
+            "bear": { pastSimple: "bore", pastParticiple: "born/borne" },
+            "beat": { pastSimple: "beat", pastParticiple: "beaten" },
+            "bend": { pastSimple: "bent", pastParticiple: "bent" },
+            "bet": { pastSimple: "bet", pastParticiple: "bet" },
+            "bid": { pastSimple: "bid", pastParticiple: "bid" },
+            "bind": { pastSimple: "bound", pastParticiple: "bound" },
+            "bite": { pastSimple: "bit", pastParticiple: "bitten" },
+            "bleed": { pastSimple: "bled", pastParticiple: "bled" },
+            "blow": { pastSimple: "blew", pastParticiple: "blown" },
+            "broadcast": { pastSimple: "broadcast", pastParticiple: "broadcast" },
+            "burst": { pastSimple: "burst", pastParticiple: "burst" },
+            "cast": { pastSimple: "cast", pastParticiple: "cast" },
+            "catch": { pastSimple: "caught", pastParticiple: "caught" },
+            "cling": { pastSimple: "clung", pastParticiple: "clung" },
+            "cost": { pastSimple: "cost", pastParticiple: "cost" },
+            "creep": { pastSimple: "crept", pastParticiple: "crept" },
+            "deal": { pastSimple: "dealt", pastParticiple: "dealt" },
+            "dig": { pastSimple: "dug", pastParticiple: "dug" },
+            "dream": { pastSimple: "dreamt/dreamed", pastParticiple: "dreamt/dreamed" },
+            "feed": { pastSimple: "fed", pastParticiple: "fed" },
+            "fight": { pastSimple: "fought", pastParticiple: "fought" },
+            "flee": { pastSimple: "fled", pastParticiple: "fled" },
+            "fling": { pastSimple: "flung", pastParticiple: "flung" },
+            "fly": { pastSimple: "flew", pastParticiple: "flown" },
+            "forbid": { pastSimple: "forbade", pastParticiple: "forbidden" },
+            "forecast": { pastSimple: "forecast", pastParticiple: "forecast" },
+            "foresee": { pastSimple: "foresaw", pastParticiple: "foreseen" },
+            "forgive": { pastSimple: "forgave", pastParticiple: "forgiven" },
+            "freeze": { pastSimple: "froze", pastParticiple: "frozen" },
+            "grind": { pastSimple: "ground", pastParticiple: "ground" },
+            "hang": { pastSimple: "hung", pastParticiple: "hung" }, // For "suspend"
+            "hurt": { pastSimple: "hurt", pastParticiple: "hurt" },
+            "kneel": { pastSimple: "knelt/kneeled", pastParticiple: "knelt/kneeled" },
+            "lay": { pastSimple: "laid", pastParticiple: "laid" }, // To put something down
+            "lean": { pastSimple: "leant/leaned", pastParticiple: "leant/leaned" },
+            "leap": { pastSimple: "leapt/leaped", pastParticiple: "leapt/leaped" },
+            "lend": { pastSimple: "lent", pastParticiple: "lent" },
+            "lie": { pastSimple: "lay", pastParticiple: "lain" }, // To recline
+            "light": { pastSimple: "lit/lighted", pastParticiple: "lit/lighted" },
+            "mow": { pastSimple: "mowed", pastParticiple: "mown/mowed" },
+            "prove": { pastSimple: "proved", pastParticiple: "proven/proved" },
+            "quit": { pastSimple: "quit", pastParticiple: "quit" },
+            "ride": { pastSimple: "rode", pastParticiple: "ridden" },
+            "ring": { pastSimple: "rang", pastParticiple: "rung" },
+            "rise": { pastSimple: "rose", pastParticiple: "risen" },
+            "saw": { pastSimple: "sawed", pastParticiple: "sawn/sawed" },
+            "seek": { pastSimple: "sought", pastParticiple: "sought" },
+            "shake": { pastSimple: "shook", pastParticiple: "shaken" },
+            "shed": { pastSimple: "shed", pastParticiple: "shed" },
+            "shine": { pastSimple: "shone/shined", pastParticiple: "shone/shined" },
+            "shoot": { pastSimple: "shot", pastParticiple: "shot" },
+            "shrink": { pastSimple: "shrank", pastParticiple: "shrunk" },
+            "shut": { pastSimple: "shut", pastParticiple: "shut" },
+            "sink": { pastSimple: "sank", pastParticiple: "sunk" },
+            "slide": { pastSimple: "slid", pastParticiple: "slid" },
+            "smell": { pastSimple: "smelt/smelled", pastParticiple: "smelt/smelled" },
+            "sow": { pastSimple: "sowed", pastParticiple: "sown/sowed" },
+            "spell": { pastSimple: "spelt/spelled", pastParticiple: "spelt/spelled" },
+            "spill": { pastSimple: "spilt/spilled", pastParticiple: "spilt/spilled" },
+            "spin": { pastSimple: "spun", pastParticiple: "spun" },
+            "spit": { pastSimple: "spat/spit", pastParticiple: "spat/spit" },
+            "split": { pastSimple: "split", pastParticiple: "split" },
+            "spread": { pastSimple: "spread", pastParticiple: "spread" },
+            "spring": { pastSimple: "sprang", pastParticiple: "sprung" },
+            "steal": { pastSimple: "stole", pastParticiple: "stolen" },
+            "stick": { pastSimple: "stuck", pastParticiple: "stuck" },
+            "sting": { pastSimple: "stung", pastParticiple: "stung" },
+            "stink": { pastSimple: "stank", pastParticiple: "stunk" },
+            "strike": { pastSimple: "struck", pastParticiple: "struck/stricken" },
+            "string": { pastSimple: "strung", pastParticiple: "strung" },
+            "strive": { pastSimple: "strove", pastParticiple: "striven" },
+            "swear": { pastSimple: "swore", pastParticiple: "sworn" },
+            "sweep": { pastSimple: "swept", pastParticiple: "swept" },
+            "swell": { pastSimple: "swelled", pastParticiple: "swollen/swelled" },
+            "swing": { pastSimple: "swung", pastParticiple: "swung" },
+            "tear": { pastSimple: "tore", pastParticiple: "torn" },
+            "throw": { pastSimple: "threw", pastParticiple: "thrown" },
+            "tread": { pastSimple: "trod", pastParticiple: "trodden/trod" },
+            "undergo": { pastSimple: "underwent", pastParticiple: "undergone" },
+            "wake": { pastSimple: "woke", pastParticiple: "woken" },
+            "weep": { pastSimple: "wept", pastParticiple: "wept" },
+            "wind": { pastSimple: "wound", pastParticiple: "wound" },
+            "withdraw": { pastSimple: "withdrew", pastParticiple: "withdrawn" },
+            "withhold": { pastSimple: "withheld", pastParticiple: "withheld" },
+            "withstand": { pastSimple: "withstood", pastParticiple: "withstood" },
+            "wring": { pastSimple: "wrung", pastParticiple: "wrung" },
+            "upset": { pastSimple: "upset", pastParticiple: "upset" }
+        };
+
+        // Function to generate regular verb forms
+        function getRegularForms(baseForm) {
+            let pastSimple = baseForm;
+            let pastParticiple = baseForm;
+
+            // Rule for verbs ending in 'e'
+            if (baseForm.endsWith('e')) {
+                pastSimple += 'd';
+                pastParticiple += 'd';
+            }
+            // Rule for verbs ending in 'y' preceded by a consonant
+            else if (baseForm.endsWith('y') && !['a', 'e', 'i', 'o', 'u'].includes(baseForm[baseForm.length - 2])) {
+                pastSimple = baseForm.slice(0, -1) + 'ied';
+                pastParticiple = baseForm.slice(0, -1) + 'ied';
+            }
+            // Default: just add 'ed'
+            else {
+                pastSimple += 'ed';
+                pastParticiple += 'ed';
+            }
+            return { pastSimple, pastParticiple };
+        }
+
+        // Data from the uploaded file (extracted and cleaned)
+        // This list now includes both the English verb and its Vietnamese meaning
+        const verbsWithMeaningFromFile = [
+            { verb: "be", meaning: "là, thì, ở" },
+            { verb: "have", meaning: "có" },
+            { verb: "do", meaning: "làm" },
+            { verb: "say", meaning: "nói" },
+            { verb: "go", meaning: "đi" },
+            { verb: "get", meaning: "có được, lấy, nhận, trở nên" },
+            { verb: "make", meaning: "làm, chế tạo" },
+            { verb: "know", meaning: "biết" },
+            { verb: "think", meaning: "nghĩ, suy nghĩ" },
+            { verb: "take", meaning: "cầm, lấy, mang, đưa" },
+            { verb: "see", meaning: "nhìn, thấy" },
+            { verb: "come", meaning: "đến" },
+            { verb: "want", meaning: "muốn" },
+            { verb: "look", meaning: "nhìn, trông" },
+            { verb: "use", meaning: "sử dụng" },
+            { verb: "find", meaning: "tìm thấy" },
+            { verb: "give", meaning: "cho, tặng" },
+            { verb: "tell", meaning: "kể, nói" },
+            { verb: "work", meaning: "làm việc" },
+            { verb: "call", meaning: "gọi, gọi điện" },
+            { verb: "try", meaning: "cố gắng, thử" },
+            { verb: "ask", meaning: "hỏi, yêu cầu" },
+            { verb: "need", meaning: "cần" },
+            { verb: "feel", meaning: "cảm thấy" },
+            { verb: "become", meaning: "trở thành" },
+            { verb: "leave", meaning: "rời đi, để lại" },
+            { verb: "put", meaning: "đặt, để" },
+            { verb: "mean", meaning: "có nghĩa là" },
+            { verb: "keep", meaning: "giữ" },
+            { verb: "let", meaning: "để, cho phép" },
+            { verb: "begin", meaning: "bắt đầu" },
+            { verb: "seem", meaning: "dường như, có vẻ" },
+            { verb: "help", meaning: "giúp đỡ" },
+            { verb: "talk", meaning: "nói chuyện" },
+            { verb: "turn", meaning: "quay, xoay, rẽ" },
+            { verb: "start", meaning: "bắt đầu" },
+            { verb: "show", meaning: "chỉ, bày tỏ, cho xem" },
+            { verb: "hear", meaning: "nghe" },
+            { verb: "play", meaning: "chơi" },
+            { verb: "run", meaning: "chạy" },
+            { verb: "move", meaning: "di chuyển" },
+            { verb: "like", meaning: "thích" },
+            { verb: "live", meaning: "sống, ở" },
+            { verb: "believe", meaning: "tin tưởng" },
+            { verb: "hold", meaning: "giữ, cầm" },
+            { verb: "bring", meaning: "mang lại, đưa đến" },
+            { verb: "happen", meaning: "xảy ra" },
+            { verb: "write", meaning: "viết" },
+            { verb: "provide", meaning: "cung cấp" },
+            { verb: "sit", meaning: "ngồi" },
+            { verb: "stand", meaning: "đứng" },
+            { verb: "lose", meaning: "mất, thua" },
+            { verb: "pay", meaning: "trả tiền" },
+            { verb: "meet", meaning: "gặp gỡ" },
+            { verb: "include", meaning: "bao gồm" },
+            { verb: "continue", meaning: "tiếp tục" },
+            { verb: "set", meaning: "đặt, để, thiết lập" },
+            { verb: "learn", meaning: "học" },
+            { verb: "change", meaning: "thay đổi" },
+            { verb: "lead", meaning: "dẫn dắt" },
+            { verb: "understand", meaning: "hiểu" },
+            { verb: "watch", meaning: "xem, theo dõi" },
+            { verb: "follow", meaning: "theo sau" },
+            { verb: "stop", meaning: "dừng lại" },
+            { verb: "create", meaning: "tạo ra" },
+            { verb: "speak", meaning: "nói" },
+            { verb: "read", meaning: "đọc" },
+            { verb: "allow", meaning: "cho phép" },
+            { verb: "add", meaning: "thêm vào" },
+            { verb: "spend", meaning: "chi tiêu, dành (thời gian)" },
+            { verb: "grow", meaning: "lớn lên, phát triển, trồng" },
+            { verb: "open", meaning: "mở" },
+            { verb: "walk", meaning: "đi bộ" },
+            { verb: "win", meaning: "thắng" },
+            { verb: "offer", meaning: "đề nghị, cung cấp" },
+            { verb: "remember", meaning: "nhớ" },
+            { verb: "love", meaning: "yêu" },
+            { verb: "consider", meaning: "xem xét" },
+            { verb: "appear", meaning: "xuất hiện" },
+            { verb: "buy", meaning: "mua" },
+            { verb: "wait", meaning: "chờ đợi" },
+            { verb: "serve", meaning: "phục vụ" },
+            { verb: "die", meaning: "chết" },
+            { verb: "send", meaning: "gửi" },
+            { verb: "build", meaning: "xây dựng" },
+            { verb: "stay", meaning: "ở lại, duy trì" },
+            { verb: "fall", meaning: "ngã, rơi" },
+            { verb: "cut", meaning: "cắt" },
+            { verb: "reach", meaning: "với tới, đạt tới" },
+            { verb: "kill", meaning: "giết" },
+            { verb: "remain", meaning: "còn lại, vẫn còn" },
+            { verb: "suggest", meaning: "gợi ý" },
+            { verb: "raise", meaning: "nâng lên, nuôi dưỡng" },
+            { verb: "pass", meaning: "đi qua, vượt qua, thi đậu" },
+            { verb: "sell", meaning: "bán" },
+            { verb: "require", meaning: "yêu cầu" },
+            { verb: "report", meaning: "báo cáo" },
+            { verb: "decide", meaning: "quyết định" },
+            { verb: "pull", meaning: "kéo" },
+            { verb: "push", meaning: "đẩy" },
+            { verb: "return", meaning: "trở về, trả lại" },
+            { verb: "explain", meaning: "giải thích" },
+            { verb: "hope", meaning: "hy vọng" },
+            { verb: "develop", meaning: "phát triển" },
+            { verb: "carry", meaning: "mang, vác" },
+            { verb: "break", meaning: "làm vỡ, phá vỡ" },
+            { verb: "receive", meaning: "nhận được" },
+            { verb: "agree", meaning: "đồng ý" },
+            { verb: "support", meaning: "ủng hộ" },
+            { verb: "hit", meaning: "đánh, đập" },
+            { verb: "present", meaning: "trình bày, tặng" },
+            { verb: "discuss", meaning: "thảo luận" },
+            { verb: "prove", meaning: "chứng minh" },
+            { verb: "teach", meaning: "dạy" },
+            { verb: "sing", meaning: "hát" },
+            { verb: "dance", meaning: "nhảy múa" },
+            { verb: "draw", meaning: "vẽ" },
+            { verb: "eat", meaning: "ăn" },
+            { verb: "drink", meaning: "uống" },
+            { verb: "sleep", meaning: "ngủ" },
+            { verb: "swim", meaning: "bơi" },
+            { verb: "travel", meaning: "du lịch" },
+            { verb: "visit", meaning: "thăm" },
+            { verb: "study", meaning: "học" },
+            { verb: "choose", meaning: "chọn lựa" },
+            { verb: "drive", meaning: "lái xe" },
+            { verb: "listen", meaning: "nghe" },
+            { verb: "cook", meaning: "nấu ăn" },
+            { verb: "clean", meaning: "dọn dẹp" },
+            { verb: "wash", meaning: "rửa" },
+            { verb: "fix", meaning: "sửa chữa" },
+            { verb: "repair", meaning: "sửa chữa" },
+            { verb: "close", meaning: "đóng" },
+            { verb: "finish", meaning: "kết thúc" },
+            { verb: "end", meaning: "kết thúc" },
+            { verb: "arrive", meaning: "đến" },
+            { verb: "depart", meaning: "khởi hành" },
+            { verb: "enter", meaning: "vào" },
+            { verb: "exit", meaning: "ra" },
+            { verb: "join", meaning: "tham gia" },
+            { verb: "wear", meaning: "mặc, đội" },
+            { verb: "put on", meaning: "mặc vào, đội vào" },
+            { verb: "take off", meaning: "cởi ra" },
+            { verb: "hide", meaning: "giấu" },
+            { verb: "forget", meaning: "quên" },
+            { verb: "answer", meaning: "trả lời" },
+            { verb: "disagree", meaning: "không đồng ý" },
+            { verb: "accept", meaning: "chấp nhận" },
+            { verb: "refuse", meaning: "từ chối" },
+            { verb: "demand", meaning: "yêu cầu" },
+            { verb: "advise", meaning: "khuyên bảo" },
+            { verb: "warn", meaning: "cảnh báo" },
+            { verb: "apologize", meaning: "xin lỗi" },
+            { verb: "thank", meaning: "cảm ơn" },
+            { verb: "welcome", meaning: "chào đón" },
+            { verb: "congratulate", meaning: "chúc mừng" },
+            { verb: "celebrate", meaning: "ăn mừng" },
+            { verb: "introduce", meaning: "giới thiệu" },
+            { verb: "interview", meaning: "phỏng vấn" },
+            { verb: "imagine", meaning: "tưởng tượng" },
+            { verb: "invent", meaning: "phát minh" },
+            { verb: "discover", meaning: "khám phá" },
+            { verb: "explore", meaning: "khám phá, thám hiểm" },
+            { verb: "research", meaning: "nghiên cứu" },
+            { verb: "analyze", meaning: "phân tích" },
+            { verb: "solve", meaning: "giải quyết" },
+            { verb: "improve", meaning: "cải thiện" },
+            { verb: "protect", meaning: "bảo vệ" },
+            { verb: "destroy", meaning: "phá hủy" },
+            { verb: "demolish", meaning: "phá dỡ" },
+            { verb: "decorate", meaning: "trang trí" },
+            { verb: "paint", meaning: "sơn" },
+            { verb: "design", meaning: "thiết kế" },
+            { verb: "plan", meaning: "lập kế hoạch" },
+            { verb: "organize", meaning: "tổ chức" },
+            { verb: "manage", meaning: "quản lý" },
+            { verb: "control", meaning: "kiểm soát" },
+            { verb: "supervise", meaning: "giám sát" },
+            { verb: "train", meaning: "đào tạo" },
+            { verb: "educate", meaning: "giáo dục" },
+            { verb: "practice", meaning: "thực hành" },
+            { verb: "exercise", meaning: "tập thể dục" },
+            { verb: "relax", meaning: "thư giãn" },
+            { verb: "rest", meaning: "nghỉ ngơi" },
+            { verb: "wake up", meaning: "thức dậy" },
+            { verb: "get up", meaning: "thức dậy, đứng dậy" },
+            { verb: "bake", meaning: "nướng" },
+            { verb: "fry", meaning: "chiên" },
+            { verb: "grill", meaning: "nướng (trên vỉ)" },
+            { verb: "boil", meaning: "đun sôi" }
+        ];
+
+        // Process all verbs to create the final 'verbs' object used by the app
+        const allVerbs = {};
+        verbsWithMeaningFromFile.forEach(item => {
+            const baseForm = item.verb.trim();
+            const meaning = item.meaning;
+
+            if (irregularVerbsData[baseForm]) {
+                allVerbs[baseForm] = {
+                    pastSimple: irregularVerbsData[baseForm].pastSimple,
+                    pastParticiple: irregularVerbsData[baseForm].pastParticiple,
+                    type: "irregular",
+                    meaning: meaning
+                };
+            } else {
+                const { pastSimple, pastParticiple } = getRegularForms(baseForm);
+                allVerbs[baseForm] = {
+                    pastSimple: pastSimple,
+                    pastParticiple: pastParticiple,
+                    type: "regular",
+                    meaning: meaning
+                };
+            }
+        });
+
+        // Get DOM elements
+        const verbSelect = document.getElementById('verbSelect');
+        const showConjugationBtn = document.getElementById('showConjugationBtn');
+        const conjugationDetailsDiv = document.getElementById('conjugationDetails');
+        const resultBox = document.getElementById('result'); // Get the result box element
+
+        // Function to populate the select dropdown
+        function populateVerbSelect() {
+            // Create a default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "--- Chọn động từ ---";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            verbSelect.appendChild(defaultOption);
+
+            // Sort verbs alphabetically for better user experience
+            const sortedVerbs = Object.keys(allVerbs).sort();
+
+            // Add irregular verbs group
+            const irregularGroup = document.createElement('optgroup');
+            irregularGroup.label = "Động từ Bất Quy Tắc";
+            sortedVerbs.filter(verb => allVerbs[verb].type === 'irregular').forEach(verb => {
+                const option = document.createElement('option');
+                option.value = verb;
+                option.textContent = verb;
+                irregularGroup.appendChild(option);
+            });
+            verbSelect.appendChild(irregularGroup);
+
+            // Add regular verbs group
+            const regularGroup = document.createElement('optgroup');
+            regularGroup.label = "Động từ Có Quy Tắc";
+            sortedVerbs.filter(verb => allVerbs[verb].type === 'regular').forEach(verb => {
+                const option = document.createElement('option');
+                option.value = verb;
+                option.textContent = verb;
+                regularGroup.appendChild(option);
+            });
+            verbSelect.appendChild(regularGroup);
+        }
+
+        // Function to display conjugation
+        function displayConjugation() {
+            const selectedVerb = verbSelect.value;
+
+            // Clear previous results and remove 'show' class to re-trigger animation
+            conjugationDetailsDiv.innerHTML = '';
+            resultBox.classList.remove('show');
+
+            if (!selectedVerb) {
+                conjugationDetailsDiv.innerHTML = '<p class="text-red-600">Vui lòng chọn một động từ từ danh sách.</p>';
+                resultBox.classList.add('show'); // Show error with animation
+                return;
+            }
+
+            const verbData = allVerbs[selectedVerb];
+            let typeLabel = '';
+            if (verbData.type === 'regular') {
+                typeLabel = '<p class="text-green-600">(Động từ Có Quy Tắc)</p>';
+            } else {
+                typeLabel = '<p class="text-red-600">(Động từ Bất Quy Tắc)</p>';
+            }
+
+            conjugationDetailsDiv.innerHTML = `
+                <p><strong>Dạng Nguyên Thể (Base Form):</strong> ${selectedVerb}</p>
+                <p><strong>Nghĩa:</strong> ${verbData.meaning}</p>
+                <p><strong>Quá Khứ Đơn (Past Simple):</strong> ${verbData.pastSimple}</p>
+                <p><strong>Quá Khứ Phân Từ (Past Participle):</strong> ${verbData.pastParticiple}</p>
+                ${typeLabel}
+            `;
+            resultBox.classList.add('show'); // Show result with animation
+        }
+
+        // Event Listeners
+        showConjugationBtn.addEventListener('click', displayConjugation);
+
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageContentWrapper = document.getElementById('pageContentWrapper');
+            const pageLinks = document.querySelectorAll('.page-link');
+            const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox'); // Get the theme switch checkbox
+
+            // Animate page in on load
+            pageContentWrapper.classList.add('page-transition-in');
+
+            // Assign music player DOM elements
+            audioPlayer = document.getElementById('audioPlayer');
+            toggleMusicButton = document.getElementById('toggleMusicButton');
+            musicPlayPauseIcon = document.getElementById('musicPlayPauseIcon');
+            musicTooltip = document.getElementById('musicTooltip');
+            albumCoverImg = document.getElementById('albumCover');
+            songTitleSpan = document.getElementById('songTitle');
+            songDetailsSpan = document.getElementById('songDetails');
+
+            // The click event listener for the music button now controls play/pause directly
+            toggleMusicButton.addEventListener('click', () => {
+                if (currentSongIndex === -1) {
+                    // If no song is loaded, load the first one and play
+                    currentSongIndex = 0;
+                    audioPlayer.src = SONGS[currentSongIndex].url;
+                    audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                    updateTooltip(SONGS[currentSongIndex]);
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on first play:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else if (audioPlayer.paused) {
+                    audioPlayer.play().then(() => {
+                        updatePlayPauseIcon(true); // Update icon to pause
+                        toggleMusicButton.classList.add('playing');
+                    }).catch(error => {
+                        console.error("Autoplay prevented on resume:", error);
+                        updateTooltip({
+                            title: "Nhấn nút nhạc để phát!",
+                            artist: "Trình duyệt đã chặn tự động phát.",
+                            album: "",
+                            albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                        });
+                        toggleMusicButton.classList.remove('playing');
+                        updatePlayPauseIcon(false); // Update icon to play
+                    });
+                } else {
+                    audioPlayer.pause();
+                    updatePlayPauseIcon(false); // Update icon to play
+                    toggleMusicButton.classList.remove('playing');
+                }
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                updatePlayPauseIcon(true);
+                toggleMusicButton.classList.add('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                updatePlayPauseIcon(false);
+                toggleMusicButton.classList.remove('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                currentSongIndex = (currentSongIndex + 1) % SONGS.length;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                updateTooltip(SONGS[currentSongIndex]);
+                audioPlayer.play(); // Auto-play next song
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('timeupdate', saveMusicState);
+            audioPlayer.addEventListener('volumechange', saveMusicState);
+
+            loadMusicState(); // Load music state when the page loads
+
+            // Handle page link clicks for smooth transitions
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default navigation
+                    const targetPage = link.dataset.href; // Get target page from data-href
+
+                    // Add fade-out animation
+                    pageContentWrapper.classList.remove('page-transition-in');
+                    pageContentWrapper.classList.add('page-transition-out');
+
+                    // Wait for the animation to complete before navigating
+                    pageContentWrapper.addEventListener('animationend', () => {
+                        window.location.href = targetPage; // Navigate to the new page
+                    }, { once: true }); // Ensure the event listener is removed after it fires
+                });
+            });
+
+            populateVerbSelect(); // Populate dropdown on DOMContentLoaded
+            // Clear input fields and result box on initial load
+            verbSelect.value = ""; // Reset select to default
+            conjugationDetailsDiv.innerHTML = 'Vui lòng chọn một động từ và nhấn nút để xem chia động từ.';
+            resultBox.classList.remove('show'); // Ensure result box is hidden initially
+
+            // --- Theme Switch Logic ---
+            function applyTheme(theme) {
+                document.body.classList.remove('light-theme'); // Remove existing theme class
+                if (theme === 'light') {
+                    document.body.classList.add('light-theme');
+                }
+                localStorage.setItem('theme', theme); // Save theme preference
+            }
+
+            // Load theme preference on page load
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+            themeSwitchCheckbox.checked = (savedTheme === 'light'); // Set checkbox state
+
+            // Event listener for theme switch
+            themeSwitchCheckbox.addEventListener('change', () => {
+                if (themeSwitchCheckbox.checked) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

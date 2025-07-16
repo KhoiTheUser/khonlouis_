@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Phát Nhạc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles consistent with index.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--body-bg); /* Use CSS variable for background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px; /* Reduced from 20px by 25% */
+            box-sizing: border-box;
+            color: var(--text-color); /* Use CSS variable for text color */
+            position: relative; /* For positioning aurora layers */
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        /* CSS Variables for Theme */
+        :root {
+            /* Dark Theme (Default) */
+            --body-bg: #0d1a2a;
+            --text-color: #ecf0f1;
+            --container-bg: rgba(44, 62, 80, 0.05);
+            --container-border: rgba(61, 90, 115, 0.1);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.4);
+            --heading-color: #ecf0f1;
+            --subheading-color: #3498db;
+            --paragraph-color: #bdc3c7;
+            --back-button-bg: rgba(90, 125, 154, 0.15);
+            --back-button-hover-bg: rgba(106, 141, 176, 0.25);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.1);
+            --back-button-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.15);
+            --back-button-active-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #ecf0f1;
+            --album-title-color: #ecf0f1;
+            --album-title-shadow: 0 1.5px 4.5px rgba(0,0,0,0.4);
+            --album-art-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            --album-art-hover-shadow: 0 9px 18.75px rgba(0, 0, 0, 0.5);
+            --album-art-playing-shadow-1: 0 6px 15px rgba(0, 0, 0, 0.5);
+            --album-art-playing-shadow-2: 0 0 37.5px rgba(52, 152, 219, 0.8), 0 0 52.5px rgba(46, 204, 113, 0.5);
+            --song-info-title-color: #ecf0f1;
+            --song-info-artist-color: #bdc3c7;
+            --progress-bar-container-bg: rgba(90, 125, 154, 0.15);
+            --progress-bar-container-hover-shadow: 0 0 11.25px rgba(52, 152, 219, 0.8);
+            --progress-bar-bg-start: rgba(52, 152, 219, 0.25);
+            --progress-bar-bg-end: rgba(41, 128, 185, 0.25);
+            --progress-bar-shadow: 0 0 3.75px rgba(52, 152, 219, 0.25);
+            --time-display-color: #bdc3c7;
+            --control-button-bg: rgba(52, 152, 219, 0.15);
+            --control-button-color: white;
+            --control-button-border: rgba(52, 152, 219, 0.25);
+            --control-button-shadow: 0 4.5px 11.25px rgba(52, 152, 219, 0.15);
+            --control-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --control-button-hover-shadow: 0 11.25px 26.25px rgba(52, 152, 219, 0.3);
+            --control-button-active-bg: rgba(36, 113, 163, 0.2);
+            --control-button-active-shadow: 0 1.5px 7.5px rgba(52, 152, 219, 0.15);
+            --play-button-pulse-shadow-1: 0 0 22.5px rgba(52, 152, 219, 1), 0 0 37.5px rgba(255, 255, 255, 0.5);
+            --play-button-pulse-shadow-2: 0 0 33.75px rgba(52, 152, 219, 1.2), 0 0 52.5px rgba(255, 255, 255, 0.7);
+            --volume-icon-color: #bdc3c7;
+            --volume-slider-bg: rgba(90, 125, 154, 0.15);
+            --volume-slider-thumb-bg: rgba(52, 152, 219, 0.25);
+            --volume-slider-thumb-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.3);
+            --volume-slider-thumb-hover-bg: rgba(41, 128, 185, 0.35);
+            --playlist-header-color: #ecf0f1;
+            --playlist-header-shadow: 0 1.5px 4.5px rgba(0,0,0,0.4);
+            --playlist-scrollbar-thumb: rgba(52, 152, 219, 0.25);
+            --playlist-scrollbar-track: rgba(90, 125, 154, 0.15);
+            --playlist-item-bg: rgba(52, 73, 94, 0.15);
+            --playlist-item-border: rgba(61, 90, 115, 0.1);
+            --playlist-item-hover-bg: rgba(61, 90, 115, 0.25);
+            --playlist-item-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.3);
+            --playlist-item-active-bg-start: rgba(52, 152, 219, 0.25);
+            --playlist-item-active-bg-end: rgba(41, 128, 185, 0.25);
+            --playlist-item-active-shadow: 0 3px 11.25px rgba(52, 152, 219, 0.3);
+            --playlist-item-active-border-color: rgba(52, 152, 219, 0.25);
+            --playlist-item-img-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.2);
+            --playlist-item-title-color: #ecf0f1;
+            --playlist-item-artist-color: #bdc3c7;
+            --playlist-item-active-text-color: #ffffff;
+            --search-bar-bg: rgba(44, 62, 80, 0.15);
+            --search-bar-border: rgba(52, 152, 219, 0.25);
+            --search-bar-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.3);
+            --search-bar-focus-border: rgba(46, 204, 113, 0.25);
+            --search-bar-focus-shadow: 0 0 15px rgba(46, 204, 113, 0.525);
+            --search-input-color: #ecf0f1;
+            --search-input-placeholder-color: #bdc3c7;
+            --search-icon-color: #bdc3c7;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            --body-bg: #f0f2f5; /* Light background */
+            --text-color: #34495e; /* Darker text */
+            --container-bg: rgba(255, 255, 255, 0.1); /* Reduced alpha for more transparency */
+            --container-border: rgba(180, 180, 180, 0.7);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.1);
+            --heading-color: #34495e;
+            --subheading-color: #2980b9;
+            --paragraph-color: #7f8c8d;
+            --back-button-bg: rgba(180, 180, 180, 0.2);
+            --back-button-hover-bg: rgba(180, 180, 180, 0.3);
+            --back-button-shadow: 0 3px 7.5px rgba(0, 0, 0, 0.05);
+            --back-button-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.1);
+            --back-button-active-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.05);
+            --back-button-icon-color: #34495e;
+            --album-title-color: #34495e;
+            --album-title-shadow: none;
+            --album-art-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            --album-art-hover-shadow: 0 9px 18.75px rgba(0, 0, 0, 0.2);
+            --album-art-playing-shadow-1: 0 6px 15px rgba(0, 0, 0, 0.2);
+            --album-art-playing-shadow-2: 0 0 37.5px rgba(52, 152, 219, 0.4), 0 0 52.5px rgba(46, 204, 113, 0.2);
+            --song-info-title-color: #34495e;
+            --song-info-artist-color: #7f8c8d;
+            --progress-bar-container-bg: rgba(180, 180, 180, 0.2);
+            --progress-bar-container-hover-shadow: 0 0 11.25px rgba(52, 152, 219, 0.4);
+            --progress-bar-bg-start: rgba(52, 152, 219, 0.15);
+            --progress-bar-bg-end: rgba(41, 128, 185, 0.15);
+            --progress-bar-shadow: 0 0 3.75px rgba(52, 152, 219, 0.15);
+            --time-display-color: #7f8c8d;
+            --control-button-bg: rgba(52, 152, 219, 0.1);
+            --control-button-color: #34495e;
+            --control-button-border: rgba(52, 152, 219, 0.15);
+            --control-button-shadow: 0 4.5px 11.25px rgba(52, 152, 219, 0.1);
+            --control-button-hover-bg: rgba(52, 152, 219, 0.15);
+            --control-button-hover-shadow: 0 11.25px 26.25px rgba(52, 152, 219, 0.2);
+            --control-button-active-bg: rgba(36, 113, 163, 0.1);
+            --control-button-active-shadow: 0 1.5px 7.5px rgba(52, 152, 219, 0.1);
+            --play-button-pulse-shadow-1: 0 0 22.5px rgba(52, 152, 219, 0.5), 0 0 37.5px rgba(0, 0, 0, 0.25);
+            --play-button-pulse-shadow-2: 0 0 33.75px rgba(52, 152, 219, 0.6), 0 0 52.5px rgba(0, 0, 0, 0.35);
+            --volume-icon-color: #7f8c8d;
+            --volume-slider-bg: rgba(180, 180, 180, 0.2);
+            --volume-slider-thumb-bg: rgba(52, 152, 219, 0.15);
+            --volume-slider-thumb-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.15);
+            --volume-slider-thumb-hover-bg: rgba(41, 128, 185, 0.25);
+            --playlist-header-color: #34495e;
+            --playlist-header-shadow: none;
+            --playlist-scrollbar-thumb: rgba(52, 152, 219, 0.15);
+            --playlist-scrollbar-track: rgba(180, 180, 180, 0.2);
+            --playlist-item-bg: rgba(255, 255, 255, 0.1);
+            --playlist-item-border: rgba(180, 180, 180, 0.7);
+            --playlist-item-hover-bg: rgba(255, 255, 255, 0.2);
+            --playlist-item-hover-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.1);
+            --playlist-item-active-bg-start: rgba(52, 152, 219, 0.15);
+            --playlist-item-active-bg-end: rgba(41, 128, 185, 0.15);
+            --playlist-item-active-shadow: 0 3px 11.25px rgba(52, 152, 219, 0.2);
+            --playlist-item-active-border-color: rgba(52, 152, 219, 0.15);
+            --playlist-item-img-shadow: 0 1.5px 6px rgba(0, 0, 0, 0.1);
+            --playlist-item-title-color: #34495e;
+            --playlist-item-artist-color: #7f8c8d;
+            --playlist-item-active-text-color: #34495e;
+            --search-bar-bg: rgba(255, 255, 255, 0.1);
+            --search-bar-border: rgba(52, 152, 219, 0.15);
+            --search-bar-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.1);
+            --search-bar-focus-border: rgba(46, 204, 113, 0.15);
+            --search-bar-focus-shadow: 0 0 15px rgba(46, 204, 113, 0.25);
+            --search-input-color: #34495e;
+            --search-input-placeholder-color: #7f8c8d;
+            --search-icon-color: #7f8c8d;
+            --slider-bg: #ccc;
+            --slider-checked-bg: #2196F3;
+            --slider-before-bg: white;
+        }
+
+        /* Aurora Borealis Effect */
+        .aurora-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through */
+            z-index: -1; /* Place behind content */
+            background: transparent;
+            overflow: hidden; /* Keep hidden for aurora layers to prevent inner scroll */
+        }
+
+        .aurora-layer {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(52, 152, 219, 0.3), /* Blue from active playlist item */
+                rgba(46, 204, 113, 0.3)  /* Green from active playlist item */
+            );
+            border-radius: 50%;
+            filter: blur(80px); /* Soft blur for aurora effect */
+            opacity: 0;
+            animation: auroraMovement 5s infinite alternate ease-in-out;
+        }
+
+        .aurora-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: 10%;
+            left: 15%;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.4), rgba(46, 204, 113, 0.4));
+            animation-delay: 0s;
+            animation-duration: 8s; /* Adjusted duration for more subtle flow */
+        }
+
+        .aurora-layer:nth-child(2) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 70%;
+            background: linear-gradient(to top, rgba(0, 200, 200, 0.4), rgba(0, 150, 150, 0.4)); /* Teal tones */
+            animation-delay: 8s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            top: 80%;
+            left: 30%;
+            background: linear-gradient(to right, rgba(70, 130, 180, 0.3), rgba(60, 179, 113, 0.3)); /* SteelBlue to MediumSeaGreen */
+            animation-delay: 16s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            top: 20%;
+            left: 80%;
+            background: linear-gradient(to left, rgba(135, 206, 250, 0.3), rgba(127, 255, 212, 0.3)); /* LightSkyBlue to Aquamarine */
+            animation-delay: 24s; /* Adjusted delay */
+            animation-duration: 9s; /* Adjusted duration */
+        }
+
+        @keyframes auroraMovement {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translate(20px, -30px) scale(1.05);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate(-10px, 40px) scale(0.95);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translate(30px, -20px) scale(1.03);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* Light theme specific adjustment for aurora opacity */
+        body.light-theme .aurora-layer {
+            opacity: 0.2; /* Reduce opacity for light theme */
+        }
+
+        /* Page Transition Animations - Changed to Fade In/Out with subtle timing */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .page-transition-in {
+            animation: fadeIn 0.4s ease-out forwards; /* Shorter duration for subtlety */
+        }
+
+        .page-transition-out {
+            animation: fadeOut 0.4s ease-in forwards; /* Shorter duration for subtlety */
+        }
+
+        /* New CSS for song transition animation */
+        @keyframes fadeOutContent {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); } /* Subtle scale down */
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: scale(1.05); } /* Subtle scale up from slightly larger */
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .fade-out-content {
+            animation: fadeOutContent 0.4s ease-in-out forwards; /* Adjusted duration and easing */
+        }
+
+        .fade-in-content {
+            animation: fadeInContent 0.4s ease-in-out forwards; /* Adjusted duration and easing */
+        }
+
+        /* New animations for playlist items */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px); /* Reduced from 20px by 25% */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutDown {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(15px); /* Reduced from 20px by 25% */
+            }
+        }
+
+        .playlist-item.fade-in-up {
+            animation: fadeInUp 0.4s ease-out forwards;
+            will-change: transform, opacity;
+        }
+
+        .playlist-item.fade-out-down {
+            animation: fadeOutDown 0.4s ease-in forwards;
+            will-change: transform, opacity;
+        }
+
+
+        /* Main content wrapper for player and playlist */
+        .main-content-wrapper {
+            display: flex;
+            gap: 30px; /* Reduced from 40px by 25% */
+            align-items: flex-start; /* Align items to the top */
+            justify-content: center;
+            width: 100%;
+            max-width: 750px; /* Reduced from 1000px by 25% */
+        }
+
+        .music-player-container, .playlist-container {
+            background-color: var(--container-bg); /* Use CSS variable */
+            border-radius: 12px; /* Reduced from 16px by 25% */
+            box-shadow: var(--container-shadow); /* Use CSS variable */
+            padding: 22.5px; /* Reduced from 30px by 25% */
+            width: 100%; /* Take full width of their flex item */
+            text-align: center;
+            border: 1px solid var(--container-border); /* Use CSS variable */
+            backdrop-filter: blur(7.5px); /* Reduced from 10px by 25% */
+            -webkit-backdrop-filter: blur(7.5px); /* For Safari */
+            position: relative; /* For back button positioning */
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth transition for any changes */
+            z-index: 1; /* Ensure player is above aurora effect */
+        }
+
+        .music-player-container {
+            max-width: 337.5px; /* Reduced from 450px by 25% */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .playlist-container {
+            max-width: 412.5px; /* Reduced from 550px by 25% */
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Enable scrolling for playlist */
+            max-height: 525px; /* Reduced from 700px by 25% */
+        }
+
+        .back-button {
+            position: absolute;
+            top: 15px; /* Reduced from 20px by 25% */
+            left: 15px; /* Reduced from 20px by 25% */
+            /* New styles for circular button */
+            background-color: var(--back-button-bg); /* Use CSS variable */
+            width: 33.75px; /* Reduced from 45px by 25% */
+            height: 33.75px; /* Reduced from 45px by 25% */
+            border-radius: 50%; /* Make it circular */
+            display: flex; /* Use flex to center SVG */
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--back-button-shadow); /* Use CSS variable */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Added transitions */
+            text-decoration: none; /* Remove underline for link */
+            z-index: 10; /* Ensure it's above other content */
+            border: 1px solid var(--back-button-bg); /* Use CSS variable */
+        }
+        .back-button:hover {
+            background-color: var(--back-button-hover-bg); /* Use CSS variable */
+            transform: translateX(-3.75px) scale(1.0375); /* Reduced from -5px, 1.05 by 25% */
+            box-shadow: var(--back-button-hover-shadow); /* Use CSS variable */
+        }
+        .back-button:active {
+            transform: translateY(0) scale(0.9625); /* Reduced from 0.95 by 25% */
+            box-shadow: var(--back-button-active-shadow); /* Use CSS variable */
+        }
+        /* Style for the SVG icon inside the button */
+        .back-button svg {
+            width: 0.9em; /* Reduced from 1.2em by 25% */
+            height: 0.9em; /* Reduced from 1.2em by 25% */
+            stroke: var(--back-button-icon-color); /* Use CSS variable */
+            stroke-width: 1.875; /* Reduced from 2.5 by 25% */
+            stroke-linecap: round; /* Rounded ends for lines */
+            stroke-linejoin: round; /* Rounded corners for lines */
+            fill: none; /* Ensure no fill for the arrow */
+            transition: stroke 0.3s ease; /* Smooth transition for arrow color */
+        }
+        .back-button:hover svg {
+            stroke: var(--back-button-icon-color); /* Keep color consistent with theme */
+        }
+        /* Adjusted h1 to be the album title */
+        .album-title {
+            color: var(--album-title-color); /* Use CSS variable */
+            font-size: 1.65rem; /* Reduced from 2.2rem by 25% */
+            font-weight: 700;
+            margin-bottom: 1.5rem; /* Reduced from 2rem by 25% */
+            text-shadow: var(--album-title-shadow); /* Use CSS variable */
+        }
+
+        /* Album Art Fixed Glow when playing */
+        .album-art {
+            width: 150px; /* Reduced from 200px by 25% */
+            height: 150px; /* Reduced from 200px by 25% */
+            border-radius: 9px; /* Reduced from 12px by 25% */
+            object-fit: cover;
+            margin: 0 auto 15px auto; /* Reduced from 20px by 25% */
+            box-shadow: var(--album-art-shadow); /* Use CSS variable */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover and glow */
+        }
+        .album-art:hover {
+            transform: scale(1.015); /* Reduced from 1.02 by 25% */
+            box-shadow: var(--album-art-hover-shadow); /* Use CSS variable */
+        }
+        .album-art.playing {
+            /* Fixed glow effect - Increased spread radius for larger glow */
+            box-shadow: var(--album-art-playing-shadow-1), /* Use CSS variable */
+                        var(--album-art-playing-shadow-2); /* Use CSS variable */
+            transform: scale(1.0075); /* Reduced from 1.01 by 25% */
+        }
+
+        .song-info .title {
+            font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+            font-weight: bold;
+            margin-bottom: 3.75px; /* Reduced from 5px by 25% */
+            color: var(--song-info-title-color); /* Use CSS variable */
+        }
+        .song-info .artist {
+            font-size: 0.9rem; /* Reduced from 1.2rem by 25% */
+            color: var(--song-info-artist-color); /* Use CSS variable */
+            margin-bottom: 15px; /* Reduced from 20px by 25% */
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 6px; /* Reduced from 8px by 25% */
+            background-color: var(--progress-bar-container-bg); /* Use CSS variable */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+            margin-bottom: 11.25px; /* Reduced from 15px by 25% */
+            cursor: pointer;
+            overflow: hidden; /* Ensure progress bar stays within bounds */
+            transition: box-shadow 0.3s ease; /* Smooth transition for glow */
+        }
+        .progress-bar-container:hover {
+            box-shadow: var(--progress-bar-container-hover-shadow); /* Use CSS variable */
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--progress-bar-bg-start), var(--progress-bar-bg-end)); /* Use CSS variables */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+            transition: width 0.1s ease-out; /* Changed to ease-out for smoother animation */
+            box-shadow: var(--progress-bar-shadow); /* Use CSS variable */
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.675rem; /* Reduced from 0.9rem by 25% */
+            color: var(--time-display-color); /* Use CSS variable */
+            margin-bottom: 18.75px; /* Reduced from 25px by 25% */
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 18.75px; /* Reduced from 25px by 25% */
+            margin-bottom: 22.5px; /* Reduced from 30px by 25% */
+        }
+        .control-button {
+            background: var(--control-button-bg); /* Use CSS variable */
+            color: var(--control-button-color); /* Use CSS variable */
+            width: 41.25px; /* Reduced from 55px by 25% */
+            height: 41.25px; /* Reduced from 55px by 25% */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.05rem; /* Reduced from 1.4rem by 25% */
+            border: 1px solid var(--control-button-border); /* Use CSS variable */
+            cursor: pointer;
+            box-shadow: var(--control-button-shadow); /* Use CSS variable */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, slightly springy transition */
+        }
+        .control-button:hover {
+            background: var(--control-button-hover-bg); /* Use CSS variable */
+            transform: translateY(-3.75px) scale(1.06); /* Reduced from -5px, 1.08 by 25% */
+            box-shadow: var(--control-button-hover-shadow); /* Use CSS variable */
+        }
+        .control-button:active {
+            transform: translateY(0) scale(0.94); /* Reduced from 0.92 by 25% */
+            box-shadow: var(--control-button-active-shadow); /* Use CSS variable */
+            background: var(--control-button-active-bg); /* Use CSS variable */
+        }
+        .control-button.play-pause {
+            width: 52.5px; /* Reduced from 70px by 25% */
+            height: 52.5px; /* Reduced from 70px by 25% */
+            font-size: 1.5rem; /* Reduced from 2rem by 25% */
+        }
+
+        /* Reintroduced: Play/Pause button pulse glow when playing */
+        @keyframes playButtonPulse {
+            0% {
+                box-shadow: var(--play-button-pulse-shadow-1); /* Use CSS variable */
+                transform: scale(1.0375); /* Reduced from 1.05 by 25% */
+            }
+            50% {
+                box-shadow: var(--play-button-pulse-shadow-2); /* Use CSS variable */
+                transform: scale(1.0525); /* Reduced from 1.07 by 25% */
+            }
+            100% {
+                box-shadow: var(--play-button-pulse-shadow-1); /* Use CSS variable */
+                transform: scale(1.0375);
+            }
+        }
+
+        .control-button.play-pause.playing {
+            animation: playButtonPulse 1.8s infinite alternate ease-in-out; /* Apply animation */
+        }
+
+        /* Light theme specific adjustment for play button pulse */
+        body.light-theme .control-button.play-pause.playing {
+            animation: none; /* Disable pulse animation for light theme */
+            box-shadow: var(--control-button-shadow); /* Keep regular shadow */
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 7.5px; /* Reduced from 10px by 25% */
+            margin-bottom: 22.5px; /* Reduced from 30px by 25% */
+            justify-content: center;
+        }
+        .volume-control i {
+            font-size: 0.9rem; /* Reduced from 1.2rem by 25% */
+            color: var(--volume-icon-color); /* Use CSS variable */
+        }
+        .volume-slider {
+            width: 112.5px; /* Reduced from 150px by 25% */
+            -webkit-appearance: none;
+            height: 4.5px; /* Reduced from 6px by 25% */
+            background: var(--volume-slider-bg); /* Use CSS variable */
+            border-radius: 2.25px; /* Reduced from 3px by 25% */
+            outline: none;
+            cursor: pointer;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px; /* Reduced from 16px by 25% */
+            height: 12px; /* Reduced from 16px by 25% */
+            border-radius: 50%;
+            background: var(--volume-slider-thumb-bg); /* Use CSS variable */
+            cursor: pointer;
+            box-shadow: var(--volume-slider-thumb-shadow); /* Use CSS variable */
+            transition: background 0.2s ease; /* Smooth transition for thumb color */
+        }
+        .volume-slider::-webkit-slider-thumb:hover {
+            background: var(--volume-slider-thumb-hover-bg); /* Use CSS variable */
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 12px; /* Reduced from 16px by 25% */
+            height: 12px; /* Reduced from 16px by 25% */
+            border-radius: 50%;
+            background: var(--volume-slider-thumb-bg); /* Use CSS variable */
+            cursor: pointer;
+            box-shadow: var(--volume-slider-thumb-shadow); /* Use CSS variable */
+            transition: background 0.2s ease;
+        }
+        .volume-slider::-moz-range-thumb:hover {
+            background: var(--volume-slider-thumb-hover-bg); /* Use CSS variable */
+        }
+
+        /* Playlist Specific Styles */
+        .playlist-header {
+            font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+            font-weight: 700;
+            color: var(--playlist-header-color); /* Use CSS variable */
+            margin-bottom: 1.125rem; /* Reduced from 1.5rem by 25% */
+            text-align: center;
+            text-shadow: var(--playlist-header-shadow); /* Use CSS variable */
+        }
+
+        .playlist-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: calc(100% - 52.5px); /* Reduced from 70px by 25% */
+            overflow-y: auto; /* Scrollable playlist */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--playlist-scrollbar-thumb) var(--playlist-scrollbar-track); /* Thumb and Track, 75% and 85% transparent */
+        }
+
+        /* Webkit scrollbar styles */
+        .playlist-list::-webkit-scrollbar {
+            width: 6px; /* Reduced from 8px by 25% */
+        }
+
+        .playlist-list::-webkit-scrollbar-track {
+            background: var(--playlist-scrollbar-track); /* Use CSS variable */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+        }
+
+        .playlist-list::-webkit-scrollbar-thumb {
+            background-color: var(--playlist-scrollbar-thumb); /* Use CSS variable */
+            border-radius: 3px; /* Reduced from 4px by 25% */
+            border: 1.5px solid var(--playlist-scrollbar-track); /* Use CSS variable */
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 9px 11.25px; /* Reduced from 12px 15px by 25% */
+            margin-bottom: 6px; /* Reduced from 8px by 25% */
+            background-color: var(--playlist-item-bg); /* Use CSS variable */
+            border-radius: 7.5px; /* Reduced from 10px by 25% */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-align: left; /* Align text left within item */
+            border: 1px solid var(--playlist-item-border); /* Use CSS variable */
+        }
+
+        .playlist-item:hover {
+            background-color: var(--playlist-item-hover-bg); /* Use CSS variable */
+            transform: translateY(-2.25px); /* Reduced from -3px by 25% */
+            box-shadow: var(--playlist-item-hover-shadow); /* Use CSS variable */
+        }
+
+        .playlist-item.active {
+            background: linear-gradient(to right, var(--playlist-item-active-bg-start), var(--playlist-item-active-bg-end)); /* Use CSS variables */
+            box-shadow: var(--playlist-item-active-shadow); /* Use CSS variable */
+            transform: scale(1.0075); /* Reduced from 1.01 by 25% */
+            border-color: var(--playlist-item-active-border-color); /* Use CSS variable */
+        }
+
+        .playlist-item-img {
+            width: 37.5px; /* Reduced from 50px by 25% */
+            height: 37.5px; /* Reduced from 50px by 25% */
+            border-radius: 6px; /* Reduced from 8px by 25% */
+            object-fit: cover;
+            margin-right: 11.25px; /* Reduced from 15px by 25% */
+            flex-shrink: 0;
+            box-shadow: var(--playlist-item-img-shadow); /* Use CSS variable */
+        }
+
+        .playlist-item-info {
+            flex-grow: 1;
+        }
+
+        .playlist-item-info .title {
+            font-size: 0.7875rem; /* Reduced from 1.05rem by 25% */
+            font-weight: bold;
+            color: var(--playlist-item-title-color); /* Use CSS variable */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item-info .artist {
+            font-size: 0.675rem; /* Reduced from 0.9rem by 25% */
+            color: var(--playlist-item-artist-color); /* Use CSS variable */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .playlist-item.active .playlist-item-info .title,
+        .playlist-item.active .playlist-item-info .artist {
+            color: var(--playlist-item-active-text-color); /* Use CSS variable */
+        }
+
+        /* Search Bar Styling */
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--search-bar-bg); /* Use CSS variable */
+            border: 1.5px solid var(--search-bar-border); /* Use CSS variable */
+            border-radius: 9px; /* Reduced from 12px by 25% */
+            padding: 7.5px 11.25px; /* Reduced from 10px 15px by 25% */
+            margin-bottom: 15px; /* Reduced from 20px by 25% */
+            box-shadow: var(--search-bar-shadow); /* Use CSS variable */
+            transition: all 0.3s ease;
+            width: 90%; /* Default width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-bar-container:focus-within {
+            border-color: var(--search-bar-focus-border); /* Use CSS variable */
+            box-shadow: var(--search-bar-focus-shadow); /* Use CSS variable */
+            transform: translateY(-1.5px); /* Reduced from -2px by 25% */
+        }
+
+        .search-bar-container input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--search-input-color); /* Use CSS variable */
+            font-size: 0.75rem; /* Reduced from 1rem by 25% */
+            padding: 3.75px 7.5px; /* Reduced from 5px 10px by 25% */
+        }
+
+        .search-bar-container input::placeholder {
+            color: var(--search-input-placeholder-color); /* Use CSS variable */
+            opacity: 0.8;
+        }
+
+        .search-bar-container .search-icon {
+            color: var(--search-icon-color); /* Use CSS variable */
+            font-size: 0.9rem; /* Reduced from 1.2rem by 25% */
+            margin-left: 7.5px; /* Reduced from 10px by 25% */
+        }
+
+        /* Theme Switch Styles */
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--container-bg);
+            border-radius: 9px;
+            padding: 8px 15px;
+            box-shadow: var(--container-shadow);
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 25px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--slider-bg);
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 19px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--slider-before-bg);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--slider-checked-bg);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--slider-checked-bg);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .main-content-wrapper {
+                flex-direction: column; /* Stack vertically on smaller screens */
+                align-items: center; /* Center items when stacked */
+                gap: 22.5px; /* Reduced from 30px by 25% */
+            }
+            .music-player-container, .playlist-container {
+                max-width: 337.5px; /* Keep consistent max width for both */
+            }
+            .playlist-container {
+                max-height: 375px; /* Reduced from 500px by 25% */
+            }
+            .album-title { /* Adjusted for responsive */
+                font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+                margin-bottom: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            .album-art {
+                width: 112.5px; /* Reduced from 150px by 25% */
+                height: 112.5px; /* Reduced from 150px by 25% */
+            }
+            .song-info .title {
+                font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            .song-info .artist {
+                font-size: 0.75rem; /* Reduced from 1.0rem by 25% */
+            }
+            .controls {
+                gap: 11.25px; /* Reduced from 15px by 25% */
+            }
+            .control-button {
+                width: 33.75px; /* Reduced from 45px by 25% */
+                height: 33.75px; /* Reduced from 45px by 25% */
+                font-size: 0.9rem; /* Reduced from 1.2rem by 25% */
+            }
+            .control-button.play-pause {
+                width: 45px; /* Reduced from 60px by 25% */
+                height: 45px; /* Reduced from 60px by 25% */
+                font-size: 1.35rem; /* Reduced from 1.8rem by 25% */
+            }
+            .volume-control {
+                flex-direction: column;
+                gap: 3.75px; /* Reduced from 5px by 25% */
+            }
+            .volume-slider {
+                width: 100%;
+            }
+            .theme-switch-wrapper {
+                bottom: 15px;
+                right: 15px;
+                left: auto; /* Ensure it stays on the right */
+                width: auto;
+                padding: 8px 10px;
+            }
+        }
+        @media (max-width: 600px) {
+            .music-player-container, .playlist-container {
+                padding: 15px; /* Reduced from 20px by 25% */
+            }
+            .playlist-header {
+                font-size: 1.125rem; /* Reduced from 1.5rem by 25% */
+            }
+            .playlist-item {
+                padding: 7.5px; /* Reduced from 10px by 25% */
+            }
+            .playlist-item-img {
+                width: 30px; /* Reduced from 40px by 25% */
+                height: 30px; /* Reduced from 40px by 25% */
+                margin-right: 7.5px; /* Reduced from 10px by 25% */
+            }
+            .playlist-item-info .title {
+                font-size: 0.7125rem; /* Reduced from 0.95rem by 25% */
+            }
+            .playlist-item-info .artist {
+                font-size: 0.6rem; /* Reduced from 0.8rem by 25% */
+            }
+            .search-bar-container {
+                width: 100%; /* Full width on small screens */
+                padding: 6px 9px; /* Reduced from 8px 12px by 25% */
+            }
+            .search-bar-container input {
+                font-size: 0.675rem; /* Reduced from 0.9rem by 25% */
+            }
+            .search-bar-container .search-icon {
+                font-size: 0.825rem; /* Reduced from 1.1rem by 25% */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-background">
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+    </div>
+
+    <!-- Page Content Wrapper for Transitions -->
+    <div id="pageContentWrapper" class="relative w-full h-full flex justify-center items-center">
+        <div class="main-content-wrapper">
+            <div class="music-player-container">
+                <a href="#" class="back-button page-link" data-href="index.html" title="Quay lại Trang Chủ">
+                    <!-- Replaced Font Awesome icon with inline SVG for exact match -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 4L4 12L12 20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <!-- Replaced h1 with a span for the dynamic album title -->
+                <span id="currentAlbumTitle" class="album-title">Tên Album</span>
+                <img id="currentAlbumArt" class="album-art" src="https://placehold.co/200x200/95a5a6/ffffff?text=Music" alt="Album Art">
+                <div class="song-info">
+                    <div class="title" id="currentSongTitle">Chưa có nhạc</div>
+                    <div class="artist" id="currentSongArtist">Chọn bài hát để phát</div>
+                </div>
+
+                <div class="progress-bar-container" id="progressBarContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+
+                <div class="controls">
+                    <button class="control-button" id="prevButton">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button class="control-button play-pause" id="playPauseButton">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-button" id="nextButton">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+
+            <!-- Playlist Container -->
+            <div class="playlist-container">
+                <h2 class="playlist-header">Danh Sách Phát</h2>
+                <!-- Search Bar for Playlist -->
+                <div class="search-bar-container">
+                    <input type="text" id="playlistSearchInput" placeholder="Tìm kiếm bài hát...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <ul id="playlist" class="playlist-list">
+                    <!-- Playlist items will be rendered here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switch-wrapper">
+        <label for="theme-switch-checkbox" class="text-sm font-semibold">Chế độ sáng</label>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-switch-checkbox">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" src="" preload="auto"></audio>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const currentAlbumArt = document.getElementById('currentAlbumArt');
+        const currentAlbumTitle = document.getElementById('currentAlbumTitle');
+        const currentSongTitle = document.getElementById('currentSongTitle');
+        const currentSongArtist = document.getElementById('currentSongArtist');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+        const playPauseButton = document.getElementById('playPauseButton');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const playlistElement = document.getElementById('playlist'); // New: Playlist UL element
+        const playlistSearchInput = document.getElementById('playlistSearchInput'); // New: Search input for playlist
+        const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox'); // Get the theme switch checkbox
+
+        const SONGS = [
+            {
+                id: 'song1',
+                title: "Die for you",
+                artist: "joji",
+                album: "SMITHEREENS",
+                url: "music/03. Die For You.mp3", // Updated to local path
+                albumArtUrl: "albumcover/smithereens.jpeg" // Updated to local path
+            },
+            {
+                id: 'song2',
+                title: "You suck Charlie",
+                artist: "joji",
+                album: "Chloe Burbank",
+                url: "music/you suck charlie.m4a", // Updated to local path
+                albumArtUrl: "albumcover/chloe burbank.jpg" // Updated to local path
+            },
+            {
+                id: 'song3',
+                title: "Come Thru",
+                artist: "Joji",
+                album: "BALLADS 1",
+                url: "music/09 Come Thru.mp3", // Updated to local path
+                albumArtUrl: "albumcover/ballads1.png" // Updated to local path
+            },
+			{
+                id: 'song4',
+                title: "Modus",
+                artist: "Joji",
+                album: "Nectar",
+                url: "music/02 MODUS.mp3", // Updated to local path
+                albumArtUrl: "albumcover/Nectar.jpg" // Updated to local path
+            },
+			{
+                id: 'song5',
+                title: "505",
+                artist: "Arctic Monkeys",
+                album: "Favourite Worst Nightmare",
+                url: "music/505 - Arctic Monkeys.mp3", // Updated to local path
+                albumArtUrl: "albumcover/FavouriteWorstNightmare.jpg" // Updated to local path
+            },
+			{
+                id: 'song6',
+                title: "Stressed Out",
+                artist: "Ben Schuller",
+                album: "piano cover",
+                url: "music/Ben Schuller-Stressed Out.mp3", // Updated to local path
+                albumArtUrl: "albumcover/strout.jpg" // Updated to local path
+            },
+			{
+                id: 'song7',
+                title: "Chamber Of Reflection",
+                artist: "Mac DeMarco",
+                album: "Salad Days",
+                url: "music/Chamber Of Reflection.mp3", // Updated to local path
+                albumArtUrl: "albumcover/cbofrl.jpg" // Updated to local path
+            },
+			{
+                id: 'song8',
+                title: "For the First Time",
+                artist: "Mac DeMarco",
+                album: "This Old Dog",
+                url: "music/For the First Time - Mac DeMarco.mp3", // Updated to local path
+                albumArtUrl: "albumcover/tolddog.png" // Updated to local path
+            },
+        ];
+
+        let currentSongIndex = -1; // No song selected initially
+
+        // Function to format time
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Function to save music state to localStorage
+        function saveMusicState() {
+            if (currentSongIndex !== -1) {
+                const state = {
+                    songId: SONGS[currentSongIndex].id,
+                    currentTime: audioPlayer.currentTime,
+                    isPlaying: !audioPlayer.paused,
+                    volume: audioPlayer.volume
+                };
+                localStorage.setItem('musicPlayerState', JSON.stringify(state));
+            } else {
+                localStorage.removeItem('musicPlayerState'); // Clear state if no song is playing
+            }
+        }
+
+        // Function to update player UI with animation
+        function updatePlayerInfo(song) {
+            // Elements to animate
+            const elementsToAnimate = [currentAlbumArt, currentSongTitle, currentSongArtist, currentAlbumTitle];
+
+            // 1. Start fade-out animation
+            elementsToAnimate.forEach(el => {
+                el.classList.remove('fade-in-content'); // Ensure no lingering fade-in
+                el.classList.add('fade-out-content');
+            });
+
+            // Remove playing classes immediately to avoid visual glitches during fade-out
+            currentAlbumArt.classList.remove('playing');
+            playPauseButton.classList.remove('playing');
+            playPauseButton.innerHTML = '<i class="fas fa-play"></i>'; // Reset button to play icon during transition
+
+
+            // Update active state in playlist
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activePlaylistItem = document.querySelector(`.playlist-item[data-song-id="${song.id}"]`);
+            if (activePlaylistItem) {
+                activePlaylistItem.classList.add('active');
+            }
+
+
+            // 2. After fade-out, update content and start fade-in
+            setTimeout(() => {
+                // Update content
+                currentAlbumArt.src = song.albumArtUrl;
+                currentAlbumArt.alt = `Ảnh bìa album của ${song.title}`;
+                currentAlbumTitle.textContent = song.album || "Không có Album";
+                currentSongTitle.textContent = song.title;
+                currentSongArtist.textContent = song.artist;
+
+                // Remove fade-out and start fade-in
+                elementsToAnimate.forEach(el => {
+                    el.classList.remove('fade-out-content');
+                    // Force reflow to restart animation
+                    void el.offsetWidth; // Trigger reflow
+                    el.classList.add('fade-in-content');
+                });
+
+                // 3. After fade-in, remove fade-in class and apply playing state if applicable
+                setTimeout(() => {
+                    elementsToAnimate.forEach(el => {
+                        el.classList.remove('fade-in-content');
+                    });
+
+                    // Reapply playing state if audio is actually playing
+                    if (!audioPlayer.paused) {
+                        currentAlbumArt.classList.add('playing');
+                        playPauseButton.classList.add('playing');
+                        playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    }
+                }, 400); // Match fadeInContent duration (0.4s)
+            }, 400); // Match fadeOutContent duration (0.4s)
+        }
+
+        // Function to load music state from localStorage
+        function loadMusicState() {
+            const savedState = localStorage.getItem('musicPlayerState');
+
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const songIndex = SONGS.findIndex(s => s.id === state.songId);
+                if (songIndex !== -1) {
+                    currentSongIndex = songIndex;
+                    audioPlayer.src = SONGS[currentSongIndex].url;
+                    audioPlayer.volume = state.volume;
+                    volumeSlider.value = state.volume;
+                    updatePlayerInfo(SONGS[currentSongIndex]); // Use the animated update
+
+                    if (state.isPlaying) {
+                        audioPlayer.currentTime = state.currentTime;
+                        audioPlayer.play().then(() => {
+                            // These are now handled by the play event listener or updatePlayerInfo's final step
+                        }).catch(error => {
+                            console.error("Error playing audio:", error);
+                            audioPlayer.currentTime = 0;
+                            progressBar.style.width = '0%';
+                            currentTimeSpan.textContent = '0:00';
+                            playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                            currentAlbumArt.classList.remove('playing');
+                            playPauseButton.classList.remove('playing');
+                        });
+                    } else {
+                        audioPlayer.currentTime = 0;
+                        progressBar.style.width = '0%';
+                        currentTimeSpan.textContent = '0:00';
+                        playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                        currentAlbumArt.classList.remove('playing');
+                        playPauseButton.classList.remove('playing');
+                    }
+                } else {
+                    // If song not found in current SONGS list, default to the first song
+                    currentSongIndex = 0;
+                    audioPlayer.src = SONGS[currentSongIndex].url;
+                    audioPlayer.currentTime = 0;
+                    progressBar.style.width = '0%';
+                    currentTimeSpan.textContent = '0:00';
+                    updatePlayerInfo(SONGS[currentSongIndex]); // Use the animated update
+                    playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                    currentAlbumArt.classList.remove('playing');
+                    playPauseButton.classList.remove('playing');
+                }
+            } else {
+                // Default state if no music was previously playing, set to the first song
+                currentSongIndex = 0;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                audioPlayer.currentTime = 0;
+                progressBar.style.width = '0%';
+                currentTimeSpan.textContent = '0:00';
+                updatePlayerInfo(SONGS[currentSongIndex]); // Use the animated update
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                currentAlbumArt.classList.remove('playing');
+                playPauseButton.classList.remove('playing');
+            }
+        }
+
+        // Function to render the playlist
+        function renderPlaylist() {
+            playlistElement.innerHTML = ''; // Clear existing playlist items
+            SONGS.forEach((song, index) => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('playlist-item');
+                listItem.dataset.songId = song.id; // Store song ID for easy lookup
+                listItem.dataset.index = index; // Store index for easy lookup
+
+                listItem.innerHTML = `
+                    <img src="${song.albumArtUrl}" alt="Album Cover" class="playlist-item-img">
+                    <div class="playlist-item-info">
+                        <div class="title">${song.title}</div>
+                        <div class="artist">${song.artist}</div>
+                    </div>
+                `;
+                listItem.addEventListener('click', () => {
+                    if (currentSongIndex !== index) { // Only change if different song clicked
+                        currentSongIndex = index;
+                        audioPlayer.src = song.url;
+                        updatePlayerInfo(song); // Update player UI and highlight active song
+                        audioPlayer.play();
+                        saveMusicState();
+                    } else if (audioPlayer.paused) {
+                        audioPlayer.play();
+                    } else {
+                        audioPlayer.pause();
+                    }
+                });
+                playlistElement.appendChild(listItem);
+            });
+        }
+
+
+        // Play/Pause toggle
+        playPauseButton.addEventListener('click', () => {
+            if (currentSongIndex === -1) {
+                // If no song is selected, default to the first song and update info
+                currentSongIndex = 0;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                updatePlayerInfo(SONGS[currentSongIndex]); // This will trigger the animation and update UI
+                // The actual play() call will happen in the next 'if' block
+            }
+
+            if (audioPlayer.paused) {
+                audioPlayer.play().then(() => {
+                    // Handled by audioPlayer 'play' event listener
+                }).catch(error => {
+                    console.error("Error playing audio:", error);
+                    currentSongTitle.textContent = "Không thể tự động phát!";
+                    currentSongArtist.textContent = "Trình duyệt đã chặn tự động phát.";
+                    currentAlbumArt.classList.remove('playing');
+                    playPauseButton.classList.remove('playing');
+                    playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                });
+            } else {
+                audioPlayer.pause();
+                // Handled by audioPlayer 'pause' event listener
+            }
+            saveMusicState();
+        });
+
+        // Next song
+        nextButton.addEventListener('click', () => {
+            if (SONGS.length === 0) {
+                console.log("No songs in playlist. Cannot go to next.");
+                return;
+            }
+            currentSongIndex = (currentSongIndex + 1) % SONGS.length;
+            audioPlayer.src = SONGS[currentSongIndex].url;
+            updatePlayerInfo(SONGS[currentSongIndex]); // Use the animated update
+            audioPlayer.play();
+            saveMusicState();
+        });
+
+        // Previous song
+        prevButton.addEventListener('click', () => {
+            if (SONGS.length === 0) {
+                console.log("No songs in playlist. Cannot go to previous.");
+                return;
+            }
+            currentSongIndex = (currentSongIndex - 1 + SONGS.length) % SONGS.length;
+            audioPlayer.src = SONGS[currentSongIndex].url;
+            updatePlayerInfo(SONGS[currentSongIndex]); // Use the animated update
+            audioPlayer.play();
+            saveMusicState();
+        });
+
+        // Update progress bar and time display
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+            currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
+            saveMusicState();
+        });
+
+        // Update duration when metadata is loaded
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            durationSpan.textContent = formatTime(audioPlayer.duration);
+        });
+
+        // Handle audio player 'play' event
+        audioPlayer.addEventListener('play', () => {
+            playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            currentAlbumArt.classList.add('playing');
+            playPauseButton.classList.add('playing');
+            saveMusicState();
+        });
+
+        // Handle audio player 'pause' event
+        audioPlayer.addEventListener('pause', () => {
+            playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            currentAlbumArt.classList.remove('playing');
+            playPauseButton.classList.remove('playing');
+            saveMusicState();
+        });
+
+        // Handle song ending
+        audioPlayer.addEventListener('ended', () => {
+            nextButton.click(); // Play next song automatically
+            saveMusicState();
+        });
+
+        // Seek functionality for progress bar
+        progressBarContainer.addEventListener('click', (e) => {
+            if (currentSongIndex === -1) return; // Cannot seek if no song is loaded
+            const clickX = e.offsetX;
+            const width = progressBarContainer.clientWidth;
+            const duration = audioPlayer.duration;
+            audioPlayer.currentTime = (clickX / width) * duration;
+            saveMusicState();
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', () => {
+            audioPlayer.volume = volumeSlider.value;
+            saveMusicState();
+        });
+
+        // Debounce function (copied from index.html)
+        let debounceTimer;
+        const debounce = (func, delay) => {
+            return function(...args) {
+                const context = this;
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => func.apply(context, args), delay);
+            };
+        };
+
+        // Function to filter playlist items
+        const filterPlaylistItems = () => {
+            const searchTerm = playlistSearchInput.value.toLowerCase();
+            const playlistItems = playlistElement.querySelectorAll('.playlist-item');
+
+            playlistItems.forEach(item => {
+                const title = item.querySelector('.title').textContent.toLowerCase();
+                const artist = item.querySelector('.artist').textContent.toLowerCase();
+                const itemIsVisible = item.style.display !== 'none';
+                const shouldBeVisible = title.includes(searchTerm) || artist.includes(searchTerm);
+
+                if (shouldBeVisible && !itemIsVisible) {
+                    item.style.display = 'flex'; // Make it visible for animation
+                    item.classList.remove('fade-out-down'); // Remove any lingering fade-out
+                    item.classList.add('fade-in-up'); // Add fade-in animation
+                } else if (!shouldBeVisible && itemIsVisible) {
+                    item.classList.remove('fade-in-up'); // Remove any lingering fade-in
+                    item.classList.add('fade-out-down'); // Add fade-out animation
+                    item.addEventListener('animationend', function handler() {
+                        item.style.display = 'none'; // Hide after animation
+                        item.classList.remove('fade-out-down'); // Clean up class
+                        item.removeEventListener('animationend', handler); // Remove listener
+                    }, { once: true });
+                }
+            });
+        };
+
+        // Event Listener for playlist search input with debounce
+        playlistSearchInput.addEventListener('input', debounce(filterPlaylistItems, 500));
+
+        // --- Theme Switch Logic ---
+        function applyTheme(theme) {
+            document.body.classList.remove('light-theme'); // Remove existing theme class
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+            localStorage.setItem('theme', theme); // Save theme preference
+        }
+
+        // Load theme preference on page load
+        const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+        applyTheme(savedTheme);
+        themeSwitchCheckbox.checked = (savedTheme === 'light'); // Set checkbox state
+
+        // Event listener for theme switch
+        themeSwitchCheckbox.addEventListener('change', () => {
+            if (themeSwitchCheckbox.checked) {
+                applyTheme('light');
+            } else {
+                applyTheme('dark');
+            }
+        });
+
+        // --- Page Transition Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageContentWrapper = document.getElementById('pageContentWrapper');
+            const pageLinks = document.querySelectorAll('.page-link');
+
+            // Animate page in on load
+            pageContentWrapper.classList.add('page-transition-in');
+
+            // Handle page link clicks for smooth transitions
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default navigation
+                    const targetPage = link.dataset.href; // Get target page from data-href
+
+                    // Add fade-out animation
+                    pageContentWrapper.classList.remove('page-transition-in');
+                    pageContentWrapper.classList.add('page-transition-out');
+
+                    // Wait for the animation to complete before navigating
+                    pageContentWrapper.addEventListener('animationend', () => {
+                        window.location.href = targetPage; // Navigate to the new page
+                    }, { once: true }); // Ensure the event listener is removed after it fires
+                });
+            });
+
+            renderPlaylist(); // Render playlist on DOMContentLoaded
+            loadMusicState(); // Load music state when the page loads
+            // Set initial volume (already done in loadMusicState, but good to ensure)
+            volumeSlider.value = audioPlayer.volume;
+        });
+    </script>
+</body>
+</html>

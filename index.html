@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom font for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            box-sizing: border-box;
+            position: relative;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        /* CSS Variables for Theme */
+        :root {
+            /* Dark Theme (Default) */
+            --body-bg: #0d1a2a;
+            --text-color: #ecf0f1;
+            --container-bg: rgba(44, 62, 80, 0.05);
+            --container-border: rgba(61, 90, 115, 0.1);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.4);
+            --search-bar-bg: rgba(44, 62, 80, 0.05);
+            --search-bar-border: rgba(52, 152, 219, 0.1);
+            --search-bar-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 11.25px rgba(52, 152, 219, 0.15);
+            --search-bar-focus-border: rgba(46, 204, 113, 0.2);
+            --search-bar-focus-shadow: 0 6px 18.75px rgba(0, 0, 0, 0.5), 0 0 15px rgba(46, 204, 113, 0.25);
+            --placeholder-color: #bdc3c7;
+            --tool-card-bg: rgba(52, 73, 94, 0.08);
+            --tool-card-border: rgba(74, 98, 122, 0.1);
+            --tool-card-hover-bg: rgba(61, 90, 115, 0.15);
+            --tool-card-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.3);
+            --tool-card-hover-shadow-base: 0 4.5px 18.75px rgba(0, 0, 0, 0.5);
+            --tool-card-icon-color: #3498db;
+            --tool-card-icon-glow: 0 0 5.25px rgba(52, 152, 219, 0.6);
+            --tool-card-hover-icon-color: #2ecc71;
+            --tool-card-hover-icon-glow-1: 0 0 11.25px rgba(46, 204, 113, 1);
+            --tool-card-hover-icon-glow-2: 0 0 18.75px rgba(46, 204, 113, 0.7);
+            --music-button-bg: rgba(52, 152, 219, 0.08);
+            --music-button-color: white;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.08);
+            --music-button-border: rgba(52, 152, 219, 0.15);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.15);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.2);
+            --music-button-active-bg: rgba(36, 113, 163, 0.1);
+            --music-button-pulse-shadow-1: 0 0 18.75px rgba(52, 152, 219, 0.2);
+            --music-button-pulse-shadow-2: 0 0 30px rgba(255, 255, 255, 0.1);
+            --music-tooltip-bg: rgba(44, 62, 80, 0.95);
+            --music-tooltip-color: #ecf0f1;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.3);
+            --music-tooltip-border: #3d5a73;
+            --glowing-title-color: #fff;
+            --glowing-title-glow-1: 0 0 0.375px var(--glowing-title-color);
+            --glowing-title-glow-2: 0 0 0.75px var(--glowing-title-color);
+            --glowing-title-glow-3: 0 0 1.125px var(--glowing-title-color);
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            --body-bg: #f0f2f5; /* Light background */
+            --text-color: #34495e; /* Darker text */
+            --container-bg: rgba(255, 255, 255, 0.2); /* Giảm alpha để trong suốt hơn rất nhiều */
+            --container-border: rgba(200, 200, 200, 0.5);
+            --container-shadow: 0 9px 22px rgba(0, 0, 0, 0.1);
+            --search-bar-bg: rgba(255, 255, 255, 0.9);
+            --search-bar-border: rgba(52, 152, 219, 0.3);
+            --search-bar-shadow: 0 6px 15px rgba(0, 0, 0, 0.1), 0 0 11.25px rgba(52, 152, 219, 0.05);
+            --search-bar-focus-border: rgba(46, 204, 113, 0.4);
+            --search-bar-focus-shadow: 0 6px 18.75px rgba(0, 0, 0, 0.15), 0 0 15px rgba(46, 204, 113, 0.1);
+            --placeholder-color: #7f8c8d;
+            --tool-card-bg: rgba(255, 255, 255, 0.7);
+            --tool-card-border: rgba(220, 220, 220, 0.5);
+            --tool-card-hover-bg: rgba(240, 240, 240, 0.8);
+            --tool-card-shadow: 0 4.5px 11.25px rgba(0, 0, 0, 0.1);
+            --tool-card-hover-shadow-base: 0 4.5px 18.75px rgba(0, 0, 0, 0.2);
+            --tool-card-icon-color: #2980b9;
+            --tool-card-icon-glow: none; /* Less glow for light theme */
+            --tool-card-hover-icon-color: #3498db; /* Changed to blue for light theme hover */
+            --tool-card-hover-icon-glow-1: none;
+            --tool-card-hover-icon-glow-2: none;
+            --music-button-bg: rgba(52, 152, 219, 0.15);
+            --music-button-color: #34495e;
+            --music-button-shadow: 0 3.75px 11.25px rgba(52, 152, 219, 0.15);
+            --music-button-border: rgba(52, 152, 219, 0.25);
+            --music-button-hover-bg: rgba(52, 152, 219, 0.25);
+            --music-button-hover-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            --music-button-active-bg: rgba(36, 113, 163, 0.2);
+            --music-button-pulse-shadow-1: 0 0 18.75px rgba(52, 152, 219, 0.3);
+            --music-button-pulse-shadow-2: 0 0 30px rgba(0, 0, 0, 0.1);
+            --music-tooltip-bg: rgba(255, 255, 255, 0.9);
+            --music-tooltip-color: #34495e;
+            --music-tooltip-shadow: 0 3px 11.25px rgba(0, 0, 0, 0.15);
+            --music-tooltip-border: #ccc;
+            --glowing-title-color: #34495e; /* Darker color for light theme */
+            --glowing-title-glow-1: none; /* No glow for light theme */
+            --glowing-title-glow-2: none;
+            --glowing-title-glow-3: none;
+        }
+
+        body {
+            background: var(--body-bg);
+            color: var(--text-color);
+        }
+
+        /* Aurora Borealis Effect - Copied from music.html */
+        .aurora-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through */
+            z-index: -1; /* Place behind content */
+            background: transparent;
+            overflow: hidden; /* Keep hidden for aurora layers to prevent inner scroll */
+        }
+
+         .aurora-layer {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(52, 152, 219, 0.3), /* Blue from active playlist item */
+                rgba(46, 204, 113, 0.3)  /* Green from active playlist item */
+            );
+            border-radius: 50%;
+            filter: blur(80px); /* Soft blur for aurora effect */
+            opacity: 0;
+            animation: auroraMovement 3s infinite alternate ease-in-out;
+        }
+
+        .aurora-layer:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            top: 10%;
+            left: 15%;
+            background: linear-gradient(to bottom, rgba(52, 152, 219, 0.4), rgba(46, 204, 113, 0.4));
+            animation-delay: 0s;
+            animation-duration: 5s; /* Adjusted duration for more subtle flow */
+        }
+
+        .aurora-layer:nth-child(2) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 70%;
+            background: linear-gradient(to top, rgba(0, 200, 200, 0.4), rgba(0, 150, 150, 0.4)); /* Teal tones */
+            animation-delay: 8s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(3) {
+            width: 500px;
+            height: 500px;
+            top: 80%;
+            left: 30%;
+            background: linear-gradient(to right, rgba(70, 130, 180, 0.3), rgba(60, 179, 113, 0.3)); /* SteelBlue to MediumSeaGreen */
+            animation-delay: 16s; /* Adjusted delay */
+            animation-duration: 10s; /* Adjusted duration */
+        }
+
+        .aurora-layer:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            top: 20%;
+            left: 80%;
+            background: linear-gradient(to left, rgba(135, 206, 250, 0.3), rgba(127, 255, 212, 0.3)); /* LightSkyBlue to Aquamarine */
+            animation-delay: 24s; /* Adjusted delay */
+            animation-duration: 9s; /* Adjusted duration */
+        }
+
+        @keyframes auroraMovement {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translate(20px, -30px) scale(1.05);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate(-10px, 40px) scale(0.95);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translate(30px, -20px) scale(1.03);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* Page Transition Animations - Changed to Fade In/Out with subtle timing */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Initial state for page content wrapper to prevent flicker */
+        #pageContentWrapper {
+            opacity: 0; /* Start hidden */
+        }
+
+        .page-transition-in {
+            animation: fadeIn 0.5s ease-out forwards; /* Smoother ease-out */
+        }
+
+        .page-transition-out {
+            animation: fadeOut 0.5s ease-in forwards; /* Smoother ease-in */
+        }
+
+
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: var(--container-shadow);
+            padding: 22px;
+            max-width: 375px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--container-border);
+           backdrop-filter: blur(15px); /* Tăng độ mờ để hiệu ứng rõ hơn */
+           -webkit-backdrop-filter: blur(15px);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+            position: relative;
+        }
+        /* New class for expanded container on search focus */
+        .container.expanded-search {
+            max-width: 525px;
+            padding: 30px;
+            box-shadow: 0 11px 30px rgba(0, 0, 0, 0.5);
+            will-change: max-width, padding, box-shadow;
+        }
+        h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 1.5px 4.5px rgba(0,0,0,0.4);
+        }
+
+        /* Updated CSS for the glowing time (reduced intensity to ~15%) */
+        @keyframes whiteGlowPulse {
+            0% {
+                text-shadow: var(--glowing-title-glow-1), var(--glowing-title-glow-2), var(--glowing-title-glow-3);
+            }
+            50% {
+                text-shadow: var(--glowing-title-glow-2), var(--glowing-title-glow-3), 0 0 2.25px var(--glowing-title-color);
+            }
+            100% {
+                text-shadow: var(--glowing-title-glow-1), var(--glowing-title-glow-2), var(--glowing-title-glow-3);
+            }
+        }
+
+        .glowing-title {
+            animation: whiteGlowPulse 2s infinite alternate ease-in-out;
+        }
+
+        /* Optimized CSS for aura/halo hover glow on tool cards (blue-green) */
+        @keyframes auraCardGlow {
+            from {
+                box-shadow: var(--tool-card-shadow);
+            }
+            to {
+                box-shadow: var(--tool-card-hover-shadow-base),
+                            0 0 18.75px rgba(52, 152, 219, 0.8),
+                            0 0 30px rgba(46, 204, 113, 0.6);
+            }
+        }
+
+        /* Light theme specific adjustments for tool card hover glow and icon glow */
+        .light-theme .tool-card:hover {
+            animation: none; /* Disable aura glow animation for light theme */
+            box-shadow: var(--tool-card-hover-shadow-base); /* Keep subtle shadow */
+        }
+
+        .grid-cols-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.125rem;
+        }
+        .tool-card {
+            background-color: var(--tool-card-bg);
+            border-radius: 9px;
+            padding: 15px;
+            box-shadow: var(--tool-card-shadow);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid var(--tool-card-border);
+        }
+        .tool-card:hover {
+            transform: translateY(-7.5px) scale(1.075);
+            background-color: var(--tool-card-hover-bg);
+            animation: auraCardGlow 0.5s forwards;
+            z-index: 2;
+            position: relative;
+        }
+        .tool-card:active {
+            transform: translateY(0) scale(0.9625);
+            box-shadow: 0 3.75px 7.5px rgba(0, 0, 0, 0.2);
+        }
+        .tool-card i {
+            font-size: 2.25rem;
+            color: var(--tool-card-icon-color);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+            text-shadow: var(--tool-card-icon-glow);
+        }
+        .tool-card:hover i {
+            font-size: 2.625rem;
+            color: var(--tool-card-hover-icon-color);
+            text-shadow: var(--tool-card-hover-icon-glow-1), var(--tool-card-hover-icon-glow-2);
+            transform: scale(1.075);
+        }
+        /* New style for text-based icons */
+        .tool-icon-text {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: var(--tool-card-icon-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 2.25rem;
+            width: 100%;
+            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+            text-shadow: var(--tool-card-icon-glow);
+        }
+        .tool-card:hover .tool-icon-text {
+            font-size: 2.25rem;
+            color: var(--tool-card-hover-icon-color);
+            text-shadow: var(--tool-card-hover-icon-glow-1), var(--tool-card-hover-icon-glow-2);
+            transform: scale(1.075);
+        }
+
+        .tool-card h2 {
+            font-size: 0.975rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.375rem;
+        }
+        .tool-card p {
+            font-size: 0.7125rem;
+            color: var(--placeholder-color); /* Use placeholder color for description */
+            line-height: 1.4;
+        }
+
+        /* Music Player Floating Button */
+        .music-player-floating-button-wrapper {
+            position: fixed;
+            bottom: 22px;
+            left: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+        }
+
+        .music-player-floating-button {
+            background: var(--music-button-bg);
+            color: var(--music-button-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.125rem;
+            box-shadow: var(--music-button-shadow);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            z-index: 1;
+            border: 1px solid var(--music-button-border);
+        }
+
+        .music-player-floating-button:hover {
+            background: var(--music-button-hover-bg);
+            transform: translateY(-2.25px) scale(1.0375);
+            box-shadow: var(--music-button-hover-shadow);
+        }
+
+        .music-player-floating-button:active {
+            transform: translateY(0) scale(0.9625);
+            box-shadow: 0 1.5px 6px rgba(52, 152, 219, 0.05);
+            background: var(--music-button-active-bg);
+        }
+
+        /* Re-enabled Pulse effect for the music button when playing */
+        @keyframes pulseMusicButton {
+            0% {
+                box-shadow: var(--music-button-shadow);
+            }
+            50% {
+                box-shadow: var(--music-button-pulse-shadow-1), var(--music-button-pulse-shadow-2);
+            }
+            100% {
+                box-shadow: var(--music-button-shadow);
+            }
+        }
+
+        .music-player-floating-button.playing {
+            animation: pulseMusicButton 1.5s infinite ease-in-out;
+        }
+
+        /* Light theme specific adjustment for music button pulse */
+        .light-theme .music-player-floating-button.playing {
+            animation: none; /* Disable pulse animation for light theme */
+            box-shadow: var(--music-button-shadow); /* Keep regular shadow */
+        }
+
+
+        /* Custom Tooltip Styles */
+        .music-tooltip {
+            position: absolute;
+            left: 52px;
+            bottom: 50%;
+            transform: translateY(50%);
+            background-color: var(--music-tooltip-bg);
+            color: var(--music-tooltip-color);
+            padding: 7.5px 11.25px;
+            border-radius: 6px;
+            box-shadow: var(--music-tooltip-shadow);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-size: 0.7125rem;
+            pointer-events: none;
+            border: 1px solid var(--music-tooltip-border);
+            backdrop-filter: blur(2.25px);
+            -webkit-backdrop-filter: blur(2.25px);
+            display: flex;
+            align-items: center;
+            gap: 7.5px;
+        }
+
+        .music-tooltip img {
+            width: 37.5px;
+            height: 37.5px;
+            border-radius: 3px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .music-tooltip-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .music-tooltip-content .song-title {
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: var(--music-tooltip-color);
+        }
+
+        .music-tooltip-content .song-details {
+            font-size: 0.6375rem;
+            color: var(--placeholder-color);
+        }
+
+        .music-player-floating-button-wrapper:hover .music-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Search Bar Styling - Made more prominent */
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--search-bar-bg);
+            border: 1.5px solid var(--search-bar-border);
+            border-radius: 9px;
+            padding: 9px 15px;
+            margin-bottom: 22px;
+            box-shadow: var(--search-bar-shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+        }
+
+        .search-bar-container:focus-within {
+            border-color: var(--search-bar-focus-border);
+            box-shadow: var(--search-bar-focus-shadow);
+            transform: translateY(-2.25px);
+            width: 90%;
+        }
+
+        .search-bar-container input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-color);
+            font-size: 0.8625rem;
+            padding: 3.75px 7.5px;
+        }
+
+        .search-bar-container input::placeholder {
+            color: var(--placeholder-color);
+            opacity: 0.8;
+        }
+
+        .search-bar-container .search-icon {
+            color: var(--placeholder-color);
+            font-size: 1.125rem;
+            margin-left: 11.25px;
+        }
+
+        /* New animations for tool cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(22.5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutDown {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(22.5px);
+            }
+        }
+
+        .tool-card.fade-in-up {
+            animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            will-change: transform, opacity;
+        }
+
+        .tool-card.fade-out-down {
+            animation: fadeOutDown 0.5s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+            will-change: transform, opacity;
+        }
+
+        /* Styles for the animated placeholder text */
+        .animated-placeholder-text {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--placeholder-color);
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            white-space: nowrap;
+            font-size: 0.8625rem;
+            z-index: 1;
+            padding: 3.75px 0;
+        }
+
+        .animated-placeholder-text.fade-out {
+            opacity: 0;
+        }
+
+        /* Theme Switch Styles */
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--container-bg);
+            border-radius: 9px;
+            padding: 8px 15px;
+            box-shadow: var(--container-shadow);
+            border: 1px solid var(--container-border);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 45px; /* Increased width */
+            height: 25px; /* Increased height */
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px; /* Half of height for rounded slider */
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px; /* Slightly smaller than slider height */
+            width: 19px; /* Slightly smaller than slider width */
+            left: 3px; /* Adjusted for centering */
+            bottom: 3px; /* Adjusted for centering */
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3; /* Blue for light theme */
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px); /* Move slider to the right */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .container.expanded-search {
+                max-width: 95%;
+                padding: 22px;
+            }
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1.125rem;
+            }
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            .tool-card {
+                padding: 11.25px;
+            }
+            .tool-card i {
+                font-size: 1.875rem;
+            }
+            .tool-card h2 {
+                font-size: 0.825rem;
+            }
+            .tool-card p {
+                font-size: 0.6375rem;
+            }
+            .search-bar-container {
+                padding: 7.5px 11.25px;
+                margin-bottom: 15px;
+                width: 80%;
+            }
+            .search-bar-container:focus-within {
+                width: 95%;
+            }
+            .search-bar-container input {
+                font-size: 0.75rem;
+            }
+            .search-bar-container .search-icon {
+                font-size: 0.9rem;
+            }
+            .animated-placeholder-text {
+                font-size: 0.75rem;
+            }
+            .music-player-floating-button-wrapper,
+            .theme-switch-wrapper {
+                bottom: 15px;
+                left: 15px; /* Adjust for mobile layout */
+                right: 15px; /* Adjust for mobile layout */
+                justify-content: space-between; /* Space out buttons */
+                width: calc(100% - 30px); /* Full width minus padding */
+                gap: 0; /* Remove gap between buttons */
+            }
+            .theme-switch-wrapper {
+                right: 15px; /* Keep switch on the right */
+                left: auto; /* Auto left to align right */
+                width: auto; /* Auto width to fit content */
+                padding: 8px 10px; /* Adjust padding */
+            }
+            .music-player-floating-button-wrapper {
+                left: 15px; /* Keep music button on the left */
+                right: auto; /* Auto right to align left */
+                width: auto; /* Auto width to fit content */
+                padding: 0; /* No padding for this wrapper, buttons handle it */
+            }
+            .music-tooltip {
+                left: 60px; /* Adjust tooltip position for mobile */
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="aurora-background">
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+        <div class="aurora-layer"></div>
+    </div>
+
+    <!-- Page Content Wrapper for Transitions -->
+    <div id="pageContentWrapper" class="relative w-full h-full flex justify-center items-center">
+        <div class="container" id="mainContainer">
+            <h1 class="text-3xl font-bold text-center mb-8" id="mainTitle">
+                Chào mừng, bây giờ là <span id="currentTimeDisplay" class="glowing-title"></span>.
+            </h1>
+
+            <!-- Search Bar -->
+            <div class="search-bar-container">
+                <span id="animatedPlaceholder" class="animated-placeholder-text"></span>
+                <input type="text" id="searchInput">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="grid-cols-2" id="toolCardsGrid">
+                <!-- Tool Card 1: Đạo Hàm -->
+                <a href="dao_ham.html" class="tool-card page-link" data-href="dao_ham.html">
+                    <span class="tool-icon-text" id="derivativeIcon"></span>
+                    <h2>Tính Đạo Hàm</h2>
+                    <p>Tính đạo hàm của các hàm số phức tạp.</p>
+                </a>
+
+                <!-- Tool Card 2: Hình Học -->
+                <a href="hinh_hoc.html" class="tool-card page-link" data-href="hinh_hoc.html">
+                    <i class="fas fa-cube"></i>
+                    <h2>Hình Học</h2>
+                    <p>Tính chu vi, diện tích, thể tích các hình 2D, 3D.</p>
+                </a>
+
+                <!-- Tool Card 3: Hệ Phương Trình Tuyến Tính -->
+                <a href="hpt.html" class="tool-card page-link" data-href="hpt.html">
+                    <i class="fas fa-superscript"></i>
+                    <h2>Hệ Phương Trình</h2>
+                    <p>Giải hệ phương trình tuyến tính.</p>
+                </a>
+
+                <!-- Tool Card 4: Tỉ Số Lượng Giác -->
+                <a href="luong_giac6.html" class="tool-card page-link" data-href="luong_giac6.html">
+                    <i class="fas fa-wave-square"></i>
+                    <h2>Tỉ Số Lượng Giác</h2>
+                    <p>Tính 6 tỉ số lượng giác của một góc.</p>
+                </a>
+
+                <!-- Tool Card 5: Phương Trình Bậc Hai -->
+                <a href="pt_bac_2.html" class="tool-card page-link" data-href="pt_bac_2.html">
+                    <i class="fas fa-square-root-alt"></i>
+                    <h2>Phương Trình Bậc Hai</h2>
+                    <p>Giải và phân tích phương trình bậc hai.</p>
+                </a>
+
+                <!-- Tool Card 6: More Police Mod GTA SA -->
+                <a href="moreplmod.html" class="tool-card page-link" data-href="moreplmod.html">
+                    <i class="fas fa-gamepad"></i>
+                    <h2>More Police Mod GTA SA</h2>
+                    <p>Thông tin về bản mod cảnh sát cho GTA San Andreas.</p>
+                </a>
+
+                <!-- Tool Card 7: Chia Động Từ -->
+                <a href="dongtu.html" class="tool-card page-link" data-href="dongtu.html">
+                    <span class="tool-icon-text">ABC</span>
+                    <h2>Chia Động Từ</h2>
+                    <p>Tra cứu cách chia động từ tiếng Anh.</p>
+                </a>
+
+                <!-- Tool Card 8: Mở Gemini tức thì -->
+                <a href="https://gemini.google.com" target="_blank" class="tool-card page-link" data-href="https://gemini.google.com">
+                    <span class="tool-icon-text">Gemini</span>
+                    <h2>Mở Gemini tức thì</h2>
+                    <p>Truy cập nhanh Gemini để trò chuyện và sáng tạo.</p>
+                </a>
+
+                <!-- Tool Card 9: Mở Copilot tức thì -->
+                <a href="https://copilot.microsoft.com/" target="_blank" class="tool-card page-link" data-href="https://copilot.microsoft.com/">
+                    <span class="tool-icon-text">Copilot</span>
+                    <h2>Mở Copilot tức thì</h2>
+                    <p>Truy cập nhanh Copilot để hỗ trợ lập trình và hơn thế nữa.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Button Wrapper for Tooltip -->
+    <div class="music-player-floating-button-wrapper">
+        <button class="music-player-floating-button" id="toggleMusicButton">
+            <!-- Font Awesome Music icon -->
+            <i class="fas fa-music" id="musicPlayPauseIcon"></i>
+        </button>
+        <div class="music-tooltip" id="musicTooltip">
+            <!-- Album cover image -->
+            <img id="albumCover" src="" alt="Album Cover">
+            <div class="music-tooltip-content">
+                <span class="song-title" id="songTitle"></span>
+                <span class="song-details" id="songDetails"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switch-wrapper">
+        <label for="theme-switch-checkbox" class="text-sm font-semibold">Chế độ sáng</label>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-switch-checkbox">
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" src="" preload="auto"></audio>
+
+    <script>
+        // --- Music Player Logic for Background Playback ---
+        // These variables need to be declared globally or within the DOMContentLoaded scope
+        let audioPlayer;
+        let toggleMusicButton;
+        let musicPlayPauseIcon;
+        let musicTooltip;
+        let albumCoverImg;
+        let songTitleSpan;
+        let songDetailsSpan;
+
+        const SONGS = [
+            {
+                id: 'song1',
+                title: "Die for you",
+                artist: "joji",
+                album: "SMITHEREENS",
+                url: "music/03. Die For You.mp3",
+                albumArtUrl: "albumcover/smithereens.jpeg"
+            },
+            {
+                id: 'song2',
+                title: "You suck Charlie",
+                artist: "joji",
+                album: "Chloe Burbank",
+                url: "music/you suck charlie.m4a",
+                albumArtUrl: "albumcover/chloe burbank.jpg"
+            },
+            {
+                id: 'song3',
+                title: "Come Thru",
+                artist: "Joji",
+                album: "BALLADS 1",
+                url: "music/09 Come Thru.mp3",
+                albumArtUrl: "albumcover/ballads1.png"
+            }
+        ];
+
+        let currentSongIndex = -1; // No song selected initially
+
+        function saveMusicState() {
+            const currentSongId = audioPlayer.dataset.currentSongId;
+            if (currentSongId) {
+                const state = {
+                    songId: currentSongId,
+                    currentTime: audioPlayer.currentTime,
+                    isPlaying: !audioPlayer.paused,
+                    volume: audioPlayer.volume
+                };
+                localStorage.setItem('musicPlayerState', JSON.stringify(state));
+            } else {
+                localStorage.removeItem('musicPlayerState');
+            }
+        }
+
+        function loadMusicState() {
+            const savedState = localStorage.getItem('musicPlayerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const song = SONGS.find(s => s.id === state.songId);
+                if (song) {
+                    currentSongIndex = SONGS.indexOf(song); // Update currentSongIndex
+                    audioPlayer.src = song.url;
+                    audioPlayer.dataset.currentSongId = song.id;
+                    audioPlayer.volume = state.volume;
+
+                    if (state.isPlaying) {
+                        audioPlayer.currentTime = state.currentTime;
+                        audioPlayer.play().then(() => {
+                            updateTooltip(song);
+                            toggleMusicButton.classList.add('playing');
+                        }).catch(error => {
+                            console.log("Autoplay prevented:", error);
+                            updateTooltip({
+                                title: "Nhấn nút nhạc để phát!",
+                                artist: "Trình duyệt đã chặn tự động phát.",
+                                album: "",
+                                albumArtUrl: "https://placehold.co/50x50/7f8c8d/ffffff?text=Play"
+                            });
+                            toggleMusicButton.classList.remove('playing');
+                        });
+                    } else {
+                        updateTooltip(song);
+                        audioPlayer.currentTime = state.currentTime;
+                        toggleMusicButton.classList.remove('playing');
+                    }
+                } else {
+                    resetMusicState();
+                }
+            } else {
+                resetMusicState();
+            }
+        }
+
+        function resetMusicState() {
+            currentSongIndex = -1;
+            audioPlayer.src = "";
+            audioPlayer.dataset.currentSongId = '';
+            audioPlayer.currentTime = 0;
+            audioPlayer.volume = 1;
+            localStorage.removeItem('musicPlayerState');
+            updateTooltip({
+                title: "Chưa có nhạc",
+                artist: "Hãy chọn bài hát từ trang nhạc",
+                album: "",
+                albumArtUrl: "https://placehold.co/50x50/95a5a6/ffffff?text=Music"
+            });
+            toggleMusicButton.classList.remove('playing');
+        }
+
+        function updateTooltip(song) {
+            albumCoverImg.src = song.albumArtUrl;
+            albumCoverImg.alt = `Ảnh bìa album của ${song.title}`;
+            songTitleSpan.textContent = song.title;
+            songDetailsSpan.textContent = `${song.artist} ${song.album ? '(Album: "' + song.album + '")' : ''}`;
+        }
+
+        // --- Page Transition Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageContentWrapper = document.getElementById('pageContentWrapper');
+            const pageLinks = document.querySelectorAll('.page-link');
+            const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+            const searchInput = document.getElementById('searchInput');
+            const toolCardsGrid = document.getElementById('toolCardsGrid');
+            const toolCards = toolCardsGrid.querySelectorAll('.tool-card');
+            const mainContainer = document.getElementById('mainContainer');
+            const derivativeIconSpan = document.getElementById('derivativeIcon');
+            const animatedPlaceholderSpan = document.getElementById('animatedPlaceholder');
+            const themeSwitchCheckbox = document.getElementById('theme-switch-checkbox');
+
+            let placeholderTimeout;
+
+            // Array of math tips for the placeholder
+            const mathTips = [
+                "Nhân số có hai chữ số với 11.", "Chia nhanh cho 5.", "Tính phần trăm dễ dàng.", "Bình phương số kết thúc bằng 5.",
+                "Nhân số lớn bằng phương pháp lưới.", "Quy tắc chia hết cho 3.", "Quy tắc chia hết cho 4.", "Quy tắc chia hết cho 6.",
+                "Quy tắc chia hết cho 9.", "Quy tắc chia hết cho 12.", "Thủ thuật nhân 9.", "Thủ thuật nhân 12.",
+                "Thủ thuật nhân 15.", "Thủ thuật nhân 25.", "Thủ thuật nhân 50.", "Thủ thuật nhân 100.",
+                "Tìm ước chung lớn nhất.", "Tìm bội chung nhỏ nhất.", "Chuyển đổi phân số sang số thập phân.", "Chuyển đổi số thập phân sang phân số.",
+                "Giải phương trình tuyến tính.", "Giải hệ phương trình.", "Tính diện tích hình tròn.", "Tính chu vi hình tròn.",
+                "Tính diện tích hình vuông.", "Tính chu vi hình vuông.", "Tính diện tích hình chữ nhật.", "Tính chu vi hình chữ nhật.",
+                "Tính diện tích tam giác.", "Định lý Pythagoras.", "Tính thể tích hình lập phương.", "Tính thể tích hình trụ.",
+                "Tính thể tích hình cầu.", "Tính diện tích bề mặt hình lập phương.", "Tính diện tích bề mặt hình trụ.", "Tính diện tích bề mặt hình cầu.",
+                "Quy tắc dấu ngoặc (PEMDAS/BODMAS).", "Giải bất phương trình.", "Vẽ đồ thị hàm số.", "Tìm nghiệm của phương trình bậc hai.",
+                "Sử dụng công thức nghiệm bậc hai.", "Phân tích đa thức thành nhân tử.", "Rút gọn biểu thức đại số.", "Tính lũy thừa.",
+                "Tính căn bậc hai.", "Tính logarit.", "Giải phương trình mũ.", "Giải phương trình logarit.",
+                "Tính giới hạn hàm số.", "Tính đạo hàm cơ bản.", "Tính tích phân cơ bản.", "Quy tắc L'Hopital.",
+                "Định lý giá trị trung bình.", "Định lý Fubini.", "Định lý Green.", "Định lý Stokes.",
+                "Định lý Gauss.", "Ma trận nghịch đảo.", "Định thức của ma trận.", "Giải hệ phương trình bằng ma trận.",
+                "Giá trị riêng, vector riêng.", "Phép biến đổi Laplace.", "Phép biến đổi Fourier.", "Giải phương trình vi phân.",
+                "Xác suất cơ bản.", "Luật cộng xác suất.", "Luật nhân xác suất.", "Định lý Bayes.",
+                "Phân phối chuẩn.", "Phân phối nhị thức.", "Phân phối Poisson.", "Kiểm định giả thuyết thống kê.",
+                "Hồi quy tuyến tính.", "Tương quan.", "Độ lệch chuẩn.", "Phương sai.",
+                "Trung bình cộng.", "Trung vị.", "Mốt.", "Phép cộng vector.",
+                "Phép trừ vector.", "Tích vô hướng.", "Tích có hướng.", "Đường thẳng trong không gian.",
+                "Mặt phẳng trong không gian.", "Hệ tọa độ cực.", "Hệ tọa độ trụ.", "Hệ tọa độ cầu.",
+                "Số phức.", "Mô-đun và Argument của số phức.", "Công thức Euler.", "Định lý De Moivre.",
+                "Chuỗi số.", "Hội tụ và phân kỳ của chuỗi.", "Chuỗi Taylor.", "Chuỗi Maclaurin.",
+                "Phép toán modulo.", "Đồng dư.", "Số nguyên tố.", "Ước số.",
+                "Bội số.", "Thuật toán Euclid.", "Định lý số dư Trung Quốc.", "Mã hóa RSA.",
+                "Lý thuyết đồ thị.", "Đường đi Euler.", "Đường đi Hamilton.", "Cây bao trùm tối thiểu.",
+                "Thuật toán Dijkstra.",
+                // Bắt đầu các câu mới được thêm vào để đạt tổng cộng 300 câu
+
+                // Gợi ý game (tiếp nối)
+                "Thử chơi Liên Minh Huyền Thoại: Tốc Chiến.", "Tham gia đấu trường Đấu Trường Chân Lý.", "Chơi Garena Free Fire max.",
+                "Vào Call of Duty: Mobile.", "Thử Age of Empires II.", "Khám phá Valorant Mobile.",
+                "Cùng chơi Among Us!", "Giải trí với Plants vs. Zombies.", "Chơi Subway Surfers.",
+                "Thử Asphalt 9.", "Vào Clash Royale.", "Chơi Bloons TD 6.",
+                "Khám phá Terraria.", "Cùng chơi ARK: Survival Evolved.", "Thử Fallout Shelter.",
+                "Vào The Sims Mobile.", "Chơi Hay Day.", "Thử Township.",
+                "Vào Rise of Kingdoms.", "Chơi AFK Arena.", "Thử Genshin Impact 2.",
+                "Vào Honkai Impact 3rd.", "Chơi Apex Legends Mobile.", "Thử Dragon Raja.",
+                "Vào Punishing: Gray Raven.", "Chơi Grand Summoners.", "Thử Arknights.",
+                "Vào Azur Lane.", "Chơi Epic Seven.", "Thử Guardian Tales.",
+                "Vào Dislyte.", "Chơi One Punch Man: The Strongest.", "Thử Saint Seiya Awakening.",
+                "Vào My Hero Academia: The Strongest Hero.", "Chơi Slime Isekai Memories.", "Thử King's Raid.",
+                "Vào Summoners War.", "Chơi Brave Exvius.", "Thử Fate/Grand Order.",
+                "Vào Dokkan Battle.", "Chơi Legends.", "Thử 7 Deadly Sins: Grand Cross.",
+                "Vào Overhit.", "Chơi Exos Heroes.",
+                "Thử Cookie Run: Kingdom.", "Vào Guardian Tales.", "Chơi Arknights.",
+                "Thử Azur Lane.", "Vào Epic Seven.", "Chơi Dislyte.",
+                "Thử One Punch Man: The Strongest.", "Vào Saint Seiya Awakening.", "Chơi My Hero Academia: The Strongest Hero.",
+                "Thử Slime Isekai Memories.", "Vào King's Raid.", "Chơi Summoners War.",
+                "Thử Brave Exvius.", "Vào Fate/Grand Order.", "Chơi Dokkan Battle.",
+                "Thử Legends.", "Vào 7 Deadly Sins: Grand Cross.", "Chơi Overhit.",
+                "Thử Exos Heroes.",
+
+                // Định lý hay (tiếp nối)
+                "Định lý Tích chập Laplace.", "Định lý về biến đổi Z.", "Định lý Shannon về mã hóa nguồn.",
+                "Định lý Nyquist về tần số lấy mẫu.", "Định lý Cramer–Rao về giới hạn dưới phương sai.",
+                "Định lý Rao–Blackwell về ước lượng.", "Định lý Lehmann–Scheffé về thống kê đủ.",
+                "Định lý Neyman–Pearson về kiểm định.", "Định lý Wald về chuỗi xác suất.",
+                "Định lý Slutsky về hội tụ.", "Định lý Cochran về phân phối chi bình phương.",
+                "Định lý Fisher–Tippett–Gnedenko.", "Định lý Extreme Value Theory.",
+                "Định lý Black–Scholes về giá quyền chọn.", "Định lý Itô's Lemma.",
+                "Định lý Martingale Representation.", "Định lý Fundamental Theorem of Asset Pricing.",
+                "Định lý Girsanov's Theorem.", "Định lý Clark–Ocone Formula.",
+                "Định lý Feynman–Kac Formula.", "Định lý Central Limit Theorem for Martingales.",
+                "Định lý Law of the Iterated Logarithm.", "Định lý Radon–Nikodym.",
+                "Định lý Lebesgue Decomposition.", "Định lý Fatou's Lemma.",
+                "Định lý Dominated Convergence Theorem.", "Định lý Monotone Convergence Theorem.",
+                "Định lý Riesz Representation Theorem.", "Định lý Lusin's Theorem.",
+                "Định lý Egorov's Theorem.", "Định lý Stone–Weierstrass (Complex).",
+                "Định lý Runge's Theorem (Complex).", "Định lý Casorati–Weierstrass.",
+                "Định lý Argument Principle (Complex).", "Định lý Rouché's Theorem.",
+                "Định lý Maximum Modulus Principle (Complex).", "Định lý Schwarz Lemma.",
+                "Định lý Riemann Mapping Theorem.", "Định lý Uniformization Theorem.",
+                "Định lý Prime Number Theorem.", "Định lý Siegel–Walfisz.",
+                "Định lý Vinogradov's Theorem.", "Định lý Goldbach's Weak Conjecture.",
+                "Định lý Dirichlet's Approximation Theorem.", "Định lý Liouville's Theorem (Diophantine).",
+                "Định lý Roth's Theorem.", "Định lý Baker's Theory of Linear Forms in Logarithms.",
+                "Định lý Frey–Hellegouarch conjecture.", "Định lý modularity theorem (Wiles).",
+                "Định lý Taniyama–Shimura–Weil.", "Định lý ABC Conjecture.",
+                "Định lý P. Hall's Theorem.", "Định lý Burnside's Lemma.",
+                "Định lý Cauchy's Theorem (Group Theory).", "Định lý Sylow's Theorems.",
+                "Định lý Jordan–Hölder Theorem.", "Định lý Cayley's Theorem (Group Theory).",
+                "Định lý Lagrange's Theorem (Group Theory).", "Định lý isomorphism theorems.",
+                "Định lý homomorphism theorem.", "Định lý Schur–Zassenhaus Theorem.",
+                "Định lý Feit–Thompson Theorem.", "Định lý Classification of Finite Simple Groups.",
+                "Định lý Krull's Principal Ideal Theorem.", "Định lý Nakayama's Lemma.",
+                "Định lý Artin–Rees Lemma.", "Định lý Hilbert's Syzygy Theorem.",
+                "Định lý Serre's Vanishing Theorem.", "Định lý Riemann–Roch for Curves.",
+                "Định lý Hirzebruch–Riemann–Roch for Surfaces.", "Định lý Kodaira Vanishing Theorem.",
+                "Định lý Lefschetz Fixed-Point Theorem.", "Định lý Poincaré Duality.",
+                "Định lý Hurewicz Theorem.", "Định lý Whitehead Theorem.",
+                "Định lý Serre–Swan Theorem.", "Định lý Bott Periodicity Theorem.",
+                "Định lý Atiyah–Singer Index Theorem.", "Định lý Donaldson's Theorem.",
+                "Định lý Gromov's Non-Squeezing Theorem.", "Định lý Seiberg–Witten Invariants.",
+                "Định lý Perelman's Proof of Poincaré Conjecture.", "Định lý Geometrization Conjecture.",
+                "Định lý Calabi Conjecture.", "Định lý Yau's Proof of Calabi Conjecture.",
+                "Định lý Hawking's Area Theorem.", "Định lý Penrose–Hawking Singularity Theorems.",
+                "Định lý No-Hair Theorem.", "Định lý Cosmic Censorship Conjecture.",
+                "Định lý Bekenstein–Hawking Entropy.", "Định lý Hawking Radiation.",
+                "Định lý Unruh Effect.", "Định lý Equivalence Principle.",
+                "Định lý Einstein Field Equations.", "Định lý Friedmann Equations.",
+                "Định lý Standard Model of Particle Physics.", "Định lý Higgs Mechanism.",
+                "Định lý Quark Confinement.", "Định lý Asymptotic Freedom.",
+                "Định lý Electroweak Unification.", "Định lý Grand Unification Theory (GUT).",
+                "Định lý Theory of Everything (TOE).", "Định lý String Theory.",
+                "Định lý M-Theory.", "Định lý Holographic Principle.",
+                "Định lý AdS/CFT Correspondence.", "Định lý Loop Quantum Gravity.",
+                "Định lý Causal Set Theory.", "Định lý Twistor Theory.",
+                "Định lý Penrose Tiles.", "Định lý Mandelbrot Set.",
+                "Định lý Julia Set.", "Định lý Lorenz Attractor.",
+                "Định lý Butterfly Effect.", "Định lý Chaos Theory.",
+                "Định lý Fractal Geometry.", "Định lý Percolation Theory.",
+                "Định lý Random Matrix Theory.", "Định lý Free Probability Theory.",
+                "Định lý Quantum Field Theory.", "Định lý Renormalization.",
+                "Định lý Path Integral Formulation.", "Định lý Second Quantization.",
+                "Định lý Standard Model of Cosmology.", "Định lý Big Bang Theory.",
+                "Định lý Cosmic Microwave Background.", "Định lý Inflationary Cosmology.",
+                "Định lý Dark Matter.", "Định lý Dark Energy.",
+                "Định lý Hubble's Law.", "Định lý Tully–Fisher Relation.",
+                "Định lý Faber–Jackson Relation.", "Định lý K-Correction.",
+                "Định lý Luminosity Distance.", "Định lý Angular Diameter Distance.",
+                "Định lý Redshift.", "Định lý Blueshift.",
+                "Định lý Doppler Effect.", "Định lý Gravitational Lensing.",
+                "Định lý Cosmic Strings.", "Định lý Monopoles.",
+                "Định lý Domain Walls.", "Định lý Superfluid Vacuum Theory.",
+                "Định lý Emergent Gravity.", "Định lý Entropic Gravity.",
+                "Định lý Modified Newtonian Dynamics (MOND).", "Định lý Scalar–Tensor Theories of Gravity.",
+                "Định lý f(R) Gravity.", "Định lý Gauss–Bonnet Gravity.",
+                "Định lý Lovelock Gravity.", "Định lý Horava–Lifshitz Gravity.",
+                "Định lý Causal Dynamical Triangulations.", "Định lý Quantum Graphity.",
+                "Định lý Spin Foam Theory.", "Định lý Quantum Electrodynamics (QED).",
+                "Định lý Quantum Chromodynamics (QCD).", "Định lý Electroweak Theory.",
+                "Định lý Grand Unified Theory (GUT).", "Định lý Supersymmetry (SUSY).",
+                "Định lý Technicolor.", "Định lý Extra Dimensions.",
+                "Định lý Randall–Sundrum Model.", "Định lý Kaluza–Klein Theory.",
+                "Định lý Braneworlds.", "Định lý Multiverse Theory.",
+                "Định lý Many-Worlds Interpretation.", "Định lý Copenhagen Interpretation.",
+                "Định lý Pilot-Wave Theory.", "Định lý Transactional Interpretation.",
+                "Định lý Consistent Histories.", "Định lý Ensemble Interpretation.",
+                "Định lý Relational Quantum Mechanics.", "Định lý Quantum Darwinism.",
+                "Định lý Measurement Problem.", "Định lý Quantum Entanglement.",
+                "Định lý Bell's Inequality.", "Định lý EPR Paradox.",
+                "Định lý Quantum Zeno Effect.", "Định lý Quantum Cheshire Cat.",
+                "Định lý Quantum Eraser.", "Định lý Quantum Teleportation.",
+                "Định lý Quantum Computing.", "Định lý Quantum Cryptography.",
+                "Định lý Quantum Key Distribution.", "Định lý Shor's Algorithm.",
+                "Định lý Grover's Algorithm.", "Định lý Quantum Supremacy.",
+                "Định lý Quantum Machine Learning.", "Định lý Quantum Neural Networks.",
+                "Định lý Quantum Generative Adversarial Networks.", "Định lý Quantum Optimization.",
+                "Định lý Quantum Simulation.", "Định lý Quantum Sensor.",
+                "Định lý Quantum Metrology.", "Định lý Quantum Biology.",
+                "Định lý Quantum Chemistry.", "Định lý Quantum Materials.",
+                "Định lý Superconductivity.", "Định lý Superfluidity.",
+                "Định lý Bose–Einstein Condensate.", "Định lý Fermi Liquid.",
+                "Định lý Quantum Hall Effect.", "Định lý Topological Insulator.",
+                "Định lý Spintronics.", "Định lý Graphene.",
+                "Định lý Carbon Nanotubes.", "Định lý Nanotechnology.",
+                "Định lý Molecular Nanotechnology.", "Định lý Self-Assembly.",
+                "Định lý Synthetic Biology.", "Định lý Genetic Engineering.",
+                "Định lý CRISPR–Cas9.", "Định lý Gene Editing.",
+                "Định lý Epigenetics.", "Định lý Microbiome.",
+                "Định lý Human Genome Project.", "Định lý Personalized Medicine.",
+                "Định lý Gene Therapy.", "Định lý Immuno-Oncology.",
+                "Định lý CAR T-cell Therapy.", "Định lý mRNA Vaccines.",
+                "Định lý Computational Biology.", "Định lý Bioinformatics.",
+                "Định lý Proteomics.", "Định lý Metabolomics.",
+                "Định lý Systems Biology.", "Định lý Synthetic Biology.",
+                "Định lý Astrobiology.", "Định lý Exoplanets.",
+                "Định lý SETI.", "Định lý Fermi Paradox.",
+                "Định lý Drake Equation.", "Định lý Dyson Sphere.",
+                "Định lý Kardashev Scale.", "Định lý Great Filter.",
+                "Định lý Simulation Hypothesis.", "Định lý Transhumanism.",
+                "Định lý Posthumanism.", "Định lý Singularity.",
+                "Định lý Artificial General Intelligence.", "Định lý Superintelligence.",
+                "Định lý Friendly AI.", "Định lý AI Safety.",
+                "Định lý AI Alignment.", "Định lý Existential Risk.",
+                "Định lý Global Catastrophic Risk.", "Định lý Long-term Future.",
+                "Định lý Effective Altruism.",
+
+                // Câu nói không quá 10 từ (mở rộng thêm)
+                "Hãy sống trọn vẹn từng khoảnh khắc.", "Niềm vui đến từ những điều nhỏ bé.", "Không gì là không thể, hãy tin.",
+                "Đừng bao giờ từ bỏ ước mơ của bạn.", "Học hỏi mỗi ngày, trưởng thành hơn.", "Hạnh phúc là một hành trình.",
+                "Bạn là duy nhất, hãy tỏa sáng.", "Tự tin là chìa khóa thành công.", "Yêu thương và được yêu thương.",
+                "Sống hết mình cho hiện tại.", "Mọi thứ đều có thể xảy ra.", "Kiên trì sẽ mang lại thành quả.",
+                "Đừng ngừng cố gắng, bạn nhé.", "Vượt qua nỗi sợ hãi của bạn.", "Hãy luôn tử tế và nhân ái.",
+                "Tìm kiếm vẻ đẹp trong cuộc sống.", "Luôn giữ nụ cười trên môi.", "Mỗi ngày là một khởi đầu mới.",
+                "Tin vào bản thân mình hơn.", "Hãy là chính mình, không ai khác.", "Tạo ra những điều tuyệt vời.",
+                "Sống đơn giản, hạnh phúc hơn.", "Chia sẻ yêu thương, lan tỏa niềm vui.", "Hành động nhỏ, ý nghĩa lớn.",
+                "Chấp nhận thay đổi, tiến về phía trước.", "Học hỏi từ mọi người xung quanh.", "Luôn biết ơn những gì bạn có.",
+                "Khám phá thế giới rộng lớn.", "Tận hưởng từng giây phút.", "Hãy biết ơn mỗi sớm mai.",
+                "Thử thách bản thân, không ngừng vươn lên.", "Giá trị của bạn là vô hạn.", "Niềm vui là sự lựa chọn.",
+                "Bắt đầu từ những bước nhỏ.", "Mỗi ngày một tốt hơn.", "Hành động ngay bây giờ.",
+                "Tập trung vào hiện tại.", "Sức mạnh nằm trong bạn.", "Tự do trong tư tưởng.",
+                "Khó khăn là cơ hội.", "Đừng ngại thất bại.", "Học từ sai lầm.",
+                "Luôn có cách để làm.", "Tìm thấy bình yên.", "Cuộc sống thật đẹp.",
+                "Hãy mỉm cười nhiều hơn.", "Cho đi để nhận lại.", "Lắng nghe con tim.",
+                "Đừng so sánh bản thân.", "Mỗi người một vẻ.", "Vẻ đẹp là sự đa dạng.",
+                "Hãy là ánh sáng của bạn.", "Thắp sáng thế giới.", "Yêu thương vô điều kiện.",
+                "Sự thật giải phóng bạn.", "Trí tuệ là sức mạnh.", "Kiến thức không giới hạn.",
+                "Luôn tò mò, khám phá.", "Đọc sách mỗi ngày.", "Học hỏi không ngừng.",
+                "Bảo vệ hành tinh xanh.", "Sống xanh, sống sạch.", "Tái chế để bảo vệ.",
+                "Tiết kiệm năng lượng.", "Trân trọng tài nguyên.", "Chăm sóc bản thân.",
+                "Ăn uống lành mạnh.", "Tập thể dục thường xuyên.", "Ngủ đủ giấc mỗi đêm.",
+                "Sức khỏe là vàng.", "Tinh thần minh mẫn.", "Cơ thể khỏe mạnh.",
+                "Thở sâu, thư giãn.", "Thiền định mỗi ngày.", "Tĩnh tâm giữa ồn ào.",
+                "Kết nối với thiên nhiên.", "Đi dạo ngoài trời.", "Hít thở không khí trong lành.",
+                "Ngắm nhìn bầu trời.", "Lắng nghe tiếng chim hót.", "Cảm nhận làn gió.",
+                "Tạo ra nghệ thuật.", "Viết lách, vẽ vời.", "Âm nhạc là cuộc sống.",
+                "Nhảy múa theo nhịp điệu.", "Hát lên khúc ca.", "Thể hiện bản thân.",
+                "Lòng biết ơn là chìa khóa.", "Thực hành lòng biết ơn.", "Cảm ơn mỗi điều.",
+                "Sống với lòng trắc ẩn.", "Giúp đỡ người khác.", "Lan tỏa yêu thương.",
+                "Tha thứ cho lỗi lầm.",
+                "Tự tin bước về phía trước.",
+                "Mỗi bước đi, một bài học.",
+                "Vượt qua chính mình.",
+                "Sức mạnh từ bên trong.",
+                "Đừng bao giờ từ bỏ.",
+                "Tin vào khả năng của bạn.",
+                "Hãy làm điều bạn yêu.",
+                "Niềm đam mê dẫn lối.",
+                "Tìm thấy mục đích sống.",
+                "Yêu cuộc sống này.",
+                "Đừng lo lắng quá nhiều.",
+                "Chấp nhận mọi thứ.",
+                "Sự thay đổi là tất yếu.",
+                "Vững vàng trước bão giông.",
+                "Bình tĩnh đối mặt.",
+                "Hành động dứt khoát.",
+                "Nghĩ lớn, làm lớn.",
+                "Tầm nhìn xa trông rộng.",
+                "Thành công đang chờ.",
+                "Cố gắng không ngừng.",
+                "Vinh quang thuộc về bạn.",
+                "Ghi dấu ấn của bạn.",
+                "Luôn giữ tinh thần lạc quan.",
+                "Nụ cười xua tan mọi thứ.",
+                "Mang niềm vui đến mọi người.",
+                "Sống có ý nghĩa.",
+                "Phát triển bản thân.",
+                "Tạo ra giá trị.",
+                "Đóng góp cho cộng đồng.",
+                "Thế giới cần bạn.",
+                "Tạo nên sự khác biệt.",
+                "Hạnh phúc là sẻ chia.",
+                "Cho đi không mong nhận.",
+                "Yêu thương chân thành.",
+                "Tình bạn vĩnh cửu.",
+                "Gia đình là tất cả.",
+                "Trân trọng khoảnh khắc.",
+                "Kỷ niệm là vô giá.",
+                "Sống không hối tiếc.",
+                "Đừng chờ đợi cơ hội.",
+                "Tạo ra cơ hội của bạn.",
+                "Nắm bắt thời cơ.",
+                "Dũng cảm lên đường.",
+                "Khám phá điều mới mẻ.",
+                "Hành trình vạn dặm.",
+                "Bắt đầu từ một bước.",
+                "Luôn có con đường.",
+                "Tìm thấy lối đi riêng.",
+                "Sáng tạo không ngừng.",
+                "Tư duy đột phá.",
+                "Học từ thiên nhiên.",
+                "Sự thật giản đơn.",
+                "Đừng phức tạp hóa.",
+                "Tin vào trực giác.",
+                "Lắng nghe tiếng lòng.",
+                "Bản năng mách bảo.",
+                "Hành động từ trái tim.",
+                "Yêu thương bản thân.",
+                "Chăm sóc tâm hồn.",
+                "Nuôi dưỡng ước mơ.",
+                "Hãy là phiên bản tốt nhất.",
+                "Phát huy thế mạnh.",
+                "Khắc phục điểm yếu.",
+                "Hoàn thiện bản thân.",
+                "Đừng sợ hãi tương lai.",
+                "Đối mặt với thử thách.",
+                "Biến thách thức thành cơ hội.",
+                "Tin tưởng vào số phận.",
+                "Nắm giữ vận mệnh.",
+                "Kiểm soát cuộc đời.",
+                "Tạo ra điều kỳ diệu.",
+                "Mở rộng tầm nhìn.",
+                "Học hỏi không ngừng nghỉ.",
+                "Tôn trọng mọi người.",
+                "Lắng nghe ý kiến khác.",
+                "Học từ người khôn ngoan.",
+                "Chia sẻ kiến thức.",
+                "Kết nối con người.",
+                "Xây dựng cầu nối.",
+                "Hòa bình cho thế giới.",
+                "Yêu thương hành tinh này."
+            ];
+
+            // Function to update the time display
+            function updateTime() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                const formattedMinute = currentMinute < 10 ? '0' + currentMinute : currentMinute;
+
+                let greeting;
+                if (currentHour >= 5 && currentHour < 10) {
+                    greeting = "Chào buổi sáng";
+                } else if (currentHour >= 10 && currentHour < 13) {
+                    greeting = "Chào buổi trưa";
+                } else if (currentHour >= 13 && currentHour < 17) {
+                    greeting = "Chào buổi chiều";
+					 } else if (currentHour >= 17 && currentHour < 23) {
+                    greeting = "Chào buổi tối";
+                } else {
+                    greeting = "Chào bạn";
+                }
+
+                document.getElementById('mainTitle').innerHTML = `${greeting}, bây giờ là <span id="currentTimeDisplay" class="glowing-title">${currentHour}:${formattedMinute}</span>.`;
+                const updatedTimeDisplay = document.getElementById('currentTimeDisplay');
+                if (updatedTimeDisplay) {
+                    updatedTimeDisplay.textContent = `${currentHour}:${formattedMinute}`;
+                }
+            }
+
+            // Update time immediately on load
+            updateTime();
+            // Update time every second to ensure continuous update
+            setInterval(updateTime, 1000);
+
+            // Randomly set derivative icon on page load
+            const derivativeIcons = ["f'(x)", "d/dx"];
+            const randomIndex = Math.floor(Math.random() * derivativeIcons.length);
+            derivativeIconSpan.textContent = derivativeIcons[randomIndex];
+
+            // Set initial animated placeholder text
+            const randomMathTipIndex = Math.floor(Math.random() * mathTips.length);
+            animatedPlaceholderSpan.textContent = `ý tưởng: ${mathTips[randomMathTipIndex]}`;
+            searchInput.placeholder = "";
+
+            // Change placeholder after 8 seconds with animation
+            placeholderTimeout = setTimeout(() => {
+                animatedPlaceholderSpan.classList.add('fade-out');
+
+                animatedPlaceholderSpan.addEventListener('transitionend', function handler() {
+                    animatedPlaceholderSpan.style.display = 'none';
+                    searchInput.placeholder = "tìm kiếm về chủ đề,...";
+                    animatedPlaceholderSpan.removeEventListener('transitionend', handler);
+                }, { once: true });
+
+            }, 8000);
+
+
+            // Animate page in on load
+            pageContentWrapper.classList.add('page-transition-in');
+
+            // Attach music player DOM elements and event listeners
+            audioPlayer = document.getElementById('audioPlayer');
+            toggleMusicButton = document.getElementById('toggleMusicButton');
+            musicPlayPauseIcon = document.getElementById('musicPlayPauseIcon');
+            musicTooltip = document.getElementById('musicTooltip');
+            albumCoverImg = document.getElementById('albumCover');
+            songTitleSpan = document.getElementById('songTitle');
+            songDetailsSpan = document.getElementById('songDetails');
+
+            toggleMusicButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                pageContentWrapper.classList.remove('page-transition-in');
+                pageContentWrapper.classList.add('page-transition-out');
+
+                pageContentWrapper.addEventListener('animationend', () => {
+                    window.location.href = 'music.html';
+                }, { once: true });
+            });
+
+            audioPlayer.addEventListener('play', () => {
+                toggleMusicButton.classList.add('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('pause', () => {
+                toggleMusicButton.classList.remove('playing');
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                currentSongIndex = (currentSongIndex + 1) % SONGS.length;
+                audioPlayer.src = SONGS[currentSongIndex].url;
+                audioPlayer.dataset.currentSongId = SONGS[currentSongIndex].id;
+                updateTooltip(SONGS[currentSongIndex]);
+                saveMusicState();
+            });
+
+            audioPlayer.addEventListener('timeupdate', saveMusicState);
+            audioPlayer.addEventListener('volumechange', saveMusicState);
+
+            loadMusicState();
+
+            // Handle page link clicks for smooth transitions
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetPage = link.dataset.href;
+
+                    if (link.href.startsWith("http")) {
+                        window.open(link.href, '_blank');
+                        pageContentWrapper.classList.remove('page-transition-out');
+                    } else {
+                        if (audioPlayer && !audioPlayer.paused) {
+                            audioPlayer.pause();
+                        }
+
+                        pageContentWrapper.classList.remove('page-transition-in');
+                        pageContentWrapper.classList.add('page-transition-out');
+
+                        pageContentWrapper.addEventListener('animationend', () => {
+                            window.location.href = targetPage;
+                        }, { once: true });
+                    }
+                });
+            });
+
+            // Debounce function
+            let debounceTimer;
+            const debounce = (func, delay) => {
+                return function(...args) {
+                    const context = this;
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+                };
+            };
+
+            // Function to filter tool cards
+            const filterToolCards = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+
+                toolCards.forEach(card => {
+                    const title = card.querySelector('h2').textContent.toLowerCase();
+                    const description = card.querySelector('p').textContent.toLowerCase();
+                    const cardIsVisible = card.style.display !== 'none';
+                    const shouldBeVisible = title.includes(searchTerm) || description.includes(searchTerm);
+
+                    if (shouldBeVisible && !cardIsVisible) {
+                        card.style.display = 'flex';
+                        card.classList.remove('fade-out-down');
+                        card.classList.add('fade-in-up');
+                    } else if (!shouldBeVisible && cardIsVisible) {
+                        card.classList.remove('fade-in-up');
+                        card.classList.add('fade-out-down');
+                        card.addEventListener('animationend', function handler() {
+                            card.style.display = 'none';
+                            card.classList.remove('fade-out-down');
+                            card.removeEventListener('animationend', handler);
+                        }, { once: true });
+                    }
+                });
+            };
+
+            // Apply debounce to the search input
+            searchInput.addEventListener('input', debounce(filterToolCards, 500));
+
+            // Add/remove class to main container on search input focus/blur
+            searchInput.addEventListener('focus', () => {
+                mainContainer.classList.add('expanded-search');
+                if (placeholderTimeout) {
+                    clearTimeout(placeholderTimeout);
+                }
+                animatedPlaceholderSpan.classList.add('fade-out');
+                animatedPlaceholderSpan.addEventListener('transitionend', function handler() {
+                    animatedPlaceholderSpan.style.display = 'none';
+                    searchInput.placeholder = "tìm kiếm về chủ đề,...";
+                    animatedPlaceholderSpan.removeEventListener('transitionend', handler);
+                }, { once: true });
+            });
+
+            searchInput.addEventListener('blur', () => {
+                if (searchInput.value.trim() === '') {
+                    mainContainer.classList.remove('expanded-search');
+                }
+            });
+
+            // --- Theme Switch Logic ---
+            function applyTheme(theme) {
+                document.body.classList.remove('light-theme'); // Remove existing theme class
+                if (theme === 'light') {
+                    document.body.classList.add('light-theme');
+                }
+                localStorage.setItem('theme', theme); // Save theme preference
+            }
+
+            // Load theme preference on page load
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+            themeSwitchCheckbox.checked = (savedTheme === 'light'); // Set checkbox state
+
+            // Event listener for theme switch
+            themeSwitchCheckbox.addEventListener('change', () => {
+                if (themeSwitchCheckbox.checked) {
+                    applyTheme('light');
+                } else {
+                    applyTheme('dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
